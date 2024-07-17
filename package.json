@@ -1,0 +1,37 @@
+{
+  "name": "material-ui-remix-ts",
+  "version": "5.0.0",
+  "private": true,
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev --manual",
+    "start": "remix-serve ./build/index.js",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@emotion/cache": "latest",
+    "@emotion/react": "^11.11.4",
+    "@emotion/server": "latest",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.21",
+    "@mui/material": "^5.15.21",
+    "@remix-run/css-bundle": "latest",
+    "@remix-run/node": "latest",
+    "@remix-run/react": "latest",
+    "@remix-run/serve": "latest",
+    "@remix-run/server-runtime": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "ts-fsrs": "^3.5.7"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false
+}
