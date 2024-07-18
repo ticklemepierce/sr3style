@@ -22,8 +22,4 @@ export interface Results {
 
 export type SetType = typeof EDGES | typeof CORNERS;
 
-export type CombinedSet = {
-  [key in SetType]: Questions;
-};
-
 export type Nullable<T> = T | null;

@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { updateCard } from '~/src/utils/cards';
 import { Rating } from 'ts-fsrs';
 import { Question, SetType } from '~/src/types';
 import { useFSRSContext } from '~/src/context/fsrs';
 import { formatTime } from '~/src/utils/time';
 import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
 import useTabActive from '~/src/hooks/use-tab-active';
+import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
 
 export const QuizQuestion = ({ question, onAdvance, type }: {question: Question, onAdvance: Function, type: SetType }) => {
   const { f } = useFSRSContext();
+  const { updateCard } = useLocalStorageCards({ type });
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const stopWatchStartTimeRef = useRef(Date.now());
 
@@ -66,7 +67,7 @@ export const QuizQuestion = ({ question, onAdvance, type }: {question: Question,
 
     const newCard = f!.repeat(question.card, new Date())[rating];
 
-    updateCard({ card: newCard, pair: question.pair, type });
+    updateCard({ card: newCard, letterPair: question.pair });
     
     onAdvance({ time: timeForPair, rating });
   };

@@ -1,16 +1,10 @@
 import { Rating } from "ts-fsrs";
-import { Questions, CombinedSet, SetType } from "~/src/types";
+import { Questions, SetType } from "~/src/types";
 
 export const INITIALIZE_QUIZ = 'initialize';
-export const initializeQuiz = ({ dispatch, questions }: { dispatch: Function, questions: Questions, type: SetType}) => {
+export const initializeQuiz = ({ dispatch, questions }: { dispatch: Function, questions: Questions }) => {
   dispatch({ type: INITIALIZE_QUIZ, payload: { questions }});
 }
-
-export const INITIALIZE_COMBINED_QUIZ = 'initialize combined';
-export const initializeCombinedQuiz = ({ dispatch, combinedSet }: { dispatch: Function, combinedSet: CombinedSet}) => {
-  dispatch({ type: INITIALIZE_COMBINED_QUIZ, payload: { combinedSet }});
-}
-
 
 export const GET_FEEDBACK = 'get feedback';
 export const getFeedback = ({ dispatch, time, rating }: { dispatch: Function, time: number, rating: Rating }) => {

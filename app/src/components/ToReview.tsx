@@ -1,9 +1,13 @@
 import { Button, Typography } from '@mui/material';
 import { Cards, SetType } from '../types';
 import { Link } from "@remix-run/react"
+import useLocalStorageCards from '../hooks/use-local-storage-cards';
 
 
-export const ToReview = ({ cards, type } : { cards: Cards[], type: SetType }) => {
+export const ToReview = ({ type } : { type: SetType }) => {
+  const { getCardsReadyForReview } = useLocalStorageCards({ type });
+  const cards = getCardsReadyForReview();
+
   const pairOrPairs = cards.length === 1 ? 'pair' : 'pairs';
 
   return (

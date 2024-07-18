@@ -1,9 +1,8 @@
 import type { MetaFunction } from '@remix-run/node';
-import { useReducer, useEffect, useState, useCallback } from 'react';
+import { useReducer, useEffect } from 'react';
 import { CircularProgress, Grid } from '@mui/material';
-import { reducer, getInitialState, State } from '~/src/components/quiz/reducer';
-import { advance, finishQuiz, getFeedback, initializeCombinedQuiz, initializeQuiz, advanceToNextType } from '~/src/components/quiz/actions';
-import { getCardReadyForReviewForCombinedQuiz, getCardsReadyForReview } from '~/src/utils/cards';
+import { reducer, getInitialState } from '~/src/components/quiz/reducer';
+import { advance, finishQuiz, getFeedback, initializeQuiz } from '~/src/components/quiz/actions';
 import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
 import { QuizSummary } from '~/src/components/quiz/QuizSummary';
 import { QuizFeedback } from '~/src/components/quiz/QuizFeedback';
@@ -11,6 +10,7 @@ import { QuizProgress } from '~/src/components/quiz/QuizProgress';
 import { Rating } from 'ts-fsrs';
 import { useParams } from "@remix-run/react";
 import { SetType } from '~/src/types';
+import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
@@ -19,33 +19,20 @@ export const meta: MetaFunction = () => [
 ];
 
 interface Params {
-  type: SetType | 'combined';
+  type: SetType;
 }
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Quiz() {
   const { type } = useParams<keyof Params>() as Params;
-  const [state, dispatch] = useReducer(reducer, getInitialState({ type }));
+  const {getCardsReadyForReview} = useLocalStorageCards({type});
+  const [state, dispatch] = useReducer(reducer, getInitialState());
 
-  // TODO move to loader
   useEffect(() => {
-    if (type === 'combined') {
-      const combinedSet = getCardReadyForReviewForCombinedQuiz();
+    const cards = getCardsReadyForReview(true);
 
-      initializeCombinedQuiz({ dispatch, combinedSet });
-    } else {
-      const cards = getCardsReadyForReview({ type, shuffle: true });
-
-      initializeQuiz({ dispatch, questions: cards, type });
-    }
+    initializeQuiz({ dispatch, questions: cards });
   }, []);
-
-  const onAdvance = useCallback(() => {
-    if (state.isCombinedQuiz && state.isLastQuestionOfType && !state.isLastSet) {
-      return advanceToNextType({ dispatch });
-    }
-    return !state.isLastQuestionOfType ? advance({ dispatch }) : finishQuiz({ dispatch })
-  }, [state.isCombinedQuiz, state.isLastQuestionOfType, state.isLastSet]);
 
   return (
     <>
@@ -61,8 +48,8 @@ export default function Quiz() {
       > 
         <Grid item xs={3}>
           { state.quizState === 'loading' && <CircularProgress /> }
-          { state.quizState === 'question' && <QuizQuestion type={state.currentType} question={state.question} onAdvance={({ time, rating }: { time: number, rating: Rating }) => getFeedback({ dispatch, time, rating })} />}
-          { state.quizState === 'feedback' && <QuizFeedback isLastQuestionOfType={state.isLastQuestionOfType!} isStartScreen={state.isStartScreen!} isLastSet={Boolean(state.isLastSet)} isCombinedQuiz={state.isCombinedQuiz} type={state.currentType} nextType={state.nextType!} onAdvance={onAdvance} /> }
+          { state.quizState === 'question' && <QuizQuestion type={type} question={state.question} onAdvance={({ time, rating }: { time: number, rating: Rating }) => getFeedback({ dispatch, time, rating })} />}
+          { state.quizState === 'feedback' && <QuizFeedback isLastQuestion={state.isLastQuestion!} isStartScreen={state.isStartScreen!} onAdvance={() => !state.isLastQuestion ? advance({ dispatch }) : finishQuiz({ dispatch })} /> }
           { state.quizState === 'complete' && <QuizSummary results={state.results!} />}
         </Grid>
       </Grid>
