@@ -18,9 +18,8 @@ const SettingsContext = React.createContext<ISettingsContext>({settings: {}, sav
 
 export default SettingsContext;
 
-export function SettingsProvider({ children }: { children: React.ReactNode }) {
+export function SettingsProvider({ debugMode, children }: { debugMode: boolean, children: React.ReactNode }) {
   const [settings, setSettings] = useState<ISettings>({});
-  const [debugMode, setDebugMode] = useState(false);
 
   const saveSettings = (newSettings: ISettings) => {
     localStorage.setItem('settings', JSON.stringify(newSettings));
@@ -37,10 +36,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const settingsFromStorage = window.localStorage.getItem('settings');
 
     let settings = settingsFromStorage ? JSON.parse(settingsFromStorage) : DEFAULT_SETTINGS;
-
-    const urlParams = new URLSearchParams(window.location.search);
-
-    setDebugMode(urlParams.get('debugMode') === '1' || urlParams.get('debugMode') === 'true');
 
     setSettings(settings);
   }, []);

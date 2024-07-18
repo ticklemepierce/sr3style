@@ -1,10 +1,10 @@
 import { Button, Typography } from '@mui/material';
-import { Cards, SetType } from '../types';
+import { SetType } from '../types';
 import { Link } from "@remix-run/react"
 import useLocalStorageCards from '../hooks/use-local-storage-cards';
+import { ClientOnly } from './ClientOnly';
 
-
-export const ToReview = ({ type } : { type: SetType }) => {
+const ToReviewClient = ({ type } : { type: SetType }) => {
   const { getCardsReadyForReview } = useLocalStorageCards({ type });
   const cards = getCardsReadyForReview();
 
@@ -15,7 +15,7 @@ export const ToReview = ({ type } : { type: SetType }) => {
       <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
         You have {cards.length} {type.slice(0, -1)} {pairOrPairs} to review.
       </Typography>
-      { !!cards.length &&
+      { Boolean(cards && cards.length) &&
         <Link to={`/quiz/${type}`}>      
           <Button>
             Start {type.slice(0, -1)} review
@@ -23,5 +23,13 @@ export const ToReview = ({ type } : { type: SetType }) => {
         </Link>
       }
     </>
+  );
+}
+
+export const ToReview = ({ type } : { type: SetType }) => {
+  return (
+    <ClientOnly fallback={<div>Loading...</div>}>
+      {() => <ToReviewClient type={type} />}
+    </ClientOnly>
   );
 }

@@ -3,8 +3,9 @@ import { setTypeMap } from "../utils/constants";
 import { SetGroup } from "./SetGroup";
 import Typography from '@mui/material/Typography';
 import { SetType } from "../types";
+import { ClientOnly } from "./ClientOnly";
 
-export const SetSelector = ({ type }: {type: SetType}) => {
+const SetSelectorClient = ({ type } : { type: SetType }) => {
   return (
     <>
       <Typography variant="h5">
@@ -16,5 +17,13 @@ export const SetSelector = ({ type }: {type: SetType}) => {
         ))}
       </FormGroup>
     </>
+  );
+}
+
+export const SetSelector = ({ type } : { type: SetType }) => {
+  return (
+    <ClientOnly fallback={<div>Loading...</div>}>
+      {() => <SetSelectorClient type={type} />}
+    </ClientOnly>
   );
 }

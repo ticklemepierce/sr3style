@@ -17,7 +17,7 @@ export const meta: MetaFunction = () => [
 
 // TODO make summary show percentage in each state
 // TODO show fraction of selected cases on set selectors
-
+// TODO better loading components
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {
@@ -29,7 +29,7 @@ export default function Index() {
         <SettingsIcon />
       </IconButton>
       <Typography variant="h4" component="h1" sx={{ my: 2 }}>
-        Material UI Remix in TypeScript example
+        SR 3style
       </Typography>
       <ToReview type={EDGES} />
       <ToReview type={CORNERS} />
