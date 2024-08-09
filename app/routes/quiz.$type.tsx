@@ -38,7 +38,7 @@ export default function Quiz() {
 
   return (
     <>
-      <Link style={{position: 'absolute', top: '15px'}} color={'gray'} to={{
+      <Link style={{position: 'absolute', top: '15px', left: '15px'}} color={'gray'} to={{
           pathname: `/`,
           search: searchParams.toString()
       }}>
