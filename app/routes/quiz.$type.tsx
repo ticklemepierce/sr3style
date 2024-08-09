@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useReducer, useEffect } from 'react';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Grid, IconButton } from '@mui/material';
 import { reducer, getInitialState } from '~/src/components/quiz/reducer';
 import { advance, finishQuiz, getFeedback, initializeQuiz } from '~/src/components/quiz/actions';
 import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
@@ -8,9 +8,10 @@ import { QuizSummary } from '~/src/components/quiz/QuizSummary';
 import { QuizFeedback } from '~/src/components/quiz/QuizFeedback';
 import { QuizProgress } from '~/src/components/quiz/QuizProgress';
 import { Rating } from 'ts-fsrs';
-import { useParams } from "@remix-run/react";
+import { Link, useParams, useSearchParams } from "@remix-run/react";
 import { SetType } from '~/src/types';
 import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
+import CloseIcon from '@mui/icons-material/Close';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
@@ -27,6 +28,7 @@ export default function Quiz() {
   const { type } = useParams<keyof Params>() as Params;
   const {getCardsReadyForReview} = useLocalStorageCards({type});
   const [state, dispatch] = useReducer(reducer, getInitialState());
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const cards = getCardsReadyForReview(true);
@@ -36,6 +38,12 @@ export default function Quiz() {
 
   return (
     <>
+      <Link style={{position: 'absolute', top: '15px'}} color={'gray'} to={{
+          pathname: `/`,
+          search: searchParams.toString()
+      }}>
+        <CloseIcon htmlColor={'gray'} />
+      </Link>
       { state.showQuizProgress && <QuizProgress questionNumber={state.isStartScreen ? 0 : (state.questionIndex! + 1)} totalQuestions={state.questions!.length} />}
       <Grid
         container

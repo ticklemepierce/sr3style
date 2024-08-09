@@ -23,8 +23,12 @@ export const QuizQuestion = ({ question, onAdvance, type }: {question: Question,
   };
 
   useEffect(() => {
+    document.addEventListener('touchstart', rate, false);
     document.addEventListener("keydown", handleSpacePress, false);
-    return () => document.removeEventListener("keydown", handleSpacePress, false);
+    return () => {
+      document.removeEventListener("keydown", handleSpacePress, false);
+      document.removeEventListener('touchstart', rate, false);
+    }
   }, []);
 
   useTabActive({

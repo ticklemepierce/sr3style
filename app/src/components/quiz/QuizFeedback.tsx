@@ -1,18 +1,35 @@
 import { Typography } from "@mui/material";
-import { useEffect } from "react";
-import { SetType } from "~/src/types";
+import { useEffect, useRef } from "react";
 
 
 export const QuizFeedback = ({ isLastQuestion, isStartScreen, onAdvance }: { isLastQuestion: boolean, isStartScreen: boolean, onAdvance: Function }) => {
+  const touchStarted = useRef(false);
+
   const handleSpacePress = (e: KeyboardEvent) => {
     if (e.key === ' ') {
       onAdvance();
     }
   };
+
+  const handleTouchStart = () => touchStarted.current = true;
+
+  const handleTouchEnd = () => {
+    if (!touchStarted.current) return;
+
+    onAdvance();
+  }
+
+  const supportsTouch = 'ontouchstart' in window;
   
   useEffect(() => {
     document.addEventListener("keydown", handleSpacePress, false);
-    return () => document.removeEventListener("keydown", handleSpacePress, false);
+    document.addEventListener("touchstart", handleTouchStart, false);
+    document.addEventListener("touchend", handleTouchEnd, false);
+    return () => {
+      document.removeEventListener("touchstart", handleTouchStart, false);
+      document.removeEventListener("touchend", handleTouchEnd, false);
+      document.removeEventListener("keydown", handleSpacePress, false);
+    }
   }, []);
 
   const getCopy = () => {
@@ -27,7 +44,7 @@ export const QuizFeedback = ({ isLastQuestion, isStartScreen, onAdvance }: { isL
   
   return (
     <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-      Press 'space' to {getCopy()}
+      {supportsTouch ? 'Tap screen' : `Press 'space'`} to {getCopy()}
     </Typography>
   );
 }

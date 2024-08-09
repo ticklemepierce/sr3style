@@ -26,7 +26,7 @@ export const QuizProgress = ({ questionNumber, totalQuestions }: { questionNumbe
         top: 25,
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '75vw',
+        width: '70vw',
       }}
     >
       <Grid>

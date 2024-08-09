@@ -1,10 +1,9 @@
 import type { MetaFunction } from '@remix-run/node';
-import Typography from '@mui/material/Typography';
 import { SetSelector } from '~/src/components/SetSelector';
 import { ToReview } from '~/src/components/ToReview';
 import { CORNERS, EDGES } from '~/src/utils/constants';
 import { Settings as SettingsIcon } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import { SettingsModal } from '~/src/components/SettingsModal';
 
@@ -25,7 +24,7 @@ export default function Index() {
 
   return (
     <>
-      <IconButton aria-label="Settings" onClick={() => setSettingsModalOpen(true)}>
+      <IconButton style={{position: 'absolute', top: '15px', right: '15px' }} aria-label="Settings" onClick={() => setSettingsModalOpen(true)}>
         <SettingsIcon />
       </IconButton>
       <Typography variant="h4" component="h1" sx={{ my: 2 }}>
