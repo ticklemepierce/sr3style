@@ -55,7 +55,7 @@ export default function Index() {
       )}
       <IconButton
         style={{ position: 'absolute', top: '15px', right: '15px' }}
-        aria-label='Settings'
+        aria-label={'Settings'}
         onClick={() => setSettingsModalOpen(true)}
       >
         <SettingsIcon />
