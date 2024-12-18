@@ -8,7 +8,7 @@ export const QuizFeedback = ({
 }: {
   isLastQuestion: boolean;
   isStartScreen: boolean;
-  onAdvance: Function;
+  onAdvance: () => void;
 }) => {
   const touchStarted = useRef(false);
 
@@ -50,7 +50,7 @@ export const QuizFeedback = ({
   };
 
   return (
-    <Typography variant='h4' component='h1' sx={{ mb: 2 }}>
+    <Typography variant={'h4'} component={'h1'} sx={{ mb: 2 }}>
       {supportsTouch ? 'Tap screen' : `Press 'space'`} to {getCopy()}
     </Typography>
   );

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { FormControlLabel, Checkbox, Box, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { Cards, SetType } from '../types';
+import { SetType } from '../types';
 import { setTypeMap } from '../utils/constants';
 import useCards from '../hooks/use-cards';
 
@@ -15,6 +15,7 @@ export const SetGroup = ({
   set: string;
   possiblePairs: string[];
   setType: SetType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user?: any;
 }) => {
   const { cards, addSet, addPair, removeSet, removePair } = useCards({
@@ -28,7 +29,7 @@ export const SetGroup = ({
     [cards],
   );
 
-  const [isExpanded, setIsExpanded] = useState<Boolean>(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const areAllChecked = () => numChecked === setTypeMap[setType][set].length;
   const areSomeChecked = () =>
@@ -101,7 +102,7 @@ export const SetGroup = ({
             />
           }
         />
-        <IconButton aria-label='Example' onClick={toggleIsExpanded}>
+        <IconButton aria-label={'Example'} onClick={toggleIsExpanded}>
           {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </IconButton>
       </Box>

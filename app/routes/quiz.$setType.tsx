@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useReducer, useEffect } from 'react';
-import { CircularProgress, Grid, IconButton } from '@mui/material';
+import { CircularProgress, Grid } from '@mui/material';
 import { reducer, getInitialState } from '~/src/components/quiz/reducer';
 import {
   advance,
@@ -62,10 +62,10 @@ export default function Quiz() {
       <Grid
         container
         spacing={0}
-        direction='column'
-        alignItems='center'
-        textAlign='center'
-        justifyContent='center'
+        direction={'column'}
+        alignItems={'center'}
+        textAlign={'center'}
+        justifyContent={'center'}
         sx={{ minHeight: '100vh' }}
       >
         <Grid item xs={3}>

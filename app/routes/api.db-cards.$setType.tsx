@@ -3,7 +3,7 @@ import { prisma } from '../src/services/db.server';
 import { Cards } from '~/src/types';
 import { Params, useParams } from '@remix-run/react';
 
-export const loader = async ({ request }: { request: Request }) => {
+export const loader = async () => {
   const { setType } = useParams<keyof Params>() as Params;
 
   try {

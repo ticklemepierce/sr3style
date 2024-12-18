@@ -14,7 +14,7 @@ export const QuizQuestion = ({
   setType,
 }: {
   question: Question;
-  onAdvance: Function;
+  onAdvance: ({ time, rating }: { time: number; rating: number }) => void;
   setType: SetType;
 }) => {
   const { f } = useFSRSContext();
@@ -86,10 +86,10 @@ export const QuizQuestion = ({
 
   return (
     <>
-      <Typography variant='h1' component='h1' sx={{ mb: 2 }}>
+      <Typography variant={'h1'} component={'h1'} sx={{ mb: 2 }}>
         {question.pair.toUpperCase()}
       </Typography>
-      <Typography variant='h2' component='p'>
+      <Typography variant={'h2'} component={'p'}>
         {formatTime(stopwatchTime)}
       </Typography>
     </>

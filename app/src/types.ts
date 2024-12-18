@@ -1,6 +1,8 @@
 import { Card, ReviewLog, Rating } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Question = any;
 export type Questions = Question[];
 

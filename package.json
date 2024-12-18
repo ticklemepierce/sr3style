@@ -29,6 +29,8 @@
     "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
     "@remix-run/dev": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -37,10 +39,10 @@
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.37.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "prettier": "^3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.9",
     "typescript": "latest"
   },
   "engines": {

@@ -1,12 +1,17 @@
 import { Rating } from 'ts-fsrs';
-import { Questions, SetType } from '~/src/types';
+import { Dispatch } from 'react';
+import { Questions } from '~/src/types';
+
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Action = { type: any; payload?: any };
 
 export const INITIALIZE_QUIZ = 'initialize';
 export const initializeQuiz = ({
   dispatch,
   questions,
 }: {
-  dispatch: Function;
+  dispatch: Dispatch<Action>;
   questions: Questions;
 }) => {
   dispatch({ type: INITIALIZE_QUIZ, payload: { questions } });
@@ -18,7 +23,7 @@ export const getFeedback = ({
   time,
   rating,
 }: {
-  dispatch: Function;
+  dispatch: Dispatch<Action>;
   time: number;
   rating: Rating;
 }) => {
@@ -26,16 +31,20 @@ export const getFeedback = ({
 };
 
 export const ADVANCE = 'advance';
-export const advance = ({ dispatch }: { dispatch: Function }) => {
+export const advance = ({ dispatch }: { dispatch: Dispatch<Action> }) => {
   dispatch({ type: ADVANCE });
 };
 
 export const ADVANCE_TO_NEXT_TYPE = 'advance to next type';
-export const advanceToNextType = ({ dispatch }: { dispatch: Function }) => {
+export const advanceToNextType = ({
+  dispatch,
+}: {
+  dispatch: Dispatch<Action>;
+}) => {
   dispatch({ type: ADVANCE_TO_NEXT_TYPE });
 };
 
 export const FINISH_QUIZ = 'finish quiz';
-export const finishQuiz = ({ dispatch }: { dispatch: Function }) => {
+export const finishQuiz = ({ dispatch }: { dispatch: Dispatch<Action> }) => {
   dispatch({ type: FINISH_QUIZ });
 };

@@ -14,7 +14,7 @@ const ToReviewClient = ({ setType }: { setType: SetType }) => {
 
   return (
     <>
-      <Typography variant='h4' component='h1' sx={{ mb: 2 }}>
+      <Typography variant={'h4'} component={'h1'} sx={{ mb: 2 }}>
         You have {cards.length} {setType.slice(0, -1)} {pairOrPairs} to review.
       </Typography>
       {Boolean(cards && cards.length) && (

@@ -1,5 +1,5 @@
 // app/services/session.server.ts
-import { createCookieSessionStorage, json } from '@remix-run/node';
+import { createCookieSessionStorage } from '@remix-run/node';
 import { prisma } from './db.server';
 import { Cards } from '../types';
 import { setTypes } from '../utils/constants';
@@ -22,6 +22,8 @@ export const sessionStorage = createCookieSessionStorage({
 // you can also export the methods individually for your own usage
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getUser = async (request: Request): Promise<any> => {
   const session = await getSession(request.headers.get('Cookie'));
 

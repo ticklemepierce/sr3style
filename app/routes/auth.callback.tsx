@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const accessToken = searchParams.get('access_token');
-  const expiresIn = searchParams.get('expires_in');
+  // const expiresIn = searchParams.get('expires_in');
 
   const res = await fetch(
     `${WCA_ORIGIN}/me`,
@@ -66,7 +66,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Users() {
   useEffect(() => {
-    let href = window.location.href;
+    const href = window.location.href;
     if (href.includes('#')) {
       window.location.href = href.replace('#', '?');
     }

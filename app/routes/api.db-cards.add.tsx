@@ -1,8 +1,8 @@
 import { json } from '@remix-run/node';
 import { prisma } from '../src/services/db.server';
 import { setTypeMap } from '~/src/utils/constants';
-import { Card, createEmptyCard } from 'ts-fsrs';
-import { Cards, SetType } from '~/src/types';
+import { createEmptyCard } from 'ts-fsrs';
+import { SetType } from '~/src/types';
 
 type RequestPayload = {
   letter?: string;
@@ -53,7 +53,7 @@ export const action = async ({ request }: { request: Request }) => {
       });
     } else {
       const created = await prisma.sets.createManyAndReturn({
-        data: setTypeMap[setType][set].map((letter: any) => ({
+        data: setTypeMap[setType][set].map((letter: string) => ({
           letterPair: `${set}${letter}`,
           card: JSON.stringify(createEmptyCard()),
           setType,
@@ -61,11 +61,11 @@ export const action = async ({ request }: { request: Request }) => {
         skipDuplicates: true, // Avoid errors if some records already exist
       });
       const cards = created.reduce(
-        (acc, { letterPair, card, log }) => {
+        (acc, { letterPair, card }) => {
           acc[letterPair] = { card };
           return acc;
         },
-        {} as Record<string, {}>,
+        {} as Record<string, object>,
       );
 
       return json({ success: true, message: `created set: ${set}`, cards });

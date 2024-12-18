@@ -14,11 +14,11 @@ import { formatTime } from '~/src/utils/time';
 export const QuizSummary = ({ results }: { results: Results }) => {
   return (
     <>
-      <Typography variant='h4' component='h1' sx={{ my: 2 }}>
+      <Typography variant={'h4'} component={'h1'} sx={{ my: 2 }}>
         Results Summary
       </Typography>
       <TableContainer component={Paper}>
-        <Table size='small' aria-label='a dense table'>
+        <Table size={'small'} aria-label={'a dense table'}>
           <TableHead>
             <TableRow>
               <TableCell>Letter Pair</TableCell>
@@ -32,7 +32,7 @@ export const QuizSummary = ({ results }: { results: Results }) => {
                 key={pair}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component='th' scope='row'>
+                <TableCell component={'th'} scope={'row'}>
                   {pair.toUpperCase()}
                 </TableCell>
                 <TableCell>{formatTime(time)}</TableCell>

@@ -1,11 +1,12 @@
-import { RecordLogItem } from 'ts-fsrs';
 import { Cards, SetType } from '../types';
-import { useSettingsContext } from '../context/settings';
+// import { useSettingsContext } from '../context/settings';
 import { useState } from 'react';
 import { setTypeMap } from '../utils/constants';
 
+// TODO
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
-  const { debugMode } = useSettingsContext(); // TODO debug mode db
+  // const { debugMode } = useSettingsContext(); // TODO debug mode db
 
   const [cards, setCards] = useState<Cards>(user?.cards[setType]);
 
@@ -91,15 +92,9 @@ const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
     }
   };
 
-  const updateCard = ({
-    card,
-    letterPair,
-  }: {
-    card: RecordLogItem;
-    letterPair: string;
-  }) => {};
+  const updateCard = () => {};
 
-  const getCardsReadyForReview = (shuffle = false) => {};
+  const getCardsReadyForReview = () => {};
 
   // TODO add type for this
   return {

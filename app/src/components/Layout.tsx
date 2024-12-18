@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SettingsProvider debugMode={debugMode === '1' || debugMode === 'true'}>
       <FSRSProvider>
-        <Container maxWidth='sm'>
+        <Container maxWidth={'sm'}>
           <Box>{children}</Box>
         </Container>
       </FSRSProvider>

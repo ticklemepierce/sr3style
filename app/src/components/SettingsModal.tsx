@@ -10,7 +10,7 @@ import { useSettingsContext } from '../context/settings';
 import { useState } from 'react';
 
 const style = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -27,7 +27,7 @@ export const SettingsModal = ({
   handleClose,
 }: {
   open: boolean;
-  handleClose: Function;
+  handleClose: () => void;
 }) => {
   const { settings, saveSettings } = useSettingsContext();
 
@@ -36,19 +36,19 @@ export const SettingsModal = ({
   return (
     <Modal
       open={open}
-      onClose={() => handleClose()}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
+      onClose={handleClose}
+      aria-labelledby={'modal-modal-title'}
+      aria-describedby={'modal-modal-description'}
     >
       <Box sx={style}>
-        <Typography variant='h6' component='h2'>
+        <Typography variant={'h6'} component={'h2'}>
           Settings
         </Typography>
         <FormControlLabel
-          value='autoAddInverse'
+          value={'autoAddInverse'}
           control={
             <Switch
-              color='primary'
+              color={'primary'}
               onChange={(e) => {
                 setCurrSettings((currSettings) => ({
                   ...currSettings,
@@ -58,8 +58,8 @@ export const SettingsModal = ({
               checked={currSettings.autoAddInverse}
             />
           }
-          label='Automatically add inverses: '
-          labelPlacement='start'
+          label={'Automatically add inverses: '}
+          labelPlacement={'start'}
         />
         <Button onClick={() => saveSettings(currSettings)}>
           Save Settings

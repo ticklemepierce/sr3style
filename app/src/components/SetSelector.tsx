@@ -10,11 +10,12 @@ const SetSelectorClient = ({
   user,
 }: {
   setType: SetType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user?: any;
 }) => {
   return (
     <>
-      <Typography variant='h5'>
+      <Typography variant={'h5'}>
         Select {setType.slice(0, -1)} pairs to learn:
       </Typography>
       <FormGroup>
@@ -38,6 +39,7 @@ export const SetSelector = ({
   user,
 }: {
   setType: SetType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user?: any;
 }) => {
   return (

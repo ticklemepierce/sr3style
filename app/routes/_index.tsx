@@ -17,6 +17,7 @@ export const meta: MetaFunction = () => [
 ];
 
 interface ILoaderData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user?: any; // TODO
 }
 
@@ -36,12 +37,20 @@ export default function Index() {
   return (
     <>
       {!user ? (
-        <Form action={`/auth`} method='post' className='flex justify-center'>
-          <Button type='submit'>Sign in with WCA</Button>
+        <Form
+          action={`/auth`}
+          method={'post'}
+          className={'flex justify-center'}
+        >
+          <Button type={'submit'}>Sign in with WCA</Button>
         </Form>
       ) : (
-        <Form action={`/logout`} method='post' className='flex justify-center'>
-          <Button type='submit'>Sign out</Button>
+        <Form
+          action={`/logout`}
+          method={'post'}
+          className={'flex justify-center'}
+        >
+          <Button type={'submit'}>Sign out</Button>
         </Form>
       )}
       <IconButton
@@ -51,7 +60,7 @@ export default function Index() {
       >
         <SettingsIcon />
       </IconButton>
-      <Typography variant='h4' component='h1' sx={{ my: 2 }}>
+      <Typography variant={'h4'} component={'h1'} sx={{ my: 2 }}>
         SR 3style
       </Typography>
       <ToReview setType={EDGES} />

@@ -4,8 +4,8 @@ const useTabActive = ({
   onFocus,
   onBlur,
 }: {
-  onFocus: Function;
-  onBlur: Function;
+  onFocus: () => void;
+  onBlur: () => void;
 }) => {
   const [visibilityState, setVisibilityState] = useState(true);
 

@@ -26,8 +26,8 @@ export const QuizProgress = ({
     <Grid
       container
       spacing={0}
-      direction='column'
-      textAlign='center'
+      direction={'column'}
+      textAlign={'center'}
       sx={{
         position: 'fixed',
         top: 25,
@@ -44,8 +44,8 @@ export const QuizProgress = ({
       </Grid>
       <Grid>
         <Typography
-          variant='subtitle1'
-          component='p'
+          variant={'subtitle1'}
+          component={'p'}
           sx={{ marginTop: '10px', fontWeight: 500 }}
         >
           {questionNumber} / {totalQuestions}

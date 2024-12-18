@@ -6,7 +6,7 @@ interface ISettings {
 
 interface ISettingsContext {
   settings: ISettings;
-  saveSettings: Function;
+  saveSettings: (settings: ISettings) => void;
   debugMode: boolean;
 }
 
@@ -45,7 +45,7 @@ export function SettingsProvider({
   useEffect(() => {
     const settingsFromStorage = window.localStorage.getItem('settings');
 
-    let settings = settingsFromStorage
+    const settings = settingsFromStorage
       ? JSON.parse(settingsFromStorage)
       : DEFAULT_SETTINGS;
 
