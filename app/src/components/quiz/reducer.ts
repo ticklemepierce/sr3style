@@ -2,28 +2,34 @@ import { Question, Questions, Results, SetType } from "~/src/types";
 import { INITIALIZE_QUIZ, ADVANCE, GET_FEEDBACK, FINISH_QUIZ } from "./actions";
 import { Rating, RatingType } from "ts-fsrs";
 
-type Advance = { type: typeof ADVANCE }
-type InitializeQuiz = { type: typeof INITIALIZE_QUIZ, payload: { questions: Questions, type: SetType }}
-type GetFeedback = { type: typeof GET_FEEDBACK, payload: { time: number, rating: RatingType }}
-type Complete = { type: typeof FINISH_QUIZ }
+type Advance = { type: typeof ADVANCE };
+type InitializeQuiz = {
+  type: typeof INITIALIZE_QUIZ;
+  payload: { questions: Questions; type: SetType };
+};
+type GetFeedback = {
+  type: typeof GET_FEEDBACK;
+  payload: { time: number; rating: RatingType };
+};
+type Complete = { type: typeof FINISH_QUIZ };
 
 type Action = Advance | InitializeQuiz | GetFeedback | Complete;
 
 export interface State {
-  quizState: 'loading' | 'question' | 'feedback' | 'complete',
-  question?: Question,
-  questions?: Question[],
-  questionIndex?: number,
-  setIndex?: number,
-  isLastQuestion?: boolean,
-  isStartScreen?: boolean,
-  isLastSet?: boolean,
-  showQuizProgress?: boolean,
-  results?: Results,
+  quizState: "loading" | "question" | "feedback" | "complete";
+  question?: Question;
+  questions?: Question[];
+  questionIndex?: number;
+  setIndex?: number;
+  isLastQuestion?: boolean;
+  isStartScreen?: boolean;
+  isLastSet?: boolean;
+  showQuizProgress?: boolean;
+  results?: Results;
 }
 
 export const getInitialState = (): State => ({
-  quizState: 'loading',
+  quizState: "loading",
   showQuizProgress: false,
   isStartScreen: false,
 });
@@ -33,30 +39,30 @@ export const reducer = (state: State, action: Action): State => {
     case INITIALIZE_QUIZ:
       return {
         ...state,
-        quizState: 'feedback',
+        quizState: "feedback",
         isStartScreen: true,
         questions: action.payload.questions,
         questionIndex: -1, // TODO fix hack
         showQuizProgress: true,
         results: {},
-      }
+      };
     case GET_FEEDBACK:
       state.results![state.question.pair] = {
         time: action.payload.time,
         rating: Rating[action.payload.rating],
-      }
+      };
 
       return {
         ...state,
-        quizState: 'feedback',
+        quizState: "feedback",
         isStartScreen: false,
-        isLastQuestion: state.questions!.length === (state.questionIndex! + 1),
+        isLastQuestion: state.questions!.length === state.questionIndex! + 1,
         showQuizProgress: true,
       };
     case ADVANCE:
       return {
         ...state,
-        quizState: 'question',
+        quizState: "question",
         question: state.questions![state.questionIndex! + 1],
         questionIndex: state.questionIndex! + 1,
         showQuizProgress: true,
@@ -65,11 +71,9 @@ export const reducer = (state: State, action: Action): State => {
     case FINISH_QUIZ:
       return {
         ...state,
-        quizState: 'complete',
+        quizState: "complete",
         showQuizProgress: false,
         isStartScreen: false,
       };
   }
-}
-
-
+};

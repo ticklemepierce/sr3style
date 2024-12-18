@@ -1,12 +1,12 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
-import { RemixBrowser } from '@remix-run/react';
-import { CacheProvider } from '@emotion/react';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import ClientStyleContext from './src/ClientStyleContext';
-import createEmotionCache from './src/createEmotionCache';
-import theme from './src/theme';
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import { RemixBrowser } from "@remix-run/react";
+import { CacheProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import ClientStyleContext from "./src/ClientStyleContext";
+import createEmotionCache from "./src/createEmotionCache";
+import theme from "./src/theme";
 
 interface ClientCacheProviderProps {
   children: React.ReactNode;

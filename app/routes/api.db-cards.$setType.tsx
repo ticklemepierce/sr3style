@@ -4,7 +4,7 @@ import { Cards } from "~/src/types";
 import { Params, useParams } from "@remix-run/react";
 
 export const loader = async ({ request }: { request: Request }) => {
-    const { setType } = useParams<keyof Params>() as Params;
+  const { setType } = useParams<keyof Params>() as Params;
 
   try {
     const sets = await prisma.sets.findMany({ where: { setType } });

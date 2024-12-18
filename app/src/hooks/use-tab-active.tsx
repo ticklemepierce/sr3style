@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
-const useTabActive = ({ onFocus, onBlur }: { onFocus: Function, onBlur: Function }) => {
+const useTabActive = ({
+  onFocus,
+  onBlur,
+}: {
+  onFocus: Function;
+  onBlur: Function;
+}) => {
   const [visibilityState, setVisibilityState] = useState(true);
 
   const handleVisibilityChange = useCallback(() => {
-    const isVisible = document.visibilityState === 'visible'
+    const isVisible = document.visibilityState === "visible";
     setVisibilityState(isVisible);
 
     if (isVisible && onFocus) {
@@ -16,13 +22,13 @@ const useTabActive = ({ onFocus, onBlur }: { onFocus: Function, onBlur: Function
   }, []);
 
   useEffect(() => {
-    document.addEventListener("visibilitychange", handleVisibilityChange)
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
-    }
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [handleVisibilityChange]);
 
   return visibilityState;
-}
+};
 
 export default useTabActive;

@@ -1,6 +1,15 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { Results } from '~/src/types';
-import { formatTime } from '~/src/utils/time';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import { Results } from "~/src/types";
+import { formatTime } from "~/src/utils/time";
 
 export const QuizSummary = ({ results }: { results: Results }) => {
   return (
@@ -21,7 +30,7 @@ export const QuizSummary = ({ results }: { results: Results }) => {
             {Object.entries(results).map(([pair, { time, rating }]) => (
               <TableRow
                 key={pair}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {pair.toUpperCase()}
@@ -35,4 +44,4 @@ export const QuizSummary = ({ results }: { results: Results }) => {
       </TableContainer>
     </>
   );
-}
+};

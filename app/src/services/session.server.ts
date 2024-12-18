@@ -23,15 +23,13 @@ export const sessionStorage = createCookieSessionStorage({
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
 export const getUser = async (request: Request): Promise<any> => {
-  const session = await getSession(
-    request.headers.get("Cookie")
-  );
+  const session = await getSession(request.headers.get("Cookie"));
 
   // TODO get user from DB
 
-  const user = session.get('user') || null;
+  const user = session.get("user") || null;
 
-  console.log({user});
+  console.log({ user });
 
   if (!user) {
     return;
@@ -44,20 +42,23 @@ export const getUser = async (request: Request): Promise<any> => {
         acc[letterPair] = { card: JSON.parse(card) }; // Parse card JSON
         return acc;
       }, {} as Cards);
-  
+
       return { setType, cards }; // Include setType in the result
-    })
+    }),
   );
 
   // Combine results into a single response
-  const combinedResult = results.reduce((acc, { setType, cards }) => {
-    acc[setType] = cards;
-    return acc;
-  }, {} as Record<string, Cards>);
-  
+  const combinedResult = results.reduce(
+    (acc, { setType, cards }) => {
+      acc[setType] = cards;
+      return acc;
+    },
+    {} as Record<string, Cards>,
+  );
+
   return {
     user,
     cards: combinedResult,
-    isPremium: true // TODO
+    isPremium: true, // TODO
   };
-}  
+};

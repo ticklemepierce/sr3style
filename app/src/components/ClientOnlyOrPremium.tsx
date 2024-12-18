@@ -2,14 +2,14 @@ import { ReactNode } from "react";
 import { useHydrated } from "../hooks/use-hydrated";
 
 type ClientOnlyProps = {
-	/**
-	 * You are encouraged to add a fallback that is the same dimensions
-	 * as the client rendered children. This will avoid content layout
-	 * shift which is disgusting
-	 */
-	children: ReactNode;
-	fallback?: ReactNode;
-	isPremium?: boolean;
+  /**
+   * You are encouraged to add a fallback that is the same dimensions
+   * as the client rendered children. This will avoid content layout
+   * shift which is disgusting
+   */
+  children: ReactNode;
+  fallback?: ReactNode;
+  isPremium?: boolean;
 };
 
 /**
@@ -26,9 +26,13 @@ type ClientOnlyProps = {
  *   </ClientOnlyOrPremium>
  * );
  * ```
- * 
+ *
  */
-export const ClientOnlyOrPremium = ({ children, fallback = null, isPremium = false }: ClientOnlyProps) => {
+export const ClientOnlyOrPremium = ({
+  children,
+  fallback = null,
+  isPremium = false,
+}: ClientOnlyProps) => {
   const isHydrated = useHydrated();
 
   // Render `children` if `isHydrated` or `forceRender` is true

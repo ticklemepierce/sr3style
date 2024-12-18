@@ -18,9 +18,8 @@ export const action = async ({ request }: { request: Request }) => {
   console.log(setType);
   console.log(set);
 
-
   // TODO better validation
-  if (!setType || (!set)) {
+  if (!setType || !set) {
     return json({ error: "Missing required parameters" }, { status: 400 });
   }
 
@@ -46,8 +45,12 @@ export const action = async ({ request }: { request: Request }) => {
           card,
         },
       });
-  
-      return json({ success: true, message: `created letter pair: ${letterPair}`, card });
+
+      return json({
+        success: true,
+        message: `created letter pair: ${letterPair}`,
+        card,
+      });
     } else {
       const created = await prisma.sets.createManyAndReturn({
         data: setTypeMap[setType][set].map((letter: any) => ({
@@ -57,11 +60,14 @@ export const action = async ({ request }: { request: Request }) => {
         })),
         skipDuplicates: true, // Avoid errors if some records already exist
       });
-      const cards = created.reduce((acc, { letterPair, card, log }) => {
-        acc[letterPair] = { card };
-        return acc;
-      }, {} as Record<string, {}>);      
-      
+      const cards = created.reduce(
+        (acc, { letterPair, card, log }) => {
+          acc[letterPair] = { card };
+          return acc;
+        },
+        {} as Record<string, {}>,
+      );
+
       return json({ success: true, message: `created set: ${set}`, cards });
     }
   } catch (error) {
@@ -69,4 +75,3 @@ export const action = async ({ request }: { request: Request }) => {
     return json({ error: "Failed to add items" }, { status: 500 });
   }
 };
-

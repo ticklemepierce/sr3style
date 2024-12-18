@@ -13,12 +13,12 @@ import { redirect } from "@remix-run/node";
 import { destroySession, getSession } from "~/src/services/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get('Cookie'));
-  
+  const session = await getSession(request.headers.get("Cookie"));
+
   return redirect("/", {
     headers: {
       // use await on session functions
-      "Set-Cookie": await destroySession(session)
-    }
+      "Set-Cookie": await destroySession(session),
+    },
   });
 };
