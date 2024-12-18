@@ -2,33 +2,33 @@ import { useMemo, useState } from "react";
 import { FormControlLabel, Checkbox, Box, IconButton } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { SetType } from "../types";
-import useLocalStorageCards from "../hooks/use-local-storage-cards";
+import { Cards, SetType } from "../types";
 import { setTypeMap } from "../utils/constants";
+import useCards from "../hooks/use-cards";
 
 
-export const SetGroup = ({set, possiblePairs, type}: {set: string, possiblePairs: string[], type: SetType}) => {
-  const { cards, addSet, addPair, removeSet, removePair } = useLocalStorageCards({ type });
+export const SetGroup = ({set, possiblePairs, setType, user}: {set: string, possiblePairs: string[], setType: SetType, user?: any}) => {  
+  const { cards, addSet, addPair, removeSet, removePair } = useCards({ setType, user });
 
-  const numChecked = useMemo(() => Object.keys(cards).filter((pair) => pair.startsWith(set)).length, [cards]);
+  const numChecked = useMemo(() => Object.keys(cards ?? {}).filter((pair) => pair.startsWith(set)).length, [cards]);
 
   const [isExpanded, setIsExpanded] = useState<Boolean>(false);
 
-  const areAllChecked = () => numChecked === setTypeMap[type][set].length;
-  const areSomeChecked = () => 0 < numChecked && numChecked < setTypeMap[type][set].length;
+  const areAllChecked = () => numChecked === setTypeMap[setType][set].length;
+  const areSomeChecked = () => 0 < numChecked && numChecked < setTypeMap[setType][set].length;
 
-  const handleChange = ({ letter, isChecked }: {letter: string, isChecked: boolean}) => {
+  const handleChange = async ({ letter, isChecked }: {letter: string, isChecked: boolean}) => {
     if (letter === set) {
       if (isChecked) {
-        addSet(set);
+        await addSet(set);
       } else {
-        removeSet(set);
+        await removeSet(set);
       }
     } else {
       if (isChecked) {
-        addPair({set, letter});
+        await addPair({set, letter});
       } else {
-        removePair(`${set}${letter}`);
+        await removePair({set, letter});
       }
     }
   }
@@ -39,7 +39,7 @@ export const SetGroup = ({set, possiblePairs, type}: {set: string, possiblePairs
         <FormControlLabel
           label={letter.toUpperCase()}
           key={letter}
-          control={<Checkbox checked={Boolean(cards[`${set}${letter}`])} onChange={(e) => handleChange({ letter, isChecked: e.target.checked })} />}
+          control={<Checkbox checked={Boolean(cards[`${set}${letter}`])} onChange={async (e) => await handleChange({ letter, isChecked: e.target.checked })} />}
         />
       ))}
     </Box>
@@ -58,7 +58,7 @@ export const SetGroup = ({set, possiblePairs, type}: {set: string, possiblePairs
             <Checkbox
               checked={areAllChecked()}
               indeterminate={areSomeChecked()}
-              onChange={(e) => handleChange({ letter: set, isChecked: e.target.checked })}
+              onChange={async (e) => await handleChange({ letter: set, isChecked: e.target.checked })}
             />
           }
         />

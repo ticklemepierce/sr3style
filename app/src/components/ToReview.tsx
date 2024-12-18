@@ -2,12 +2,12 @@ import { Button, Typography } from '@mui/material';
 import { SetType } from '../types';
 import { Link, useSearchParams } from "@remix-run/react"
 import useLocalStorageCards from '../hooks/use-local-storage-cards';
-import { ClientOnly } from './ClientOnly';
+import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
 
-const ToReviewClient = ({ type } : { type: SetType }) => {
+const ToReviewClient = ({ setType } : { setType: SetType }) => {
   const [searchParams] = useSearchParams();
 
-  const { getCardsReadyForReview } = useLocalStorageCards({ type });
+  const { getCardsReadyForReview } = useLocalStorageCards({ setType });
   const cards = getCardsReadyForReview();
 
   const pairOrPairs = cards.length === 1 ? 'pair' : 'pairs';
@@ -15,15 +15,15 @@ const ToReviewClient = ({ type } : { type: SetType }) => {
   return (
     <>
       <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-        You have {cards.length} {type.slice(0, -1)} {pairOrPairs} to review.
+        You have {cards.length} {setType.slice(0, -1)} {pairOrPairs} to review.
       </Typography>
       { Boolean(cards && cards.length) &&
         <Link to={{
-          pathname: `/quiz/${type}`,
+          pathname: `/quiz/${setType}`,
           search: searchParams.toString()
         }}>      
           <Button>
-            Start {type.slice(0, -1)} review
+            Start {setType.slice(0, -1)} review
           </Button>
         </Link>
       }
@@ -31,10 +31,10 @@ const ToReviewClient = ({ type } : { type: SetType }) => {
   );
 }
 
-export const ToReview = ({ type } : { type: SetType }) => {
+export const ToReview = ({ setType } : { setType: SetType }) => {
   return (
-    <ClientOnly fallback={<div>Loading...</div>}>
-      {() => <ToReviewClient type={type} />}
-    </ClientOnly>
+    <ClientOnlyOrPremium fallback={<div>Loading...</div>}>
+      <ToReviewClient setType={setType} />
+    </ClientOnlyOrPremium>
   );
 }

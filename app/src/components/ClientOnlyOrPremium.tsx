@@ -1,14 +1,15 @@
 import { ReactNode } from "react";
 import { useHydrated } from "../hooks/use-hydrated";
 
-type Props = {
+type ClientOnlyProps = {
 	/**
 	 * You are encouraged to add a fallback that is the same dimensions
 	 * as the client rendered children. This will avoid content layout
 	 * shift which is disgusting
 	 */
-	children(): ReactNode;
+	children: ReactNode;
 	fallback?: ReactNode;
+	isPremium?: boolean;
 };
 
 /**
@@ -20,12 +21,20 @@ type Props = {
  * UI without the behavior or be a loading spinner or skeleton.
  * ```tsx
  * return (
- *   <ClientOnly fallback={<FakeChart />}>
+ *   <ClientOnlyOrPremium fallback={<FakeChart />}>
  *     {() => <Chart />}
- *   </ClientOnly>
+ *   </ClientOnlyOrPremium>
  * );
  * ```
+ * 
  */
-export function ClientOnly({ children, fallback = null }: Props) {
-	return useHydrated() ? <>{children()}</> : <>{fallback}</>;
-}
+export const ClientOnlyOrPremium = ({ children, fallback = null, isPremium = false }: ClientOnlyProps) => {
+  const isHydrated = useHydrated();
+
+  // Render `children` if `isHydrated` or `forceRender` is true
+  if (isHydrated || isPremium) {
+    return <>{children}</>;
+  }
+
+  return <>{fallback}</>;
+};

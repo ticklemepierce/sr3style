@@ -14,10 +14,24 @@ import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/material';
 import theme from './src/theme';
 import ClientStyleContext from './src/ClientStyleContext';
 import Layout from './src/components/Layout';
+import { useLoaderData } from "@remix-run/react";
+import WcaContextProvider from "./src/context/wca";
 
 interface DocumentProps {
   children: React.ReactNode;
   title?: string;
+}
+
+const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
+const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
+
+
+export async function loader() {
+  return {
+    wcaOrigin: WCA_ORIGIN,
+    wcaOauthOrigin: WCA_OAUTH_ORIGIN,
+    wcaOauthClientId: process.env.WCA_OAUTH_CLIENT_ID,
+  }
 }
 
 const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCache) => {
@@ -69,11 +83,15 @@ const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCa
 // https://remix.run/docs/en/main/route/component
 // https://remix.run/docs/en/main/file-conventions/routes
 export default function App() {
+  const wcaContextValue = useLoaderData<typeof loader>();
+
   return (
     <Document>
-      <Layout>
-        <Outlet />
-      </Layout>
+      <WcaContextProvider value={wcaContextValue}>
+        <Layout>
+          <Outlet />
+        </Layout>
+      </WcaContextProvider>
     </Document>
   );
 }

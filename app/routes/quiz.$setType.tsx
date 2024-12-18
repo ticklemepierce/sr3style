@@ -20,13 +20,13 @@ export const meta: MetaFunction = () => [
 ];
 
 interface Params {
-  type: SetType;
+  setType: SetType;
 }
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Quiz() {
-  const { type } = useParams<keyof Params>() as Params;
-  const {getCardsReadyForReview} = useLocalStorageCards({type});
+  const { setType } = useParams<keyof Params>() as Params;
+  const {getCardsReadyForReview} = useLocalStorageCards({ setType });
   const [state, dispatch] = useReducer(reducer, getInitialState());
   const [searchParams] = useSearchParams();
 
@@ -56,7 +56,7 @@ export default function Quiz() {
       > 
         <Grid item xs={3}>
           { state.quizState === 'loading' && <CircularProgress /> }
-          { state.quizState === 'question' && <QuizQuestion type={type} question={state.question} onAdvance={({ time, rating }: { time: number, rating: Rating }) => getFeedback({ dispatch, time, rating })} />}
+          { state.quizState === 'question' && <QuizQuestion setType={setType} question={state.question} onAdvance={({ time, rating }: { time: number, rating: Rating }) => getFeedback({ dispatch, time, rating })} />}
           { state.quizState === 'feedback' && <QuizFeedback isLastQuestion={state.isLastQuestion!} isStartScreen={state.isStartScreen!} onAdvance={() => !state.isLastQuestion ? advance({ dispatch }) : finishQuiz({ dispatch })} /> }
           { state.quizState === 'complete' && <QuizSummary results={state.results!} />}
         </Grid>

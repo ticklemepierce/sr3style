@@ -1,9 +1,9 @@
 
 import { useLocalStorage } from 'usehooks-ts';
 import { RecordLogItem, createEmptyCard } from "ts-fsrs";
-import { setTypeMap } from '../utils/constants';
 import { Cards, SetType } from "../types";
 import { useSettingsContext } from '../context/settings';
+import { setTypeMap } from '../utils/constants';
 
 const cardsObjToArray = (cardsObj: Cards) => Object.entries(cardsObj).map(([pair, { card }]) => ({
   pair,
@@ -18,12 +18,12 @@ const shuffleArray = (array: any[]) => {
   return array;
 }
 
-const useLocalStorageCards = ({ type }: { type: SetType }) => {
-  const { settings, debugMode } = useSettingsContext();
+const useLocalStorageCards = ({ setType }: { setType: SetType }) => {
+  const { debugMode, settings } = useSettingsContext();
 
-  const [cards, setCards] = useLocalStorage<Cards>(debugMode ? 'debug' + type : type, {});
+  const [cards, setCards] = useLocalStorage<Cards>(debugMode ? 'debug' + setType : setType, {});
 
-  const addToCardsIfNotExists = (newLetterPair: string) => {
+  const addToCardsIfNotExists = async (newLetterPair: string) => {
     const letterPairExists = !!cards[newLetterPair];
     if (!letterPairExists) {
       const card = createEmptyCard();
@@ -35,38 +35,32 @@ const useLocalStorageCards = ({ type }: { type: SetType }) => {
     }
   }
 
-  const addSet = (set: string) => {
-    setTypeMap[type][set].forEach(letter => {
-      addToCardsIfNotExists(`${set}${letter}`);
-      if (settings.autoAddInverse) {
-        addToCardsIfNotExists(`${letter}${set}`);
-      }
-    });
+  const addSet = async (set: string) => {
+    await Promise.all(
+      setTypeMap[setType][set].map(letter => 
+        addPair({ set, letter })
+      )
+    );
   }
 
-  const addPair = ({ set, letter }: { set: string, letter: string}) => {
-    addToCardsIfNotExists(`${set}${letter}`);
+  const addPair = async ({ set, letter }: { set: string, letter: string}) => {
+    await addToCardsIfNotExists(`${set}${letter}`);
     if (settings.autoAddInverse) {
-      addToCardsIfNotExists(`${letter}${set}`);
+      await addToCardsIfNotExists(`${letter}${set}`);
     }
   }
-
-  const removeSet = (set: string) => {
-    setCards((prevCards) => {
-      Object.keys(prevCards).forEach(letterPair => {
-        if (letterPair.startsWith(set)) {
-          console.log("deleting "  + letterPair);
-          delete prevCards[letterPair];
-        }
-      });
-
-      return prevCards;
-    });
+  
+  const removeSet = async (set: string) => {
+    await Promise.all(
+      setTypeMap[setType][set].map(letter => 
+        removePair({ set, letter })
+      )
+    );
   }
 
-  const removePair = (letterPair: string) => {
+  const removePair = async ({ set, letter }: { set: string, letter: string}) => {
     setCards((prevCards) => {
-      delete prevCards[letterPair];
+      delete prevCards[`${set}${letter}`];
 
       return prevCards;
     });
@@ -95,12 +89,12 @@ const useLocalStorageCards = ({ type }: { type: SetType }) => {
 
   return {
     cards,
-    addSet,
-    addPair,
-    removeSet,
     removePair,
+    removeSet,
     updateCard,
     getCardsReadyForReview,
+    addPair,
+    addSet,
   };
 }
 

@@ -8,9 +8,9 @@ import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
 import useTabActive from '~/src/hooks/use-tab-active';
 import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
 
-export const QuizQuestion = ({ question, onAdvance, type }: {question: Question, onAdvance: Function, type: SetType }) => {
+export const QuizQuestion = ({ question, onAdvance, setType }: {question: Question, onAdvance: Function, setType: SetType }) => {
   const { f } = useFSRSContext();
-  const { updateCard } = useLocalStorageCards({ type });
+  const { updateCard } = useLocalStorageCards({ setType });
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const stopWatchStartTimeRef = useRef(Date.now());
 

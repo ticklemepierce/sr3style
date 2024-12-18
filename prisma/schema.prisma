@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url = env("DATABASE_URL")
+}
+
+enum crdb_internal_region {
+  us_east1 @map("aws-us-east-1")
+}
+
+model User {
+  id BigInt @id @default(autoincrement())
+  wcaId String @unique
+  isComped Boolean @default(false)
+}
+
+// TODO add user
+model Sets {
+  id BigInt @id @default(autoincrement())
+  letterPair String
+  setType String
+  card String
+  log String?
+
+  @@unique([letterPair, setType])
+}
