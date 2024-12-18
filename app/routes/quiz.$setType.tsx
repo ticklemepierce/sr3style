@@ -1,27 +1,27 @@
-import type { MetaFunction } from "@remix-run/node";
-import { useReducer, useEffect } from "react";
-import { CircularProgress, Grid, IconButton } from "@mui/material";
-import { reducer, getInitialState } from "~/src/components/quiz/reducer";
+import type { MetaFunction } from '@remix-run/node';
+import { useReducer, useEffect } from 'react';
+import { CircularProgress, Grid, IconButton } from '@mui/material';
+import { reducer, getInitialState } from '~/src/components/quiz/reducer';
 import {
   advance,
   finishQuiz,
   getFeedback,
   initializeQuiz,
-} from "~/src/components/quiz/actions";
-import { QuizQuestion } from "~/src/components/quiz/QuizQuestion";
-import { QuizSummary } from "~/src/components/quiz/QuizSummary";
-import { QuizFeedback } from "~/src/components/quiz/QuizFeedback";
-import { QuizProgress } from "~/src/components/quiz/QuizProgress";
-import { Rating } from "ts-fsrs";
-import { Link, useParams, useSearchParams } from "@remix-run/react";
-import { SetType } from "~/src/types";
-import useLocalStorageCards from "~/src/hooks/use-local-storage-cards";
-import CloseIcon from "@mui/icons-material/Close";
+} from '~/src/components/quiz/actions';
+import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
+import { QuizSummary } from '~/src/components/quiz/QuizSummary';
+import { QuizFeedback } from '~/src/components/quiz/QuizFeedback';
+import { QuizProgress } from '~/src/components/quiz/QuizProgress';
+import { Rating } from 'ts-fsrs';
+import { Link, useParams, useSearchParams } from '@remix-run/react';
+import { SetType } from '~/src/types';
+import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
+import CloseIcon from '@mui/icons-material/Close';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
-  { title: "Remix Starter" },
-  { name: "description", content: "Welcome to remix!" },
+  { title: 'Remix Starter' },
+  { name: 'description', content: 'Welcome to remix!' },
 ];
 
 interface Params {
@@ -44,14 +44,14 @@ export default function Quiz() {
   return (
     <>
       <Link
-        style={{ position: "absolute", top: "15px", left: "15px" }}
-        color={"gray"}
+        style={{ position: 'absolute', top: '15px', left: '15px' }}
+        color={'gray'}
         to={{
           pathname: `/`,
           search: searchParams.toString(),
         }}
       >
-        <CloseIcon htmlColor={"gray"} />
+        <CloseIcon htmlColor={'gray'} />
       </Link>
       {state.showQuizProgress && (
         <QuizProgress
@@ -62,15 +62,15 @@ export default function Quiz() {
       <Grid
         container
         spacing={0}
-        direction="column"
-        alignItems="center"
-        textAlign="center"
-        justifyContent="center"
-        sx={{ minHeight: "100vh" }}
+        direction='column'
+        alignItems='center'
+        textAlign='center'
+        justifyContent='center'
+        sx={{ minHeight: '100vh' }}
       >
         <Grid item xs={3}>
-          {state.quizState === "loading" && <CircularProgress />}
-          {state.quizState === "question" && (
+          {state.quizState === 'loading' && <CircularProgress />}
+          {state.quizState === 'question' && (
             <QuizQuestion
               setType={setType}
               question={state.question}
@@ -79,7 +79,7 @@ export default function Quiz() {
               }
             />
           )}
-          {state.quizState === "feedback" && (
+          {state.quizState === 'feedback' && (
             <QuizFeedback
               isLastQuestion={state.isLastQuestion!}
               isStartScreen={state.isStartScreen!}
@@ -90,7 +90,7 @@ export default function Quiz() {
               }
             />
           )}
-          {state.quizState === "complete" && (
+          {state.quizState === 'complete' && (
             <QuizSummary results={state.results!} />
           )}
         </Grid>

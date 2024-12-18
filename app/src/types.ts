@@ -1,5 +1,5 @@
-import { Card, ReviewLog, Rating } from "ts-fsrs";
-import { EDGES, CORNERS } from "./utils/constants";
+import { Card, ReviewLog, Rating } from 'ts-fsrs';
+import { EDGES, CORNERS } from './utils/constants';
 
 export type Question = any;
 export type Questions = Question[];

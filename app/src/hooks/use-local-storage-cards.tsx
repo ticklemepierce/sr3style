@@ -1,8 +1,8 @@
-import { useLocalStorage } from "usehooks-ts";
-import { RecordLogItem, createEmptyCard } from "ts-fsrs";
-import { Cards, SetType } from "../types";
-import { useSettingsContext } from "../context/settings";
-import { setTypeMap } from "../utils/constants";
+import { useLocalStorage } from 'usehooks-ts';
+import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
+import { Cards, SetType } from '../types';
+import { useSettingsContext } from '../context/settings';
+import { setTypeMap } from '../utils/constants';
 
 const cardsObjToArray = (cardsObj: Cards) =>
   Object.entries(cardsObj).map(([pair, { card }]) => ({
@@ -22,7 +22,7 @@ const useLocalStorageCards = ({ setType }: { setType: SetType }) => {
   const { debugMode, settings } = useSettingsContext();
 
   const [cards, setCards] = useLocalStorage<Cards>(
-    debugMode ? "debug" + setType : setType,
+    debugMode ? 'debug' + setType : setType,
     {},
   );
 

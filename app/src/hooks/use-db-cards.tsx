@@ -1,8 +1,8 @@
-import { RecordLogItem } from "ts-fsrs";
-import { Cards, SetType } from "../types";
-import { useSettingsContext } from "../context/settings";
-import { useState } from "react";
-import { setTypeMap } from "../utils/constants";
+import { RecordLogItem } from 'ts-fsrs';
+import { Cards, SetType } from '../types';
+import { useSettingsContext } from '../context/settings';
+import { useState } from 'react';
+import { setTypeMap } from '../utils/constants';
 
 const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
   const { debugMode } = useSettingsContext(); // TODO debug mode db
@@ -11,9 +11,9 @@ const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
 
   const addPair = async ({ set, letter }: { set: string; letter: string }) => {
     const response = await fetch(`/api/db-cards/add`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ letter, setType, set }),
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
     if (data.success) {
@@ -26,9 +26,9 @@ const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
 
   const addSet = async (set: string) => {
     const response = await fetch(`/api/db-cards/add`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ setType, set }),
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
 
@@ -55,9 +55,9 @@ const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
     letter: string;
   }) => {
     const response = await fetch(`/api/db-cards/remove`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ letter, setType, set }),
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
 
@@ -72,9 +72,9 @@ const useDbCards = ({ setType, user }: { setType: SetType; user: any }) => {
 
   const removeSet = async (set: string) => {
     const response = await fetch(`/api/db-cards/remove`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({ setType, set }),
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
 

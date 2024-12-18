@@ -1,6 +1,6 @@
-import { styled } from "@mui/material/styles";
-import { linearProgressClasses } from "@mui/material/LinearProgress";
-import { Grid, LinearProgress, Typography } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { linearProgressClasses } from '@mui/material/LinearProgress';
+import { Grid, LinearProgress, Typography } from '@mui/material';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -8,10 +8,10 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   // TODO colors
   [`&.${linearProgressClasses.colorPrimary}`]: {
     backgroundColor:
-      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+      theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
   },
   [`& .${linearProgressClasses.bar}`]: {
-    backgroundColor: theme.palette.mode === "light" ? "#1a90ff" : "#308fe8",
+    backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
   },
 }));
 
@@ -26,27 +26,27 @@ export const QuizProgress = ({
     <Grid
       container
       spacing={0}
-      direction="column"
-      textAlign="center"
+      direction='column'
+      textAlign='center'
       sx={{
-        position: "fixed",
+        position: 'fixed',
         top: 25,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "70vw",
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '70vw',
       }}
     >
       <Grid>
         <BorderLinearProgress
           value={(questionNumber / totalQuestions) * 100}
-          variant={"determinate"}
+          variant={'determinate'}
         />
       </Grid>
       <Grid>
         <Typography
-          variant="subtitle1"
-          component="p"
-          sx={{ marginTop: "10px", fontWeight: 500 }}
+          variant='subtitle1'
+          component='p'
+          sx={{ marginTop: '10px', fontWeight: 500 }}
         >
           {questionNumber} / {totalQuestions}
         </Typography>

@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
-import { FormControlLabel, Checkbox, Box, IconButton } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Cards, SetType } from "../types";
-import { setTypeMap } from "../utils/constants";
-import useCards from "../hooks/use-cards";
+import { useMemo, useState } from 'react';
+import { FormControlLabel, Checkbox, Box, IconButton } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { Cards, SetType } from '../types';
+import { setTypeMap } from '../utils/constants';
+import useCards from '../hooks/use-cards';
 
 export const SetGroup = ({
   set,
@@ -57,7 +57,7 @@ export const SetGroup = ({
   };
 
   const children = (
-    <Box sx={{ display: "flex", flexDirection: "column", ml: 3 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
       {possiblePairs.map((letter) => (
         <FormControlLabel
           label={letter.toUpperCase()}
@@ -83,10 +83,10 @@ export const SetGroup = ({
     <>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100px",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          width: '100px',
+          justifyContent: 'space-between',
         }}
       >
         <FormControlLabel
@@ -101,7 +101,7 @@ export const SetGroup = ({
             />
           }
         />
-        <IconButton aria-label="Example" onClick={toggleIsExpanded}>
+        <IconButton aria-label='Example' onClick={toggleIsExpanded}>
           {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </IconButton>
       </Box>

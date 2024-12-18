@@ -1,11 +1,11 @@
-import { json } from "@remix-run/node";
-import { prisma } from "../src/services/db.server";
+import { json } from '@remix-run/node';
+import { prisma } from '../src/services/db.server';
 
 export const action = async ({ request }: { request: Request }) => {
   const { letter, setType, set } = await request.json();
 
   if (!setType || !set) {
-    return json({ error: "Missing required parameters" }, { status: 400 });
+    return json({ error: 'Missing required parameters' }, { status: 400 });
   }
 
   try {
@@ -37,7 +37,7 @@ export const action = async ({ request }: { request: Request }) => {
       return json({ success: true, message: `Removed set: ${set}` });
     }
   } catch (error) {
-    console.error("Error in remove API:", error);
-    return json({ error: "Failed to remove items" }, { status: 500 });
+    console.error('Error in remove API:', error);
+    return json({ error: 'Failed to remove items' }, { status: 500 });
   }
 };

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import { fsrs, FSRSParameters, generatorParameters, FSRS } from "ts-fsrs";
+import React, { useEffect, useState, useContext } from 'react';
+import { fsrs, FSRSParameters, generatorParameters, FSRS } from 'ts-fsrs';
 
 interface IFSRSContext {
   params?: FSRSParameters;

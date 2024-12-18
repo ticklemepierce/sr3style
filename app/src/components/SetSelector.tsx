@@ -1,9 +1,9 @@
-import { FormGroup } from "@mui/material";
-import { setTypeMap } from "../utils/constants";
-import { SetGroup } from "./SetGroup";
-import Typography from "@mui/material/Typography";
-import { SetType } from "../types";
-import { ClientOnlyOrPremium } from "./ClientOnlyOrPremium";
+import { FormGroup } from '@mui/material';
+import { setTypeMap } from '../utils/constants';
+import { SetGroup } from './SetGroup';
+import Typography from '@mui/material/Typography';
+import { SetType } from '../types';
+import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
 
 const SetSelectorClient = ({
   setType,
@@ -14,7 +14,7 @@ const SetSelectorClient = ({
 }) => {
   return (
     <>
-      <Typography variant="h5">
+      <Typography variant='h5'>
         Select {setType.slice(0, -1)} pairs to learn:
       </Typography>
       <FormGroup>

@@ -1,7 +1,7 @@
-import { Rating } from "ts-fsrs";
-import { Questions, SetType } from "~/src/types";
+import { Rating } from 'ts-fsrs';
+import { Questions, SetType } from '~/src/types';
 
-export const INITIALIZE_QUIZ = "initialize";
+export const INITIALIZE_QUIZ = 'initialize';
 export const initializeQuiz = ({
   dispatch,
   questions,
@@ -12,7 +12,7 @@ export const initializeQuiz = ({
   dispatch({ type: INITIALIZE_QUIZ, payload: { questions } });
 };
 
-export const GET_FEEDBACK = "get feedback";
+export const GET_FEEDBACK = 'get feedback';
 export const getFeedback = ({
   dispatch,
   time,
@@ -25,17 +25,17 @@ export const getFeedback = ({
   dispatch({ type: GET_FEEDBACK, payload: { time, rating } });
 };
 
-export const ADVANCE = "advance";
+export const ADVANCE = 'advance';
 export const advance = ({ dispatch }: { dispatch: Function }) => {
   dispatch({ type: ADVANCE });
 };
 
-export const ADVANCE_TO_NEXT_TYPE = "advance to next type";
+export const ADVANCE_TO_NEXT_TYPE = 'advance to next type';
 export const advanceToNextType = ({ dispatch }: { dispatch: Function }) => {
   dispatch({ type: ADVANCE_TO_NEXT_TYPE });
 };
 
-export const FINISH_QUIZ = "finish quiz";
+export const FINISH_QUIZ = 'finish quiz';
 export const finishQuiz = ({ dispatch }: { dispatch: Function }) => {
   dispatch({ type: FINISH_QUIZ });
 };

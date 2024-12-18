@@ -1,7 +1,7 @@
-import { json } from "@remix-run/node";
-import { prisma } from "../src/services/db.server";
-import { Cards } from "~/src/types";
-import { Params, useParams } from "@remix-run/react";
+import { json } from '@remix-run/node';
+import { prisma } from '../src/services/db.server';
+import { Cards } from '~/src/types';
+import { Params, useParams } from '@remix-run/react';
 
 export const loader = async ({ request }: { request: Request }) => {
   const { setType } = useParams<keyof Params>() as Params;
@@ -16,7 +16,7 @@ export const loader = async ({ request }: { request: Request }) => {
 
     return json(cards);
   } catch (error) {
-    console.error("Error fetching cards:", error);
-    return json({ error: "Failed to fetch cards" }, { status: 500 });
+    console.error('Error fetching cards:', error);
+    return json({ error: 'Failed to fetch cards' }, { status: 500 });
   }
 };

@@ -1,7 +1,7 @@
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from 'react';
 
-const WCA_ORIGIN = "https://api.worldcubeassociation.org";
-const WCA_OAUTH_ORIGIN = "https://worldcubeassociation.org";
+const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
+const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
 
 interface IWcaContext {
   wcaOrigin: string;

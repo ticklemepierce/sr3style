@@ -1,8 +1,8 @@
 // app/services/session.server.ts
-import { createCookieSessionStorage, json } from "@remix-run/node";
-import { prisma } from "./db.server";
-import { Cards } from "../types";
-import { setTypes } from "../utils/constants";
+import { createCookieSessionStorage, json } from '@remix-run/node';
+import { prisma } from './db.server';
+import { Cards } from '../types';
+import { setTypes } from '../utils/constants';
 // import { User } from "~/types";
 
 // TODO types
@@ -10,12 +10,12 @@ import { setTypes } from "../utils/constants";
 // export the whole sessionStorage object
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "_session",
-    sameSite: "lax", // this helps with CSRF
-    path: "/", // remember to add this so the cookie will work in all routes
+    name: '_session',
+    sameSite: 'lax', // this helps with CSRF
+    path: '/', // remember to add this so the cookie will work in all routes
     httpOnly: true, // for security reasons, make this cookie http only
-    secrets: ["s3cr3t"], // replace this with an actual secret
-    secure: process.env.NODE_ENV === "production", // enable this in prod only
+    secrets: ['s3cr3t'], // replace this with an actual secret
+    secure: process.env.NODE_ENV === 'production', // enable this in prod only
   },
 });
 
@@ -23,11 +23,11 @@ export const sessionStorage = createCookieSessionStorage({
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
 export const getUser = async (request: Request): Promise<any> => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getSession(request.headers.get('Cookie'));
 
   // TODO get user from DB
 
-  const user = session.get("user") || null;
+  const user = session.get('user') || null;
 
   console.log({ user });
 

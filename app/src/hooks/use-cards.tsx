@@ -1,11 +1,11 @@
-import { useLocalStorage } from "usehooks-ts";
-import { RecordLogItem, createEmptyCard } from "ts-fsrs";
-import { setTypeMap } from "../utils/constants";
-import { Cards, SetType } from "../types";
-import { useSettingsContext } from "../context/settings";
-import { prisma } from "../services/db.server";
-import useLocalStorageCards from "./use-local-storage-cards";
-import useDbCards from "./use-db-cards";
+import { useLocalStorage } from 'usehooks-ts';
+import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
+import { setTypeMap } from '../utils/constants';
+import { Cards, SetType } from '../types';
+import { useSettingsContext } from '../context/settings';
+import { prisma } from '../services/db.server';
+import useLocalStorageCards from './use-local-storage-cards';
+import useDbCards from './use-db-cards';
 
 const cardsObjToArray = (cardsObj: Cards) =>
   Object.entries(cardsObj).map(([pair, { card }]) => ({

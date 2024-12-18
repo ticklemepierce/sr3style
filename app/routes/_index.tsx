@@ -1,19 +1,19 @@
-import type { MetaFunction } from "@remix-run/node";
-import { SetSelector } from "~/src/components/SetSelector";
-import { ToReview } from "~/src/components/ToReview";
-import { CORNERS, EDGES } from "~/src/utils/constants";
-import { Settings as SettingsIcon } from "@mui/icons-material";
-import { IconButton, Typography, Button } from "@mui/material";
-import { useState } from "react";
-import { SettingsModal } from "~/src/components/SettingsModal";
-import { Form, useLoaderData } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/node";
-import { getUser } from "~/src/services/session.server";
+import type { MetaFunction } from '@remix-run/node';
+import { SetSelector } from '~/src/components/SetSelector';
+import { ToReview } from '~/src/components/ToReview';
+import { CORNERS, EDGES } from '~/src/utils/constants';
+import { Settings as SettingsIcon } from '@mui/icons-material';
+import { IconButton, Typography, Button } from '@mui/material';
+import { useState } from 'react';
+import { SettingsModal } from '~/src/components/SettingsModal';
+import { Form, useLoaderData } from '@remix-run/react';
+import type { LoaderFunction } from '@remix-run/node';
+import { getUser } from '~/src/services/session.server';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
-  { title: "Remix Starter" },
-  { name: "description", content: "Welcome to remix!" },
+  { title: 'Remix Starter' },
+  { name: 'description', content: 'Welcome to remix!' },
 ];
 
 interface ILoaderData {
@@ -36,22 +36,22 @@ export default function Index() {
   return (
     <>
       {!user ? (
-        <Form action={`/auth`} method="post" className="flex justify-center">
-          <Button type="submit">Sign in with WCA</Button>
+        <Form action={`/auth`} method='post' className='flex justify-center'>
+          <Button type='submit'>Sign in with WCA</Button>
         </Form>
       ) : (
-        <Form action={`/logout`} method="post" className="flex justify-center">
-          <Button type="submit">Sign out</Button>
+        <Form action={`/logout`} method='post' className='flex justify-center'>
+          <Button type='submit'>Sign out</Button>
         </Form>
       )}
       <IconButton
-        style={{ position: "absolute", top: "15px", right: "15px" }}
-        aria-label="Settings"
+        style={{ position: 'absolute', top: '15px', right: '15px' }}
+        aria-label='Settings'
         onClick={() => setSettingsModalOpen(true)}
       >
         <SettingsIcon />
       </IconButton>
-      <Typography variant="h4" component="h1" sx={{ my: 2 }}>
+      <Typography variant='h4' component='h1' sx={{ my: 2 }}>
         SR 3style
       </Typography>
       <ToReview setType={EDGES} />

@@ -1,8 +1,8 @@
-import { json } from "@remix-run/node";
-import { prisma } from "../src/services/db.server";
-import { setTypeMap } from "~/src/utils/constants";
-import { Card, createEmptyCard } from "ts-fsrs";
-import { Cards, SetType } from "~/src/types";
+import { json } from '@remix-run/node';
+import { prisma } from '../src/services/db.server';
+import { setTypeMap } from '~/src/utils/constants';
+import { Card, createEmptyCard } from 'ts-fsrs';
+import { Cards, SetType } from '~/src/types';
 
 type RequestPayload = {
   letter?: string;
@@ -20,7 +20,7 @@ export const action = async ({ request }: { request: Request }) => {
 
   // TODO better validation
   if (!setType || !set) {
-    return json({ error: "Missing required parameters" }, { status: 400 });
+    return json({ error: 'Missing required parameters' }, { status: 400 });
   }
 
   try {
@@ -71,7 +71,7 @@ export const action = async ({ request }: { request: Request }) => {
       return json({ success: true, message: `created set: ${set}`, cards });
     }
   } catch (error) {
-    console.error("Error in add API:", error);
-    return json({ error: "Failed to add items" }, { status: 500 });
+    console.error('Error in add API:', error);
+    return json({ error: 'Failed to add items' }, { status: 500 });
   }
 };

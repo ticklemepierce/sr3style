@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from 'react';
 
 interface ISettings {
   autoAddInverse?: boolean;
@@ -32,7 +32,7 @@ export function SettingsProvider({
   const [settings, setSettings] = useState<ISettings>({});
 
   const saveSettings = (newSettings: ISettings) => {
-    localStorage.setItem("settings", JSON.stringify(newSettings));
+    localStorage.setItem('settings', JSON.stringify(newSettings));
     setSettings(newSettings);
   };
 
@@ -43,7 +43,7 @@ export function SettingsProvider({
   };
 
   useEffect(() => {
-    const settingsFromStorage = window.localStorage.getItem("settings");
+    const settingsFromStorage = window.localStorage.getItem('settings');
 
     let settings = settingsFromStorage
       ? JSON.parse(settingsFromStorage)

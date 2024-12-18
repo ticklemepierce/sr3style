@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import Typography from "@mui/material/Typography";
-import { Rating } from "ts-fsrs";
-import { Question, SetType } from "~/src/types";
-import { useFSRSContext } from "~/src/context/fsrs";
-import { formatTime } from "~/src/utils/time";
-import { DEFAULT_TARGET_TIME_IN_MS } from "~/src/utils/constants";
-import useTabActive from "~/src/hooks/use-tab-active";
-import useLocalStorageCards from "~/src/hooks/use-local-storage-cards";
+import { useEffect, useRef, useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { Rating } from 'ts-fsrs';
+import { Question, SetType } from '~/src/types';
+import { useFSRSContext } from '~/src/context/fsrs';
+import { formatTime } from '~/src/utils/time';
+import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
+import useTabActive from '~/src/hooks/use-tab-active';
+import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
 
 export const QuizQuestion = ({
   question,
@@ -25,17 +25,17 @@ export const QuizQuestion = ({
   const stopwatchTimeRef = useRef(0);
 
   const handleSpacePress = (e: KeyboardEvent) => {
-    if (e.key === " ") {
+    if (e.key === ' ') {
       rate();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("touchstart", rate, false);
-    document.addEventListener("keydown", handleSpacePress, false);
+    document.addEventListener('touchstart', rate, false);
+    document.addEventListener('keydown', handleSpacePress, false);
     return () => {
-      document.removeEventListener("keydown", handleSpacePress, false);
-      document.removeEventListener("touchstart", rate, false);
+      document.removeEventListener('keydown', handleSpacePress, false);
+      document.removeEventListener('touchstart', rate, false);
     };
   }, []);
 
@@ -86,10 +86,10 @@ export const QuizQuestion = ({
 
   return (
     <>
-      <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
+      <Typography variant='h1' component='h1' sx={{ mb: 2 }}>
         {question.pair.toUpperCase()}
       </Typography>
-      <Typography variant="h2" component="p">
+      <Typography variant='h2' component='p'>
         {formatTime(stopwatchTime)}
       </Typography>
     </>

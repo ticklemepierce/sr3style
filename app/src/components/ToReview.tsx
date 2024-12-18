@@ -1,8 +1,8 @@
-import { Button, Typography } from "@mui/material";
-import { SetType } from "../types";
-import { Link, useSearchParams } from "@remix-run/react";
-import useLocalStorageCards from "../hooks/use-local-storage-cards";
-import { ClientOnlyOrPremium } from "./ClientOnlyOrPremium";
+import { Button, Typography } from '@mui/material';
+import { SetType } from '../types';
+import { Link, useSearchParams } from '@remix-run/react';
+import useLocalStorageCards from '../hooks/use-local-storage-cards';
+import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
 
 const ToReviewClient = ({ setType }: { setType: SetType }) => {
   const [searchParams] = useSearchParams();
@@ -10,11 +10,11 @@ const ToReviewClient = ({ setType }: { setType: SetType }) => {
   const { getCardsReadyForReview } = useLocalStorageCards({ setType });
   const cards = getCardsReadyForReview();
 
-  const pairOrPairs = cards.length === 1 ? "pair" : "pairs";
+  const pairOrPairs = cards.length === 1 ? 'pair' : 'pairs';
 
   return (
     <>
-      <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
+      <Typography variant='h4' component='h1' sx={{ mb: 2 }}>
         You have {cards.length} {setType.slice(0, -1)} {pairOrPairs} to review.
       </Typography>
       {Boolean(cards && cards.length) && (

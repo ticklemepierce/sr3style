@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { useHydrated } from "../hooks/use-hydrated";
+import { ReactNode } from 'react';
+import { useHydrated } from '../hooks/use-hydrated';
 
 type ClientOnlyProps = {
   /**
