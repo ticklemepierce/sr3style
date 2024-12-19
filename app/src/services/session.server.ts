@@ -1,10 +1,8 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
 import { prisma } from './db.server';
-import { Cards } from '../types';
+import { Cards, SetTypeMap, UserData } from '../types';
 import { setTypes } from '../utils/constants';
-// import { User } from "~/types";
-
 // TODO types
 
 // export the whole sessionStorage object
@@ -22,16 +20,14 @@ export const sessionStorage = createCookieSessionStorage({
 // you can also export the methods individually for your own usage
 export const { getSession, commitSession, destroySession } = sessionStorage;
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUser = async (request: Request): Promise<any> => {
+export const getUserData = async (
+  request: Request,
+): Promise<UserData | undefined> => {
   const session = await getSession(request.headers.get('Cookie'));
 
   // TODO get user from DB
 
   const user = session.get('user') || null;
-
-  console.log({ user });
 
   if (!user) {
     return;
@@ -41,7 +37,7 @@ export const getUser = async (request: Request): Promise<any> => {
     setTypes.map(async (setType) => {
       const sets = await prisma.sets.findMany({ where: { setType } });
       const cards = sets.reduce((acc, { letterPair, card }) => {
-        acc[letterPair] = { card: JSON.parse(card) }; // Parse card JSON
+        acc[letterPair] = { fsrsCard: JSON.parse(card) }; // Parse card JSON
         return acc;
       }, {} as Cards);
 
@@ -50,17 +46,14 @@ export const getUser = async (request: Request): Promise<any> => {
   );
 
   // Combine results into a single response
-  const combinedResult = results.reduce(
-    (acc, { setType, cards }) => {
-      acc[setType] = cards;
-      return acc;
-    },
-    {} as Record<string, Cards>,
-  );
+  const userSelectedLetterPairs = results.reduce((acc, { setType, cards }) => {
+    acc[setType] = cards;
+    return acc;
+  }, {} as SetTypeMap);
 
   return {
     user,
-    cards: combinedResult,
+    userSelectedLetterPairs,
     isPremium: true, // TODO
   };
 };

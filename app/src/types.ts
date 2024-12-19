@@ -1,18 +1,20 @@
-import { Card, ReviewLog, Rating } from 'ts-fsrs';
+import { Card as FsrsCard, ReviewLog, Rating } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
+import { User } from '@prisma/client';
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Question = any;
-export type Questions = Question[];
-
-export type CardWithOptionalLog = {
-  card: Card;
+export type Card = {
+  fsrsCard: FsrsCard;
   log?: ReviewLog;
+  bestTime?: number;
 };
 
 export type Cards = {
-  [pair: string]: { bestTime?: number } & CardWithOptionalLog;
+  [pair: string]: Card;
+};
+
+export type Question = {
+  pair: string;
+  card: Card;
 };
 
 export interface Results {
@@ -24,4 +26,49 @@ export interface Results {
 
 export type SetType = typeof EDGES | typeof CORNERS;
 
+export type UserData = {
+  user: User;
+  userSelectedLetterPairs: SetTypeMap;
+  isPremium: boolean;
+};
+
 export type Nullable<T> = T | null;
+
+export type SetTypeMap = Record<SetType, Cards>;
+
+export type CardManager = {
+  setTypeMap: SetTypeMap;
+  removePair: ({
+    set,
+    letter,
+    setType,
+  }: {
+    set: string;
+    letter: string;
+    setType: SetType;
+  }) => Promise<void>;
+  removeSet: ({
+    setType,
+    set,
+  }: {
+    setType: SetType;
+    set: string;
+  }) => Promise<void>;
+  updateCard: () => void; // Add specific parameters and return types if needed
+  addPair: ({
+    setType,
+    set,
+    letter,
+  }: {
+    setType: SetType;
+    set: string;
+    letter: string;
+  }) => Promise<void>;
+  addSet: ({
+    setType,
+    set,
+  }: {
+    setType: SetType;
+    set: string;
+  }) => Promise<void>;
+};

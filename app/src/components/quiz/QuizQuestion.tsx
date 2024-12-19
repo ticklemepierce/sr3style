@@ -6,11 +6,13 @@ import { useFSRSContext } from '~/src/context/fsrs';
 import { formatTime } from '~/src/utils/time';
 import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
 import useTabActive from '~/src/hooks/use-tab-active';
-import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
+import { useSessionContext } from '~/src/context/session';
 
 export const QuizQuestion = ({
   question,
   onAdvance,
+  // TODO updateCard
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setType,
 }: {
   question: Question;
@@ -18,7 +20,7 @@ export const QuizQuestion = ({
   setType: SetType;
 }) => {
   const { f } = useFSRSContext();
-  const { updateCard } = useLocalStorageCards({ setType });
+  const { updateCard } = useSessionContext();
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const stopWatchStartTimeRef = useRef(Date.now());
 
@@ -77,9 +79,12 @@ export const QuizQuestion = ({
         rating = Rating.Again;
     }
 
-    const newCard = f!.repeat(question.card, new Date())[rating];
+    // TODO updateCard
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newCard = f!.repeat(question.card.fsrsCard, new Date())[rating];
 
-    updateCard({ card: newCard, letterPair: question.pair });
+    // cardManager!.updateCard({ card: newCard, letterPair: question.pair });
+    updateCard!();
 
     onAdvance({ time: timeForPair, rating });
   };

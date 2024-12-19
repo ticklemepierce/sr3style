@@ -16,6 +16,9 @@ import ClientStyleContext from './src/ClientStyleContext';
 import Layout from './src/components/Layout';
 import { useLoaderData } from '@remix-run/react';
 import WcaContextProvider from './src/context/wca';
+import { getUserData } from './src/services/session.server';
+import type { LoaderFunction } from '@remix-run/node';
+import SessionContextProvider from './src/context/session';
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -25,13 +28,12 @@ interface DocumentProps {
 const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
 const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
 
-export async function loader() {
-  return {
-    wcaOrigin: WCA_ORIGIN,
-    wcaOauthOrigin: WCA_OAUTH_ORIGIN,
-    wcaOauthClientId: process.env.WCA_OAUTH_CLIENT_ID,
-  };
-}
+export const loader: LoaderFunction = async ({ request }) => ({
+  wcaOrigin: WCA_ORIGIN,
+  wcaOauthOrigin: WCA_OAUTH_ORIGIN,
+  wcaOauthClientId: process.env.WCA_OAUTH_CLIENT_ID,
+  userData: await getUserData(request),
+});
 
 const Document = withEmotionCache(
   ({ children, title }: DocumentProps, emotionCache) => {
@@ -95,14 +97,16 @@ const Document = withEmotionCache(
 // https://remix.run/docs/en/main/route/component
 // https://remix.run/docs/en/main/file-conventions/routes
 export default function App() {
-  const wcaContextValue = useLoaderData<typeof loader>();
+  const { userData, ...wcaContextValue } = useLoaderData<typeof loader>();
 
   return (
     <Document>
       <WcaContextProvider value={wcaContextValue}>
-        <Layout>
-          <Outlet />
-        </Layout>
+        <SessionContextProvider userData={userData}>
+          <Layout>
+            <Outlet />
+          </Layout>
+        </SessionContextProvider>
       </WcaContextProvider>
     </Document>
   );

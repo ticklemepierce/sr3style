@@ -10,7 +10,7 @@ export const loader = async () => {
     const sets = await prisma.sets.findMany({ where: { setType } });
 
     const cards = sets.reduce((acc, { letterPair, card }) => {
-      acc[letterPair] = { card: JSON.parse(card) };
+      acc[letterPair] = { fsrsCard: JSON.parse(card) };
       return acc;
     }, {} as Cards);
 

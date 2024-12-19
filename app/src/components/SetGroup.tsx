@@ -3,37 +3,36 @@ import { FormControlLabel, Checkbox, Box, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { SetType } from '../types';
-import { setTypeMap } from '../utils/constants';
-import useCards from '../hooks/use-cards';
+import { setTypeSpeffzMap } from '../utils/constants';
+import { useSessionContext } from '../context/session';
 
 export const SetGroup = ({
   set,
   possiblePairs,
   setType,
-  user,
 }: {
   set: string;
   possiblePairs: string[];
   setType: SetType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user?: any;
 }) => {
-  const { cards, addSet, addPair, removeSet, removePair } = useCards({
-    setType,
-    user,
-  });
+  const { addSet, removeSet, addPair, removePair, userData } =
+    useSessionContext();
+
+  const cards = useMemo(() => {
+    return userData?.userSelectedLetterPairs[setType] ?? {};
+  }, [userData]);
 
   const numChecked = useMemo(
-    () =>
-      Object.keys(cards ?? {}).filter((pair) => pair.startsWith(set)).length,
+    () => Object.keys(cards).filter((pair) => pair.startsWith(set)).length,
     [cards],
   );
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const areAllChecked = () => numChecked === setTypeMap[setType][set].length;
+  const areAllChecked = () =>
+    numChecked === setTypeSpeffzMap[setType][set].length;
   const areSomeChecked = () =>
-    0 < numChecked && numChecked < setTypeMap[setType][set].length;
+    0 < numChecked && numChecked < setTypeSpeffzMap[setType][set].length;
 
   const handleChange = async ({
     letter,
@@ -44,15 +43,15 @@ export const SetGroup = ({
   }) => {
     if (letter === set) {
       if (isChecked) {
-        await addSet(set);
+        await addSet!({ setType, set });
       } else {
-        await removeSet(set);
+        await removeSet!({ setType, set });
       }
     } else {
       if (isChecked) {
-        await addPair({ set, letter });
+        await addPair!({ setType, set, letter });
       } else {
-        await removePair({ set, letter });
+        await removePair!({ setType, set, letter });
       }
     }
   };

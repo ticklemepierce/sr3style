@@ -1,6 +1,6 @@
 import { Rating } from 'ts-fsrs';
 import { Dispatch } from 'react';
-import { Questions } from '~/src/types';
+import { Question } from '~/src/types';
 
 // TODO
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,7 +12,7 @@ export const initializeQuiz = ({
   questions,
 }: {
   dispatch: Dispatch<Action>;
-  questions: Questions;
+  questions: Question[];
 }) => {
   dispatch({ type: INITIALIZE_QUIZ, payload: { questions } });
 };

@@ -15,8 +15,9 @@ import { QuizProgress } from '~/src/components/quiz/QuizProgress';
 import { Rating } from 'ts-fsrs';
 import { Link, useParams, useSearchParams } from '@remix-run/react';
 import { SetType } from '~/src/types';
-import useLocalStorageCards from '~/src/hooks/use-local-storage-cards';
 import CloseIcon from '@mui/icons-material/Close';
+import { getCardsReadyForReview } from '~/src/utils/cards';
+import { useSessionContext } from '~/src/context/session';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
@@ -31,15 +32,18 @@ interface Params {
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Quiz() {
   const { setType } = useParams<keyof Params>() as Params;
-  const { getCardsReadyForReview } = useLocalStorageCards({ setType });
+  const { setTypeMap } = useSessionContext();
   const [state, dispatch] = useReducer(reducer, getInitialState());
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const cards = getCardsReadyForReview(true);
+    const questions = getCardsReadyForReview({
+      cards: setTypeMap?.[setType] ?? {},
+      shuffle: true,
+    });
 
-    initializeQuiz({ dispatch, questions: cards });
-  }, []);
+    initializeQuiz({ dispatch, questions });
+  }, [setTypeMap]);
 
   return (
     <>
@@ -73,7 +77,7 @@ export default function Quiz() {
           {state.quizState === 'question' && (
             <QuizQuestion
               setType={setType}
-              question={state.question}
+              question={state.question!}
               onAdvance={({ time, rating }: { time: number; rating: Rating }) =>
                 getFeedback({ dispatch, time, rating })
               }

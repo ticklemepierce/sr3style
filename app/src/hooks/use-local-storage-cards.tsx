@@ -1,109 +1,125 @@
 import { useLocalStorage } from 'usehooks-ts';
-import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
-import { Cards, SetType } from '../types';
+// import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
+import { createEmptyCard } from 'ts-fsrs';
+import { CardManager, SetType, SetTypeMap } from '../types';
 import { useSettingsContext } from '../context/settings';
-import { setTypeMap } from '../utils/constants';
+import { setTypeSpeffzMap } from '../utils/constants';
 
-const cardsObjToArray = (cardsObj: Cards) =>
-  Object.entries(cardsObj).map(([pair, { card }]) => ({
-    pair,
-    card,
-  }));
+const useLocalStorageCards = (): CardManager => {
+  const { settings } = useSettingsContext();
 
-const shuffleArray = (array: unknown[]) => {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
-
-const useLocalStorageCards = ({ setType }: { setType: SetType }) => {
-  const { debugMode, settings } = useSettingsContext();
-
-  const [cards, setCards] = useLocalStorage<Cards>(
-    debugMode ? 'debug' + setType : setType,
-    {},
+  const [setTypeMap, setSetTypeMap] = useLocalStorage<SetTypeMap>(
+    'cards',
+    {} as SetTypeMap,
   );
 
-  const addToCardsIfNotExists = async (newLetterPair: string) => {
-    const letterPairExists = !!cards[newLetterPair];
+  const addToCardsIfNotExists = async ({
+    setType,
+    letterPair,
+  }: {
+    setType: SetType;
+    letterPair: string;
+  }) => {
+    const letterPairExists = !!setTypeMap[setType][letterPair];
     if (!letterPairExists) {
       const card = createEmptyCard();
 
-      setCards((prevCards) => ({
-        ...prevCards,
-        [newLetterPair]: { card },
-      }));
+      setSetTypeMap((prev) => {
+        const prevSetTypeCards = prev[setType];
+
+        return {
+          ...prev,
+          [setType]: {
+            ...prevSetTypeCards,
+            [letterPair]: { card },
+          },
+        };
+      });
     }
   };
 
-  const addSet = async (set: string) => {
+  const addSet = async ({
+    setType,
+    set,
+  }: {
+    setType: SetType;
+    set: string;
+  }) => {
     await Promise.all(
-      setTypeMap[setType][set].map((letter) => addPair({ set, letter })),
+      setTypeSpeffzMap[setType][set].map((letter) =>
+        addPair({ setType, set, letter }),
+      ),
     );
   };
 
-  const addPair = async ({ set, letter }: { set: string; letter: string }) => {
-    await addToCardsIfNotExists(`${set}${letter}`);
+  const addPair = async ({
+    setType,
+    set,
+    letter,
+  }: {
+    setType: SetType;
+    set: string;
+    letter: string;
+  }) => {
+    await addToCardsIfNotExists({ setType, letterPair: `${set}${letter}` });
     if (settings.autoAddInverse) {
-      await addToCardsIfNotExists(`${letter}${set}`);
+      await addToCardsIfNotExists({ setType, letterPair: `${letter}${set}` });
     }
   };
 
-  const removeSet = async (set: string) => {
+  const removeSet = async ({
+    setType,
+    set,
+  }: {
+    setType: SetType;
+    set: string;
+  }) => {
     await Promise.all(
-      setTypeMap[setType][set].map((letter) => removePair({ set, letter })),
+      setTypeSpeffzMap[setType][set].map((letter) =>
+        removePair({ setType, set, letter }),
+      ),
     );
   };
 
   const removePair = async ({
+    setType,
     set,
     letter,
   }: {
+    setType: SetType;
     set: string;
     letter: string;
   }) => {
-    setCards((prevCards) => {
-      delete prevCards[`${set}${letter}`];
+    setSetTypeMap((prev) => {
+      delete prev[setType][`${set}${letter}`];
 
-      return prevCards;
+      return prev;
     });
   };
 
-  const updateCard = ({
-    card,
-    letterPair,
-  }: {
-    card: RecordLogItem;
-    letterPair: string;
-  }) => {
-    setCards((prevCards) => {
-      prevCards[letterPair] = card;
+  const updateCard = () => {};
 
-      return prevCards;
-    });
-  };
+  // const getCardsReadyForReview = () => {};
 
-  const getCardsReadyForReview = (shuffle = false) => {
-    const cardsFromStorageArray = cardsObjToArray(cards);
+  // const updateCard = ({
+  //   card,
+  //   letterPair,
+  // }: {
+  //   card: RecordLogItem;
+  //   letterPair: string;
+  // }) => {
+  //   setCards((prevCards) => {
+  //     prevCards[letterPair] = card;
 
-    const onlyDueCards = cardsFromStorageArray.filter(({ card }) => {
-      const currTime = new Date();
-      const cardTime = new Date(card.due);
-
-      return cardTime < currTime;
-    });
-
-    return shuffle ? shuffleArray(onlyDueCards) : onlyDueCards;
-  };
+  //     return prevCards;
+  //   });
+  // };
 
   return {
-    cards,
+    setTypeMap,
     removePair,
     removeSet,
     updateCard,
-    getCardsReadyForReview,
     addPair,
     addSet,
   };

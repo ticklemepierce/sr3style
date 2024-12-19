@@ -37,7 +37,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   session.set('accessToken', accessToken);
   session.set('user', data.me);
 
-  const user = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: {
       wcaId: data.me.wca_id, // Unique identifier for the user
     },
@@ -46,8 +46,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       wcaId: data.me.wca_id,
     },
   });
-
-  console.log(user);
 
   // return json({ user });
 

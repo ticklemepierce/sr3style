@@ -1,23 +1,37 @@
 import { Button, Typography } from '@mui/material';
 import { SetType } from '../types';
 import { Link, useSearchParams } from '@remix-run/react';
-import useLocalStorageCards from '../hooks/use-local-storage-cards';
 import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
+import { useSessionContext } from '../context/session';
+import { getCardsReadyForReview } from '../utils/cards';
+import { useMemo } from 'react';
 
 const ToReviewClient = ({ setType }: { setType: SetType }) => {
   const [searchParams] = useSearchParams();
 
-  const { getCardsReadyForReview } = useLocalStorageCards({ setType });
-  const cards = getCardsReadyForReview();
+  const { setTypeMap } = useSessionContext();
 
-  const pairOrPairs = cards.length === 1 ? 'pair' : 'pairs';
+  const cards = useMemo(
+    () => setTypeMap?.[setType] ?? {},
+    [setTypeMap, setType],
+  );
+
+  const cardsReadyForReview = useMemo(() => {
+    return getCardsReadyForReview({
+      cards,
+      shuffle: true,
+    });
+  }, [cards]);
+
+  const pairOrPairs = cardsReadyForReview.length === 1 ? 'pair' : 'pairs';
 
   return (
     <>
       <Typography variant={'h4'} component={'h1'} sx={{ mb: 2 }}>
-        You have {cards.length} {setType.slice(0, -1)} {pairOrPairs} to review.
+        You have {cardsReadyForReview.length} {setType.slice(0, -1)}{' '}
+        {pairOrPairs} to review.
       </Typography>
-      {Boolean(cards && cards.length) && (
+      {Boolean(cardsReadyForReview && cardsReadyForReview.length) && (
         <Link
           to={{
             pathname: `/quiz/${setType}`,

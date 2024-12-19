@@ -1,11 +1,11 @@
-import { Question, Questions, Results, SetType } from '~/src/types';
+import { Question, Results, SetType } from '~/src/types';
 import { INITIALIZE_QUIZ, ADVANCE, GET_FEEDBACK, FINISH_QUIZ } from './actions';
 import { Rating, RatingType } from 'ts-fsrs';
 
 type Advance = { type: typeof ADVANCE };
 type InitializeQuiz = {
   type: typeof INITIALIZE_QUIZ;
-  payload: { questions: Questions; type: SetType };
+  payload: { questions: Question[]; type: SetType };
 };
 type GetFeedback = {
   type: typeof GET_FEEDBACK;
@@ -47,7 +47,7 @@ export const reducer = (state: State, action: Action): State => {
         results: {},
       };
     case GET_FEEDBACK:
-      state.results![state.question.pair] = {
+      state.results![state.question!.pair] = {
         time: action.payload.time,
         rating: Rating[action.payload.rating],
       };

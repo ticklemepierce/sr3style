@@ -921,7 +921,7 @@ export const DEFAULT_TARGET_TIME_IN_MS = 15 * 1000;
 export const EDGES = 'edges' as const;
 export const CORNERS = 'corners' as const;
 
-export const setTypeMap = {
+export const setTypeSpeffzMap = {
   [EDGES]: edgeMap,
   [CORNERS]: cornersMap,
 } as const;

@@ -8,7 +8,8 @@ import { useState } from 'react';
 import { SettingsModal } from '~/src/components/SettingsModal';
 import { Form, useLoaderData } from '@remix-run/react';
 import type { LoaderFunction } from '@remix-run/node';
-import { getUser } from '~/src/services/session.server';
+import { getUserData } from '~/src/services/session.server';
+import { UserData } from '~/src/types';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
@@ -17,26 +18,27 @@ export const meta: MetaFunction = () => [
 ];
 
 interface ILoaderData {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user?: any; // TODO
+  userData?: UserData;
 }
 
 export const loader: LoaderFunction = async ({ request }) => ({
-  user: await getUser(request),
+  userData: await getUserData(request),
 });
 
 // TODO make summary show percentage in each state
 // TODO show fraction of selected cases on set selectors
 // TODO better loading components
+// TODO add inverse for DB
+// TODO updateCard
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-  const { user } = useLoaderData() as ILoaderData;
+  const { userData } = useLoaderData() as ILoaderData;
 
   return (
     <>
-      {!user ? (
+      {!userData ? (
         <Form
           action={`/auth`}
           method={'post'}
@@ -65,8 +67,8 @@ export default function Index() {
       </Typography>
       <ToReview setType={EDGES} />
       <ToReview setType={CORNERS} />
-      <SetSelector setType={EDGES} user={user} />
-      <SetSelector setType={CORNERS} user={user} />
+      <SetSelector setType={EDGES} userData={userData} />
+      <SetSelector setType={CORNERS} userData={userData} />
       <SettingsModal
         open={settingsModalOpen}
         handleClose={() => setSettingsModalOpen(false)}

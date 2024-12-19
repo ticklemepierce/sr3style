@@ -1,53 +1,47 @@
 import { FormGroup } from '@mui/material';
-import { setTypeMap } from '../utils/constants';
+import { setTypeSpeffzMap } from '../utils/constants';
 import { SetGroup } from './SetGroup';
 import Typography from '@mui/material/Typography';
-import { SetType } from '../types';
+import { SetType, UserData } from '../types';
 import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
 
-const SetSelectorClient = ({
-  setType,
-  user,
-}: {
-  setType: SetType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user?: any;
-}) => {
+const SetSelectorClient = ({ setType }: { setType: SetType }) => {
   return (
     <>
       <Typography variant={'h5'}>
         Select {setType.slice(0, -1)} pairs to learn:
       </Typography>
       <FormGroup>
-        {Object.entries(setTypeMap[setType]).map(([set, possiblePairs]) => (
-          <SetGroup
-            set={set}
-            possiblePairs={possiblePairs}
-            key={set}
-            setType={setType}
-            user={user}
-          />
-        ))}
+        {Object.entries(setTypeSpeffzMap[setType]).map(
+          ([set, possiblePairs]) => (
+            <SetGroup
+              set={set}
+              possiblePairs={possiblePairs}
+              key={set}
+              setType={setType}
+            />
+          ),
+        )}
       </FormGroup>
     </>
   );
 };
 
 // TODO isPremium
+// TODO don't pass in user data but read off context
 export const SetSelector = ({
   setType,
-  user,
+  userData,
 }: {
   setType: SetType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user?: any;
+  userData?: UserData;
 }) => {
   return (
     <ClientOnlyOrPremium
       fallback={<div>Loading...</div>}
-      isPremium={user?.isPremium}
+      isPremium={userData?.isPremium}
     >
-      <SetSelectorClient setType={setType} user={user} />
+      <SetSelectorClient setType={setType} />
     </ClientOnlyOrPremium>
   );
 };

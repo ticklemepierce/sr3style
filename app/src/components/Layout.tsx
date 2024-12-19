@@ -12,6 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <SettingsProvider debugMode={debugMode === '1' || debugMode === 'true'}>
+      {/* TODO move settings to Session */}
       <FSRSProvider>
         <Container maxWidth={'sm'}>
           <Box>{children}</Box>

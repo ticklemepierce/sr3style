@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import { prisma } from '../src/services/db.server';
-import { setTypeMap } from '~/src/utils/constants';
+import { setTypeSpeffzMap } from '~/src/utils/constants';
 import { createEmptyCard } from 'ts-fsrs';
 import { SetType } from '~/src/types';
 
@@ -13,10 +13,6 @@ type RequestPayload = {
 // TODO add inverse
 export const action = async ({ request }: { request: Request }) => {
   const { letter, setType, set }: RequestPayload = await request.json();
-
-  console.log(letter);
-  console.log(setType);
-  console.log(set);
 
   // TODO better validation
   if (!setType || !set) {
@@ -53,7 +49,7 @@ export const action = async ({ request }: { request: Request }) => {
       });
     } else {
       const created = await prisma.sets.createManyAndReturn({
-        data: setTypeMap[setType][set].map((letter: string) => ({
+        data: setTypeSpeffzMap[setType][set].map((letter: string) => ({
           letterPair: `${set}${letter}`,
           card: JSON.stringify(createEmptyCard()),
           setType,
