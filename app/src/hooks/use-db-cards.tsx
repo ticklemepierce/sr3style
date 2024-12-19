@@ -134,7 +134,6 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
 
   const updateCard = () => {};
 
-  // TODO add type for this
   return {
     setTypeMap,
     removePair,
