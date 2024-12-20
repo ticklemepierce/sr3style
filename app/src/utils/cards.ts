@@ -26,10 +26,10 @@ export const getCardsReadyForReview = ({
   }
 
   const cardsFromStorageArray = cardsObjToArray(cards);
-
   const onlyDueCards = cardsFromStorageArray.filter(({ card }) => {
+    const fsrsCard = JSON.parse(card.fsrsCard);
     const currTime = new Date();
-    const cardTime = new Date(card.fsrsCard.due);
+    const cardTime = new Date(fsrsCard.due);
 
     return cardTime < currTime;
   });

@@ -18,14 +18,12 @@ export const action = async ({ request }: { request: Request }) => {
     card: payloadCard,
   }: RequestPayload = await request.json();
 
-  const { card, log } = payloadCard;
+  const { log } = payloadCard;
 
   // TODO better validation
   if (!setType || !letterPair) {
     return json({ error: 'Missing required parameters' }, { status: 400 });
   }
-
-  console.log({ card });
 
   try {
     await prisma.sets.update({

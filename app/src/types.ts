@@ -1,11 +1,11 @@
 import { Card as FsrsCard, ReviewLog, Rating, RecordLogItem } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
-import { User } from '@prisma/client';
+// import { User } from '@prisma/client';
+import { User } from '../entities/user.entity';
 
 export type Card = {
   fsrsCard: FsrsCard;
   log?: ReviewLog;
-  bestTime?: number;
 };
 
 export type Cards = {
@@ -28,7 +28,6 @@ export type SetType = typeof EDGES | typeof CORNERS;
 
 export type UserData = {
   user: User;
-  userSelectedLetterPairs: SetTypeMap;
   isPremium: boolean;
 };
 

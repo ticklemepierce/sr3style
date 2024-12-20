@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { redirect } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/src/services/session.server';
-import { prisma } from '~/src/services/db.server';
+import { getOrm } from '~/src/services/db.server';
+import { User } from '~/entities/user.entity';
 
 const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
 
@@ -37,14 +38,12 @@ export const loader: LoaderFunction = async ({ request }) => {
   session.set('accessToken', accessToken);
   session.set('user', data.me);
 
-  await prisma.user.upsert({
-    where: {
-      wcaId: data.me.wca_id, // Unique identifier for the user
-    },
-    update: {}, // If user exists, do nothing
-    create: {
-      wcaId: data.me.wca_id,
-    },
+  // TODO get this logic into db.server
+  const { em } = await getOrm();
+  const userRepo = em.getRepository(User);
+
+  await userRepo.upsert({
+    wcaId: data.me.wca_id,
   });
 
   // return json({ user });

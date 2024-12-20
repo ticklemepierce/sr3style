@@ -1,10 +1,8 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
-import { prisma } from './db.server';
-import { Cards, SetTypeMap, UserData } from '../types';
-import { setTypes } from '../utils/constants';
-import { Card } from 'ts-fsrs';
-// TODO types
+import { UserData } from '../types';
+import { getOrm } from '~/src/services/db.server';
+import { User } from '~/entities/user.entity';
 
 // export the whole sessionStorage object
 export const sessionStorage = createCookieSessionStorage({
@@ -29,35 +27,35 @@ export const getUserData = async (
   const user = session.get('user');
   if (!user) return;
 
-  const dbUser = await prisma.user.findFirst({ where: { wcaId: user.wcaId } });
+  // TODO get this logic into db.server
+  const orm = await getOrm();
+  const em = orm.em.fork(); // Fork a new EntityManager instance
+  const userRepo = em.getRepository(User);
+
+  const dbUser = await userRepo.findOne(
+    { wcaId: user.wca_id },
+    { populate: ['*'] },
+  );
   if (!dbUser) return;
 
-  const results = await Promise.all(
-    setTypes.map(async (setType) => {
-      const sets = await prisma.sets.findMany({ where: { setType } });
-      const cards = sets.reduce((acc, { letterPair, card }) => {
-        acc[letterPair] = { fsrsCard: card as unknown as Card }; // Parse card JSON
-        return acc;
-      }, {} as Cards);
+  const learningSets = dbUser.learningSets.reduce((acc, set) => {
+    // Ensure the setType exists in the accumulator
+    if (!acc[set.setType]) {
+      acc[set.setType] = {};
+    }
 
-      return { setType, cards }; // Include setType in the result
-    }),
-  );
+    // Add the letterPair with card and log to the corresponding setType
+    acc[set.setType][set.letterPair] = {
+      fsrsCard: set.fsrsCard,
+      log: set.log,
+    };
 
-  console.log('results');
-  console.log(results);
-
-  // Combine results into a single response
-  const userSelectedLetterPairs = results.reduce((acc, { setType, cards }) => {
-    acc[setType] = cards;
     return acc;
   }, {} as SetTypeMap);
 
-  console.log({ userSelectedLetterPairs });
-
   return {
     user,
-    userSelectedLetterPairs,
+    learningSets,
     isPremium: dbUser.isComped,
   };
 };

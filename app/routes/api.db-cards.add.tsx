@@ -3,6 +3,10 @@ import { prisma } from '../src/services/db.server';
 import { setTypeSpeffzMap } from '~/src/utils/constants';
 import { createEmptyCard } from 'ts-fsrs';
 import { SetType } from '~/src/types';
+import { getOrm } from '~/src/services/db.server';
+import { User } from '~/entities/user.entity';
+import { LearningSet } from '~/entities/set.entity';
+import { getSession } from '~/src/services/session.server';
 
 type RequestPayload = {
   letter?: string;
@@ -13,7 +17,9 @@ type RequestPayload = {
 // TODO add inverse
 export const action = async ({ request }: { request: Request }) => {
   const { letter, setType, set }: RequestPayload = await request.json();
+  const session = await getSession(request.headers.get('Cookie'));
 
+  const user = session.get('user');
   // TODO better validation
   if (!setType || !set) {
     return json({ error: 'Missing required parameters' }, { status: 400 });
@@ -23,24 +29,39 @@ export const action = async ({ request }: { request: Request }) => {
     if (letter) {
       const letterPair = `${set}${letter}`;
 
-      // Remove a single letterPair
       // TODO remove inverse
       const card = JSON.stringify(createEmptyCard());
 
-      await prisma.sets.upsert({
-        where: {
-          letterPair_setType: {
-            letterPair,
-            setType,
-          },
-        },
-        update: {},
-        create: {
-          letterPair,
-          setType,
-          card,
-        },
-      });
+      // TODO get this logic into db.server
+      const { em } = await getOrm();
+      // const setRepo = em.getRepository(Set);
+      const userRepo = em.fork().getRepository(User);
+
+      // TODO make a helper somewhere
+      const newSet = new LearningSet();
+      newSet.letterPair = letterPair;
+      newSet.setType = setType;
+      newSet.fsrsCard = card;
+      newSet.user = await userRepo.findOne({ wcaId: user.wca_id });
+
+      const forkedEm = em.fork();
+
+      await forkedEm.persist(newSet).flush();
+
+      // await prisma.sets.upsert({
+      //   where: {
+      //     letterPair_setType: {
+      //       letterPair,
+      //       setType,
+      //     },
+      //   },
+      //   update: {},
+      //   create: {
+      //     letterPair,
+      //     setType,
+      //     card,
+      //   },
+      // });
 
       return json({
         success: true,

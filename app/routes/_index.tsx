@@ -6,24 +6,14 @@ import { Settings as SettingsIcon } from '@mui/icons-material';
 import { IconButton, Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { SettingsModal } from '~/src/components/SettingsModal';
-import { Form, useLoaderData } from '@remix-run/react';
-import type { LoaderFunction } from '@remix-run/node';
-import { getUserData } from '~/src/services/session.server';
-import { UserData } from '~/src/types';
+import { Form } from '@remix-run/react';
+import { useSessionContext } from '~/src/context/session';
 
 // https://remix.run/docs/en/main/route/meta
 export const meta: MetaFunction = () => [
   { title: 'Remix Starter' },
   { name: 'description', content: 'Welcome to remix!' },
 ];
-
-interface ILoaderData {
-  userData?: UserData;
-}
-
-export const loader: LoaderFunction = async ({ request }) => ({
-  userData: await getUserData(request),
-});
 
 // TODO make summary show percentage in each state
 // TODO show fraction of selected cases on set selectors
@@ -34,7 +24,7 @@ export const loader: LoaderFunction = async ({ request }) => ({
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-  const { userData } = useLoaderData() as ILoaderData;
+  const { userData } = useSessionContext();
 
   return (
     <>

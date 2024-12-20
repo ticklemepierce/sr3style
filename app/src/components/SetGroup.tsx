@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { FormControlLabel, Checkbox, Box, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { SetType } from '../types';
+import { SetType, Cards } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { useSessionContext } from '../context/session';
 
@@ -15,12 +15,10 @@ export const SetGroup = ({
   possiblePairs: string[];
   setType: SetType;
 }) => {
-  const { addSet, removeSet, addPair, removePair, userData } =
+  const { addSet, removeSet, addPair, removePair, setTypeMap } =
     useSessionContext();
 
-  const cards = useMemo(() => {
-    return userData?.userSelectedLetterPairs[setType] ?? {};
-  }, [userData]);
+  const cards: Cards = useMemo(() => setTypeMap[setType] ?? {}, [setTypeMap]);
 
   const numChecked = useMemo(
     () => Object.keys(cards).filter((pair) => pair.startsWith(set)).length,

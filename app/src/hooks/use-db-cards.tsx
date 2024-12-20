@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CardManager, SetType, SetTypeMap, UserData } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { RecordLogItem } from 'ts-fsrs';
 
 const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
-  const initSetTypeMap = userData?.userSelectedLetterPairs ?? {
+  const initSetTypeMap = userData?.learningSets ?? {
     edges: {},
     corners: {},
   };
 
   const [setTypeMap, setSetTypeMap] = useState<SetTypeMap>(initSetTypeMap);
-
-  useEffect(() => {
-    if (userData?.userSelectedLetterPairs) {
-      setSetTypeMap(userData.userSelectedLetterPairs);
-    }
-  }, [userData]);
 
   const addPair = async ({
     setType,
@@ -40,7 +34,7 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
           ...prev,
           [setType]: {
             ...prevSetTypeCards,
-            [`${set}${letter}`]: { card: JSON.parse(data.card) },
+            [`${set}${letter}`]: { fsrsCard: data.card },
           },
         };
       });
