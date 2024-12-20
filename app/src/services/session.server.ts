@@ -3,6 +3,7 @@ import { createCookieSessionStorage } from '@remix-run/node';
 import { prisma } from './db.server';
 import { Cards, SetTypeMap, UserData } from '../types';
 import { setTypes } from '../utils/constants';
+import { Card } from 'ts-fsrs';
 // TODO types
 
 // export the whole sessionStorage object
@@ -25,19 +26,17 @@ export const getUserData = async (
 ): Promise<UserData | undefined> => {
   const session = await getSession(request.headers.get('Cookie'));
 
-  // TODO get user from DB
+  const user = session.get('user');
+  if (!user) return;
 
-  const user = session.get('user') || null;
-
-  if (!user) {
-    return;
-  }
+  const dbUser = await prisma.user.findFirst({ where: { wcaId: user.wcaId } });
+  if (!dbUser) return;
 
   const results = await Promise.all(
     setTypes.map(async (setType) => {
       const sets = await prisma.sets.findMany({ where: { setType } });
       const cards = sets.reduce((acc, { letterPair, card }) => {
-        acc[letterPair] = { fsrsCard: JSON.parse(card) }; // Parse card JSON
+        acc[letterPair] = { fsrsCard: card as unknown as Card }; // Parse card JSON
         return acc;
       }, {} as Cards);
 
@@ -45,15 +44,20 @@ export const getUserData = async (
     }),
   );
 
+  console.log('results');
+  console.log(results);
+
   // Combine results into a single response
   const userSelectedLetterPairs = results.reduce((acc, { setType, cards }) => {
     acc[setType] = cards;
     return acc;
   }, {} as SetTypeMap);
 
+  console.log({ userSelectedLetterPairs });
+
   return {
     user,
     userSelectedLetterPairs,
-    isPremium: true, // TODO
+    isPremium: dbUser.isComped,
   };
 };

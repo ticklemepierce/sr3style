@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'usehooks-ts';
 // import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
-import { createEmptyCard } from 'ts-fsrs';
+import { createEmptyCard, RecordLogItem } from 'ts-fsrs';
 import { CardManager, SetType, SetTypeMap } from '../types';
 import { useSettingsContext } from '../context/settings';
 import { setTypeSpeffzMap } from '../utils/constants';
@@ -97,23 +97,27 @@ const useLocalStorageCards = (): CardManager => {
     });
   };
 
-  const updateCard = () => {};
+  const updateCard = async ({
+    card,
+    letterPair,
+    setType,
+  }: {
+    card: RecordLogItem;
+    letterPair: string;
+    setType: SetType;
+  }) => {
+    setSetTypeMap((prev) => {
+      const prevSetTypeCards = prev[setType];
 
-  // const getCardsReadyForReview = () => {};
-
-  // const updateCard = ({
-  //   card,
-  //   letterPair,
-  // }: {
-  //   card: RecordLogItem;
-  //   letterPair: string;
-  // }) => {
-  //   setCards((prevCards) => {
-  //     prevCards[letterPair] = card;
-
-  //     return prevCards;
-  //   });
-  // };
+      return {
+        ...prev,
+        [setType]: {
+          ...prevSetTypeCards,
+          [letterPair]: card,
+        },
+      };
+    });
+  };
 
   return {
     setTypeMap,

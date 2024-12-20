@@ -7,7 +7,7 @@ import { SetType } from '~/src/types';
 type RequestPayload = {
   letter?: string;
   setType: SetType;
-  set: string; // Optional if not always present
+  set: string;
 };
 
 // TODO add inverse

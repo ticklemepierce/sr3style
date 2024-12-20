@@ -16,12 +16,14 @@ const ToReviewClient = ({ setType }: { setType: SetType }) => {
     [setTypeMap, setType],
   );
 
-  const cardsReadyForReview = useMemo(() => {
-    return getCardsReadyForReview({
-      cards,
-      shuffle: true,
-    });
-  }, [cards]);
+  const cardsReadyForReview = useMemo(
+    () =>
+      getCardsReadyForReview({
+        cards,
+        shuffle: true,
+      }),
+    [cards],
+  );
 
   const pairOrPairs = cardsReadyForReview.length === 1 ? 'pair' : 'pairs';
 
@@ -47,7 +49,7 @@ const ToReviewClient = ({ setType }: { setType: SetType }) => {
 
 export const ToReview = ({ setType }: { setType: SetType }) => {
   return (
-    <ClientOnlyOrPremium fallback={<div>Loading...</div>}>
+    <ClientOnlyOrPremium>
       <ToReviewClient setType={setType} />
     </ClientOnlyOrPremium>
   );

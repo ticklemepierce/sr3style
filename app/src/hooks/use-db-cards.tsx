@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { CardManager, SetType, SetTypeMap, UserData } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
+import { RecordLogItem } from 'ts-fsrs';
 
 const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
   const initSetTypeMap = userData?.userSelectedLetterPairs ?? {
@@ -132,7 +133,36 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
     }
   };
 
-  const updateCard = () => {};
+  const updateCard = async ({
+    card,
+    letterPair,
+    setType,
+  }: {
+    card: RecordLogItem;
+    letterPair: string;
+    setType: SetType;
+  }) => {
+    const response = await fetch(`/api/db-cards/update`, {
+      method: 'POST',
+      body: JSON.stringify({ setType, letterPair, card }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      setSetTypeMap((prev) => {
+        const prevSetTypeCards = prev[setType];
+
+        return {
+          ...prev,
+          [setType]: {
+            ...prevSetTypeCards,
+            [letterPair]: card.card,
+          },
+        };
+      });
+    }
+  };
 
   return {
     setTypeMap,

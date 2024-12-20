@@ -22,8 +22,8 @@ model Sets {
   id BigInt @id @default(autoincrement())
   letterPair String
   setType String
-  card String
-  log String?
+  card Json
+  log Json?
 
   @@unique([letterPair, setType])
 }

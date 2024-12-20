@@ -12,7 +12,7 @@ export const QuizQuestion = ({
   question,
   onAdvance,
   // TODO updateCard
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   setType,
 }: {
   question: Question;
@@ -80,11 +80,11 @@ export const QuizQuestion = ({
     }
 
     // TODO updateCard
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const newCard = f!.repeat(question.card.fsrsCard, new Date())[rating];
 
     // cardManager!.updateCard({ card: newCard, letterPair: question.pair });
-    updateCard!();
+    updateCard!({ card: newCard, letterPair: question.pair, setType });
 
     onAdvance({ time: timeForPair, rating });
   };

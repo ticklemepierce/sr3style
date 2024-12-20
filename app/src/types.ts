@@ -1,4 +1,4 @@
-import { Card as FsrsCard, ReviewLog, Rating } from 'ts-fsrs';
+import { Card as FsrsCard, ReviewLog, Rating, RecordLogItem } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
 import { User } from '@prisma/client';
 
@@ -54,7 +54,15 @@ export type CardManager = {
     setType: SetType;
     set: string;
   }) => Promise<void>;
-  updateCard: () => void; // Add specific parameters and return types if needed
+  updateCard: ({
+    card,
+    letterPair,
+    setType,
+  }: {
+    card: RecordLogItem;
+    letterPair: string;
+    setType: SetType;
+  }) => Promise<void>;
   addPair: ({
     setType,
     set,

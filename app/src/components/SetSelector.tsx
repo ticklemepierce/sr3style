@@ -2,7 +2,7 @@ import { FormGroup } from '@mui/material';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { SetGroup } from './SetGroup';
 import Typography from '@mui/material/Typography';
-import { SetType, UserData } from '../types';
+import { SetType } from '../types';
 import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
 
 const SetSelectorClient = ({ setType }: { setType: SetType }) => {
@@ -27,20 +27,9 @@ const SetSelectorClient = ({ setType }: { setType: SetType }) => {
   );
 };
 
-// TODO isPremium
-// TODO don't pass in user data but read off context
-export const SetSelector = ({
-  setType,
-  userData,
-}: {
-  setType: SetType;
-  userData?: UserData;
-}) => {
+export const SetSelector = ({ setType }: { setType: SetType }) => {
   return (
-    <ClientOnlyOrPremium
-      fallback={<div>Loading...</div>}
-      isPremium={userData?.isPremium}
-    >
+    <ClientOnlyOrPremium>
       <SetSelectorClient setType={setType} />
     </ClientOnlyOrPremium>
   );

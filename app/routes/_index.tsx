@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => ({
 // TODO show fraction of selected cases on set selectors
 // TODO better loading components
 // TODO add inverse for DB
-// TODO updateCard
+// TODO get rid of log
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {
@@ -67,8 +67,8 @@ export default function Index() {
       </Typography>
       <ToReview setType={EDGES} />
       <ToReview setType={CORNERS} />
-      <SetSelector setType={EDGES} userData={userData} />
-      <SetSelector setType={CORNERS} userData={userData} />
+      <SetSelector setType={EDGES} />
+      <SetSelector setType={CORNERS} />
       <SettingsModal
         open={settingsModalOpen}
         handleClose={() => setSettingsModalOpen(false)}

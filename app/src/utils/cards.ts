@@ -33,6 +33,5 @@ export const getCardsReadyForReview = ({
 
     return cardTime < currTime;
   });
-
   return shuffle ? shuffleQuestions(onlyDueCards) : onlyDueCards;
 };
