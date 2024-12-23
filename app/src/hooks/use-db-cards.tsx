@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { CardManager, SetType, SetTypeMap, UserData } from '../types';
+import { Card, CardManager, SetType, SetTypeMap, UserData } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
-import { RecordLogItem } from 'ts-fsrs';
 
 const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
   const initSetTypeMap = userData?.learningSets ?? {
@@ -132,7 +131,7 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
     letterPair,
     setType,
   }: {
-    card: RecordLogItem;
+    card: Card;
     letterPair: string;
     setType: SetType;
   }) => {
@@ -151,7 +150,7 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
           ...prev,
           [setType]: {
             ...prevSetTypeCards,
-            [letterPair]: card.card,
+            [letterPair]: card,
           },
         };
       });

@@ -3,8 +3,7 @@ import { useEffect } from 'react';
 import { redirect } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/src/services/session.server';
-import { getOrm } from '~/src/services/db.server';
-import { User } from '~/entities/user.entity';
+import { userRepo } from '~/src/services/db.server';
 
 const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
 
@@ -37,10 +36,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   session.set('accessToken', accessToken);
   session.set('user', data.me);
-
-  // TODO get this logic into db.server
-  const { em } = await getOrm();
-  const userRepo = em.getRepository(User);
 
   await userRepo.upsert({
     wcaId: data.me.wca_id,

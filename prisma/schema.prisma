@@ -17,7 +17,6 @@ model User {
   isComped Boolean @default(false)
 }
 
-// TODO add user
 model Sets {
   id BigInt @id @default(autoincrement())
   letterPair String

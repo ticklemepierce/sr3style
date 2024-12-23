@@ -1,14 +1,16 @@
-import { Button, Typography } from '@mui/material';
 import { SetType } from '../types';
-import { Link, useSearchParams } from '@remix-run/react';
-import { ClientOnlyOrPremium } from './ClientOnlyOrPremium';
+import { Link } from '@remix-run/react';
+import { ClientOnly } from './ClientOnly';
 import { useSessionContext } from '../context/session';
 import { getCardsReadyForReview } from '../utils/cards';
 import { useMemo } from 'react';
+import { Button, Card } from '@chakra-ui/react';
+
+function capitalizeFirstLetter(val: string) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
 
 const ToReviewClient = ({ setType }: { setType: SetType }) => {
-  const [searchParams] = useSearchParams();
-
   const { setTypeMap } = useSessionContext();
 
   const cards = useMemo(
@@ -28,29 +30,31 @@ const ToReviewClient = ({ setType }: { setType: SetType }) => {
   const pairOrPairs = cardsReadyForReview.length === 1 ? 'pair' : 'pairs';
 
   return (
-    <>
-      <Typography variant={'h4'} component={'h1'} sx={{ mb: 2 }}>
-        You have {cardsReadyForReview.length} {setType.slice(0, -1)}{' '}
-        {pairOrPairs} to review.
-      </Typography>
-      {Boolean(cardsReadyForReview && cardsReadyForReview.length) && (
+    <Card.Root width={'320px'}>
+      <Card.Body gap={'2'}>
+        <Card.Title mb={'2'}>{capitalizeFirstLetter(setType)}</Card.Title>
+        <Card.Description>
+          You have {cardsReadyForReview.length} {setType.slice(0, -1)}{' '}
+          {pairOrPairs} to review.
+        </Card.Description>
+      </Card.Body>
+      <Card.Footer justifyContent={'flex-end'}>
         <Link
           to={{
             pathname: `/quiz/${setType}`,
-            search: searchParams.toString(),
           }}
         >
-          <Button>Start {setType.slice(0, -1)} review</Button>
+          <Button disabled={!cardsReadyForReview.length}>Review Now</Button>
         </Link>
-      )}
-    </>
+      </Card.Footer>
+    </Card.Root>
   );
 };
 
 export const ToReview = ({ setType }: { setType: SetType }) => {
   return (
-    <ClientOnlyOrPremium>
+    <ClientOnly>
       <ToReviewClient setType={setType} />
-    </ClientOnlyOrPremium>
+    </ClientOnly>
   );
 };

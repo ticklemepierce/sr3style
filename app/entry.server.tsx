@@ -1,59 +1,141 @@
-import * as React from 'react';
-import * as ReactDOMServer from 'react-dom/server';
-import { RemixServer } from '@remix-run/react';
-import type { EntryContext } from '@remix-run/node';
-import createEmotionCache from './src/createEmotionCache';
-import theme from './src/theme';
-import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from '@mui/material/styles';
-import { CacheProvider } from '@emotion/react';
-import createEmotionServer from '@emotion/server/create-instance';
+import { PassThrough } from 'stream';
 
-export default function handleRequest(
+import createEmotionCache from '@emotion/cache';
+import { CacheProvider as EmotionCacheProvider } from '@emotion/react';
+import createEmotionServer from '@emotion/server/create-instance';
+import { type EntryContext } from '@remix-run/node';
+import { Response } from '@remix-run/web-fetch';
+import { RemixServer } from '@remix-run/react';
+import { isbot } from 'isbot';
+import { renderToPipeableStream } from 'react-dom/server';
+
+const ABORT_DELAY = 5000;
+
+const handleRequest = (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-) {
-  const cache = createEmotionCache();
-  const { extractCriticalToChunks } = createEmotionServer(cache);
+) =>
+  isbot(request.headers.get('user-agent'))
+    ? handleBotRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext,
+      )
+    : handleBrowserRequest(
+        request,
+        responseStatusCode,
+        responseHeaders,
+        remixContext,
+      );
+export default handleRequest;
 
-  function MuiRemixServer() {
-    return (
-      <CacheProvider value={cache}>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <RemixServer context={remixContext} url={request.url} />
-        </ThemeProvider>
-      </CacheProvider>
+const handleBotRequest = (
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+) =>
+  new Promise((resolve, reject) => {
+    let didError = false;
+    const emotionCache = createEmotionCache({ key: 'css' });
+
+    const { pipe, abort } = renderToPipeableStream(
+      <EmotionCacheProvider value={emotionCache}>
+        <RemixServer context={remixContext} url={request.url} />
+      </EmotionCacheProvider>,
+      {
+        onAllReady: () => {
+          const reactBody = new PassThrough();
+          const emotionServer = createEmotionServer(emotionCache);
+
+          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
+          reactBody.pipe(bodyWithStyles);
+
+          responseHeaders.set('Content-Type', 'text/html');
+
+          const readableStream = new ReadableStream({
+            start(controller) {
+              bodyWithStyles.on('data', (chunk) => controller.enqueue(chunk));
+              bodyWithStyles.on('end', () => controller.close());
+              bodyWithStyles.on('error', (err) => controller.error(err));
+            },
+          });
+
+          resolve(
+            new Response(readableStream, {
+              headers: responseHeaders,
+              status: didError ? 500 : responseStatusCode,
+            }),
+          );
+
+          pipe(reactBody);
+        },
+        onShellError: (error: unknown) => {
+          reject(error);
+        },
+        onError: (error: unknown) => {
+          didError = true;
+          console.error(error);
+        },
+      },
     );
-  }
 
-  // Render the component to a string.
-  const html = ReactDOMServer.renderToString(<MuiRemixServer />);
-
-  // Grab the CSS from emotion
-  const { styles } = extractCriticalToChunks(html);
-
-  let stylesHTML = '';
-
-  styles.forEach(({ key, ids, css }) => {
-    const emotionKey = `${key} ${ids.join(' ')}`;
-    const newStyleTag = `<style data-emotion="${emotionKey}">${css}</style>`;
-    stylesHTML = `${stylesHTML}${newStyleTag}`;
+    setTimeout(abort, ABORT_DELAY);
   });
 
-  // Add the Emotion style tags after the insertion point meta tag
-  const markup = html.replace(
-    /<meta(\s)*name="emotion-insertion-point"(\s)*content="emotion-insertion-point"(\s)*\/>/,
-    `<meta name="emotion-insertion-point" content="emotion-insertion-point"/>${stylesHTML}`,
-  );
+const handleBrowserRequest = (
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext,
+) =>
+  new Promise((resolve, reject) => {
+    let didError = false;
+    const emotionCache = createEmotionCache({ key: 'css' });
 
-  responseHeaders.set('Content-Type', 'text/html');
+    const { pipe, abort } = renderToPipeableStream(
+      <EmotionCacheProvider value={emotionCache}>
+        <RemixServer context={remixContext} url={request.url} />
+      </EmotionCacheProvider>,
+      {
+        onShellReady: () => {
+          const reactBody = new PassThrough();
+          const emotionServer = createEmotionServer(emotionCache);
 
-  return new Response(`<!DOCTYPE html>${markup}`, {
-    status: responseStatusCode,
-    headers: responseHeaders,
+          const bodyWithStyles = emotionServer.renderStylesToNodeStream();
+          reactBody.pipe(bodyWithStyles);
+
+          responseHeaders.set('Content-Type', 'text/html');
+
+          const readableStream = new ReadableStream({
+            start(controller) {
+              bodyWithStyles.on('data', (chunk) => controller.enqueue(chunk));
+              bodyWithStyles.on('end', () => controller.close());
+              bodyWithStyles.on('error', (err) => controller.error(err));
+            },
+          });
+
+          resolve(
+            new Response(readableStream, {
+              headers: responseHeaders,
+              status: didError ? 500 : responseStatusCode,
+            }),
+          );
+
+          pipe(reactBody);
+        },
+        onShellError: (error: unknown) => {
+          reject(error);
+        },
+        onError: (error: unknown) => {
+          didError = true;
+          console.error(error);
+        },
+      },
+    );
+
+    setTimeout(abort, ABORT_DELAY);
   });
-}

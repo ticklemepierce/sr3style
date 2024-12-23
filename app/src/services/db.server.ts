@@ -1,16 +1,11 @@
 import { PrismaClient } from '@prisma/client';
+import { User } from '../../entities/user.entity';
 
 import { MikroORM } from '@mikro-orm/postgresql';
 import config from '../../../mikro-orm.config';
 
-// TODO fix once MUI has esm
-let orm: MikroORM;
+export const { em } = await MikroORM.init(config);
 
-export const getOrm = async () => {
-  if (!orm) {
-    orm = await MikroORM.init(config);
-  }
-  return orm;
-};
+export const userRepo = em.fork().getRepository(User);
 
 export const prisma = new PrismaClient();

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { FormControlLabel, Checkbox, Box, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { Box, IconButton } from '@chakra-ui/react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Checkbox } from '@chakra/checkbox';
 import { SetType, Cards } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { useSessionContext } from '../context/session';
@@ -18,7 +18,7 @@ export const SetGroup = ({
   const { addSet, removeSet, addPair, removePair, setTypeMap } =
     useSessionContext();
 
-  const cards: Cards = useMemo(() => setTypeMap[setType] ?? {}, [setTypeMap]);
+  const cards: Cards = useMemo(() => setTypeMap?.[setType] ?? {}, [setTypeMap]);
 
   const numChecked = useMemo(
     () => Object.keys(cards).filter((pair) => pair.startsWith(set)).length,
@@ -27,10 +27,15 @@ export const SetGroup = ({
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const areAllChecked = () =>
-    numChecked === setTypeSpeffzMap[setType][set].length;
-  const areSomeChecked = () =>
-    0 < numChecked && numChecked < setTypeSpeffzMap[setType][set].length;
+  const getCheckedValue = () => {
+    if (!numChecked) {
+      return;
+    } else if (numChecked === setTypeSpeffzMap[setType][set].length) {
+      return true;
+    } else {
+      return 'indeterminate';
+    }
+  };
 
   const handleChange = async ({
     letter,
@@ -55,20 +60,23 @@ export const SetGroup = ({
   };
 
   const children = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+    <Box
+      display={'flex'}
+      alignItems={'center'}
+      width={'100px'}
+      justifyContent={'space-between'}
+      ml={3}
+    >
       {possiblePairs.map((letter) => (
-        <FormControlLabel
-          label={letter.toUpperCase()}
+        <Checkbox
           key={letter}
-          control={
-            <Checkbox
-              checked={Boolean(cards[`${set}${letter}`])}
-              onChange={async (e) =>
-                await handleChange({ letter, isChecked: e.target.checked })
-              }
-            />
+          checked={Boolean(cards[`${set}${letter}`])}
+          onCheckedChange={async (e) =>
+            await handleChange({ letter, isChecked: Boolean(e.checked) })
           }
-        />
+        >
+          {letter.toUpperCase()}
+        </Checkbox>
       ))}
     </Box>
   );
@@ -80,27 +88,25 @@ export const SetGroup = ({
   return (
     <>
       <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: '100px',
-          justifyContent: 'space-between',
-        }}
+        display={'flex'}
+        alignItems={'center'}
+        width={'100px'}
+        justifyContent={'space-between'}
       >
-        <FormControlLabel
-          label={set.toUpperCase()}
-          control={
-            <Checkbox
-              checked={areAllChecked()}
-              indeterminate={areSomeChecked()}
-              onChange={async (e) =>
-                await handleChange({ letter: set, isChecked: e.target.checked })
-              }
-            />
+        <Checkbox
+          checked={getCheckedValue()}
+          onCheckedChange={async (e) =>
+            await handleChange({ letter: set, isChecked: Boolean(e.checked) })
           }
-        />
-        <IconButton aria-label={'Example'} onClick={toggleIsExpanded}>
-          {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        >
+          {set.toUpperCase()}
+        </Checkbox>
+        <IconButton
+          aria-label={'Example'}
+          onClick={toggleIsExpanded}
+          variant={'plain'}
+        >
+          {isExpanded ? <ChevronUp /> : <ChevronDown />}
         </IconButton>
       </Box>
       {isExpanded && children}

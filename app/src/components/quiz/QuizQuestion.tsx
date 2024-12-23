@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import { Rating } from 'ts-fsrs';
 import { Question, SetType } from '~/src/types';
 import { useFSRSContext } from '~/src/context/fsrs';
@@ -7,6 +7,7 @@ import { formatTime } from '~/src/utils/time';
 import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
 import useTabActive from '~/src/hooks/use-tab-active';
 import { useSessionContext } from '~/src/context/session';
+import { Heading, Stack } from '@chakra-ui/react';
 
 export const QuizQuestion = ({
   question,
@@ -79,24 +80,23 @@ export const QuizQuestion = ({
         rating = Rating.Again;
     }
 
-    // TODO updateCard
-
     const newCard = f!.repeat(question.card.fsrsCard, new Date())[rating];
 
-    // cardManager!.updateCard({ card: newCard, letterPair: question.pair });
-    updateCard!({ card: newCard, letterPair: question.pair, setType });
+    const { card: fsrsCard, ...rest } = newCard;
+
+    updateCard!({
+      card: { fsrsCard, ...rest },
+      letterPair: question.pair,
+      setType,
+    });
 
     onAdvance({ time: timeForPair, rating });
   };
 
   return (
-    <>
-      <Typography variant={'h1'} component={'h1'} sx={{ mb: 2 }}>
-        {question.pair.toUpperCase()}
-      </Typography>
-      <Typography variant={'h2'} component={'p'}>
-        {formatTime(stopwatchTime)}
-      </Typography>
-    </>
+    <Stack alignItems={'center'}>
+      <Heading size={'4xl'}>{question.pair.toUpperCase()}</Heading>
+      <Heading size={'4xl'}>{formatTime(stopwatchTime)}</Heading>
+    </Stack>
   );
 };

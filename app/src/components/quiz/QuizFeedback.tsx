@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
 import { useEffect, useRef } from 'react';
+import { Heading } from '@chakra-ui/react';
 
 export const QuizFeedback = ({
   isLastQuestion,
@@ -50,8 +50,8 @@ export const QuizFeedback = ({
   };
 
   return (
-    <Typography variant={'h4'} component={'h1'} sx={{ mb: 2 }}>
+    <Heading size={'4xl'}>
       {supportsTouch ? 'Tap screen' : `Press 'space'`} to {getCopy()}
-    </Typography>
+    </Heading>
   );
 };

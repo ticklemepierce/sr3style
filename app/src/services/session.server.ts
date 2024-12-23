@@ -1,8 +1,7 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
-import { UserData } from '../types';
-import { getOrm } from '~/src/services/db.server';
-import { User } from '~/entities/user.entity';
+import { UserData, SetTypeMap } from '../types';
+import { userRepo } from '~/src/services/db.server';
 
 // export the whole sessionStorage object
 export const sessionStorage = createCookieSessionStorage({
@@ -26,11 +25,6 @@ export const getUserData = async (
 
   const user = session.get('user');
   if (!user) return;
-
-  // TODO get this logic into db.server
-  const orm = await getOrm();
-  const em = orm.em.fork(); // Fork a new EntityManager instance
-  const userRepo = em.getRepository(User);
 
   const dbUser = await userRepo.findOne(
     { wcaId: user.wca_id },

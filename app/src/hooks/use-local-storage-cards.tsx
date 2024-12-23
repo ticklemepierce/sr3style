@@ -1,7 +1,7 @@
 import { useLocalStorage } from 'usehooks-ts';
 // import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
-import { createEmptyCard, RecordLogItem } from 'ts-fsrs';
-import { CardManager, SetType, SetTypeMap } from '../types';
+import { createEmptyCard } from 'ts-fsrs';
+import { Card, CardManager, SetType, SetTypeMap } from '../types';
 import { useSettingsContext } from '../context/settings';
 import { setTypeSpeffzMap } from '../utils/constants';
 
@@ -102,7 +102,7 @@ const useLocalStorageCards = (): CardManager => {
     letterPair,
     setType,
   }: {
-    card: RecordLogItem;
+    card: Card;
     letterPair: string;
     setType: SetType;
   }) => {

@@ -27,6 +27,11 @@ export default [
     },
   },
   {
-    ignores: ['public/**/*', 'build/**/*', 'migrations/**/*'],
+    ignores: [
+      'public/**/*',
+      'build/**/*',
+      'migrations/**/*',
+      '**/snippets/**/*',
+    ],
   },
 ];

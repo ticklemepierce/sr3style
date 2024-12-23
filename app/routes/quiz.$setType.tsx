@@ -1,6 +1,5 @@
 import type { MetaFunction } from '@remix-run/node';
 import { useReducer, useEffect } from 'react';
-import { CircularProgress, Grid } from '@mui/material';
 import { reducer, getInitialState } from '~/src/components/quiz/reducer';
 import {
   advance,
@@ -15,7 +14,9 @@ import { QuizProgress } from '~/src/components/quiz/QuizProgress';
 import { Rating } from 'ts-fsrs';
 import { Link, useParams, useSearchParams } from '@remix-run/react';
 import { SetType } from '~/src/types';
-import CloseIcon from '@mui/icons-material/Close';
+import { CloseButton } from '@chakra/close-button';
+import { HStack, Center, Spinner, Flex } from '@chakra-ui/react';
+import { FSRSProvider } from '~/src/context/fsrs';
 import { getCardsReadyForReview } from '~/src/utils/cards';
 import { useSessionContext } from '~/src/context/session';
 
@@ -37,68 +38,70 @@ export default function Quiz() {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const questions = getCardsReadyForReview({
-      cards: setTypeMap?.[setType] ?? {},
-      shuffle: true,
-    });
+    if (state.quizState === 'loading') {
+      const questions = getCardsReadyForReview({
+        cards: setTypeMap?.[setType] ?? {},
+        shuffle: true,
+      });
 
-    initializeQuiz({ dispatch, questions });
+      initializeQuiz({ dispatch, questions });
+    }
   }, [setTypeMap]);
 
   return (
-    <>
-      <Link
-        style={{ position: 'absolute', top: '15px', left: '15px' }}
-        color={'gray'}
-        to={{
-          pathname: `/`,
-          search: searchParams.toString(),
-        }}
-      >
-        <CloseIcon htmlColor={'gray'} />
-      </Link>
-      {state.showQuizProgress && (
-        <QuizProgress
-          questionNumber={state.isStartScreen ? 0 : state.questionIndex! + 1}
-          totalQuestions={state.questions!.length}
-        />
-      )}
-      <Grid
-        container
-        spacing={0}
-        direction={'column'}
-        alignItems={'center'}
-        textAlign={'center'}
-        justifyContent={'center'}
-        sx={{ minHeight: '100vh' }}
-      >
-        <Grid item xs={3}>
-          {state.quizState === 'loading' && <CircularProgress />}
-          {state.quizState === 'question' && (
-            <QuizQuestion
-              setType={setType}
-              question={state.question!}
-              onAdvance={({ time, rating }: { time: number; rating: Rating }) =>
-                getFeedback({ dispatch, time, rating })
+    <FSRSProvider>
+      <Flex direction={'column'} height={'100vh'} width={'100vw'}>
+        <HStack width={'100vw'} flexShrink={0}>
+          <Link
+            to={{
+              pathname: `/`,
+              search: searchParams.toString(),
+            }}
+          >
+            <CloseButton />
+          </Link>
+          {state.showQuizProgress && (
+            <QuizProgress
+              questionNumber={
+                state.isStartScreen ? 0 : state.questionIndex! + 1
               }
+              totalQuestions={state.questions!.length}
             />
           )}
-          {state.quizState === 'feedback' && (
-            <QuizFeedback
-              isLastQuestion={state.isLastQuestion!}
-              isStartScreen={state.isStartScreen!}
-              onAdvance={() =>
-                !state.isLastQuestion
-                  ? advance({ dispatch })
-                  : finishQuiz({ dispatch })
-              }
-            />
-          )}
-          {state.quizState === 'complete' && (
-            <QuizSummary results={state.results!} />
-          )}
-        </Grid>
-      </Grid>
-    </>
+        </HStack>
+        {state.quizState !== 'complete' && (
+          <Center flex={1}>
+            {state.quizState === 'loading' && <Spinner />}
+            {state.quizState === 'question' && (
+              <QuizQuestion
+                setType={setType}
+                question={state.question!}
+                onAdvance={({
+                  time,
+                  rating,
+                }: {
+                  time: number;
+                  rating: Rating;
+                }) => getFeedback({ dispatch, time, rating })}
+              />
+            )}
+            {state.quizState === 'feedback' && (
+              <QuizFeedback
+                isLastQuestion={state.isLastQuestion!}
+                isStartScreen={state.isStartScreen!}
+                onAdvance={() =>
+                  !state.isLastQuestion
+                    ? advance({ dispatch })
+                    : finishQuiz({ dispatch })
+                }
+              />
+            )}
+          </Center>
+        )}
+        {state.quizState === 'complete' && (
+          <QuizSummary results={state.results!} />
+        )}
+      </Flex>
+    </FSRSProvider>
   );
 }
