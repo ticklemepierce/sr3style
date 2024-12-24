@@ -63,8 +63,13 @@ export interface WcaUser {
   avatar: Avatar;
 }
 
+export type Settings = {
+  autoAddInverse: boolean;
+};
+
 export type UserData = {
   user: WcaUser;
+  settings: Settings;
   learningSets: SetTypeMap;
   isPremium: boolean;
 };

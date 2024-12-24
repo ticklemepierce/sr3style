@@ -17,6 +17,11 @@ export const meta: MetaFunction = () => [
 // TODO add inverse for DB
 // TODO get SSR working for premium
 // TODO figure out better naming for cards and letters and sets and fsrsCard
+// TODO settings modal
+// TODO removePair/removeSet functionality
+// TODO test local storage
+// TODO improve summary UI
+// TODO remove prisma deps (and triage for anything else unneeded)
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {

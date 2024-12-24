@@ -21,7 +21,8 @@
     "experimentalDecorators": true,
 
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true
   },
   "exclude": ["node_modules", "**/node_modules/*"]
 }

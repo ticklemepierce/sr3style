@@ -7,13 +7,9 @@ import { User } from '~/entities/user.entity';
 
 const createNewSet = async (
   forkedEm: EntityManager,
-  { letterPair, setType, fsrsCard, user }: Omit<LearningSet, 'id'>,
+  newSetVals: Omit<LearningSet, 'id'>,
 ) => {
-  const newSet = new LearningSet();
-  newSet.letterPair = letterPair;
-  newSet.setType = setType;
-  newSet.fsrsCard = fsrsCard;
-  newSet.user = user;
+  const newSet = new LearningSet(newSetVals);
 
   // Persist and flush directly within the forked EntityManager
   await forkedEm.persist(newSet);
@@ -79,8 +75,6 @@ export const updatePair = async ({
     throw new Error('Entity not found');
   }
 
-  console.log(card);
-
   // Apply updates
   Object.assign(entity, {
     ...entity,
@@ -90,20 +84,6 @@ export const updatePair = async ({
 
   // Save changes
   await forkedEm.flush();
-
-  // const forkedEm = em.fork();
-
-  // const newSets = await Promise.all(
-  //   cards.map(({ fsrsCard, letterPair }) =>
-  //     createNewSet(forkedEm, {
-  //       letterPair,
-  //       setType,
-  //       fsrsCard,
-  //       user,
-  //     }),
-  //   ),
-  // );
-  // await forkedEm.flush();
 
   return entity;
 };

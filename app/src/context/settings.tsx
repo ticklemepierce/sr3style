@@ -7,7 +7,6 @@ interface ISettings {
 interface ISettingsContext {
   settings: ISettings;
   saveSettings: (settings: ISettings) => void;
-  debugMode: boolean;
 }
 
 const DEFAULT_SETTINGS = {
@@ -17,18 +16,11 @@ const DEFAULT_SETTINGS = {
 const SettingsContext = React.createContext<ISettingsContext>({
   settings: {},
   saveSettings: () => {},
-  debugMode: false,
 });
 
 export default SettingsContext;
 
-export function SettingsProvider({
-  debugMode,
-  children,
-}: {
-  debugMode: boolean;
-  children: React.ReactNode;
-}) {
+export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<ISettings>({});
 
   const saveSettings = (newSettings: ISettings) => {
@@ -39,7 +31,6 @@ export function SettingsProvider({
   const value = {
     saveSettings,
     settings,
-    debugMode,
   };
 
   useEffect(() => {

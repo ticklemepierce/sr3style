@@ -36,12 +36,7 @@ function Document({ children, title = 'App title' }: DocumentProps) {
   const serverStyleData = useContext(ServerStyleContext);
 
   return (
-    <html
-      lang={'en'}
-      // TODO: a better solution than the hacky thing?
-      // https://github.com/chakra-ui/chakra-ui/issues/7040
-      suppressHydrationWarning
-    >
+    <html lang={'en'} suppressHydrationWarning>
       <head>
         <meta charSet={'utf-8'} />
         <meta

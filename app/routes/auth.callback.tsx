@@ -1,9 +1,10 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { useEffect } from 'react';
+import { em } from '~/src/services/db.server';
 import { redirect } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/src/services/session.server';
-import { userRepo } from '~/src/services/db.server';
+import { User } from '~/entities/user.entity';
 
 const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
 
@@ -37,9 +38,14 @@ export const loader: LoaderFunction = async ({ request }) => {
   session.set('accessToken', accessToken);
   session.set('user', data.me);
 
-  await userRepo.upsert({
-    wcaId: data.me.wca_id,
-  });
+  const forkedEm = em.fork();
+
+  const newUser = new User({ wcaId: data.me.wca_id });
+  console.log({ newUser });
+  // Persist and flush directly within the forked EntityManager
+  await forkedEm.persist(newUser);
+
+  await forkedEm.flush();
 
   // return json({ user });
 

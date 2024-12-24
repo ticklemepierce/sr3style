@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { Avatar } from '@chakra/avatar';
 import { ColorModeButton } from '@chakra/color-mode';
@@ -11,9 +12,11 @@ import {
 } from '@chakra/menu';
 import { Button } from '@chakra/button';
 import { Form } from '@remix-run/react';
+import { SettingsModal } from '~/src/components/SettingsModal';
 
 export const NavBar = () => {
   const { userData } = useSessionContext();
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   return (
     <Box bg={{ base: 'gray.100', _dark: 'gray.900' }} px={4}>
@@ -33,7 +36,12 @@ export const NavBar = () => {
                 </IconButton>
               </MenuTrigger>
               <MenuContent>
-                <MenuItem value={'settings'} cursor={'pointer'}>
+                <MenuItem
+                  value={'settings'}
+                  cursor={'pointer'}
+                  as={'button'}
+                  onClick={() => setIsSettingsModalOpen(true)}
+                >
                   Settings
                 </MenuItem>
                 <MenuSeparator />
@@ -55,6 +63,10 @@ export const NavBar = () => {
           )}
         </Flex>
       </Flex>
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+      />
     </Box>
   );
 };

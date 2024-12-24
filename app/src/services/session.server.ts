@@ -50,6 +50,7 @@ export const getUserData = async (
   return {
     user,
     learningSets,
+    settings: dbUser.settings,
     isPremium: dbUser.isComped,
   };
 };

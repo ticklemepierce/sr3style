@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-// import Typography from '@mui/material/Typography';
 import { Rating } from 'ts-fsrs';
 import { Question, SetType } from '~/src/types';
 import { useFSRSContext } from '~/src/context/fsrs';
