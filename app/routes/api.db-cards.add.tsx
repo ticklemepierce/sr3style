@@ -12,7 +12,6 @@ type RequestPayload = {
   set: string;
 };
 
-// TODO remove learningSet
 // TODO add inverse
 export const action = async ({ request }: { request: Request }) => {
   const { letter, setType, set }: RequestPayload = await request.json();

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Box, IconButton } from '@chakra-ui/react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { Checkbox } from '@chakra/checkbox';
 import { SetType, Cards } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
@@ -20,22 +20,16 @@ export const SetGroup = ({
 
   const cards: Cards = useMemo(() => setTypeMap?.[setType] ?? {}, [setTypeMap]);
 
-  const numChecked = useMemo(
-    () => Object.keys(cards).filter((pair) => pair.startsWith(set)).length,
-    [cards],
-  );
+  const numChecked = Object.keys(cards).filter((pair) =>
+    pair.startsWith(set),
+  ).length;
+
+  const indeterminate =
+    0 < numChecked && numChecked < setTypeSpeffzMap[setType][set].length;
+
+  const allChecked = numChecked === setTypeSpeffzMap[setType][set].length;
 
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const getCheckedValue = () => {
-    if (!numChecked) {
-      return;
-    } else if (numChecked === setTypeSpeffzMap[setType][set].length) {
-      return true;
-    } else {
-      return 'indeterminate';
-    }
-  };
 
   const handleChange = async ({
     letter,
@@ -84,7 +78,6 @@ export const SetGroup = ({
   const toggleIsExpanded = () => {
     setIsExpanded((isExpanded) => !isExpanded);
   };
-
   return (
     <>
       <Box
@@ -94,7 +87,7 @@ export const SetGroup = ({
         justifyContent={'space-between'}
       >
         <Checkbox
-          checked={getCheckedValue()}
+          checked={indeterminate ? 'indeterminate' : allChecked}
           onCheckedChange={async (e) =>
             await handleChange({ letter: set, isChecked: Boolean(e.checked) })
           }
@@ -106,7 +99,7 @@ export const SetGroup = ({
           onClick={toggleIsExpanded}
           variant={'plain'}
         >
-          {isExpanded ? <ChevronUp /> : <ChevronDown />}
+          {isExpanded ? <LuChevronUp /> : <LuChevronDown />}
         </IconButton>
       </Box>
       {isExpanded && children}

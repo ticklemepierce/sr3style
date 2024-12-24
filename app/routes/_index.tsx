@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => [
 // TODO removePair/removeSet functionality
 // TODO test local storage
 // TODO improve summary UI
-// TODO remove prisma deps (and triage for anything else unneeded)
+// TODO triage for unused deps/code
 
 // https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Index() {

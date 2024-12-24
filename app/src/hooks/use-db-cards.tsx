@@ -89,9 +89,10 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
 
     if (data.success) {
       setSetTypeMap((prev) => {
+        const updatedCards = { ...prev };
         delete prev[setType][`${set}${letter}`];
 
-        return prev;
+        return updatedCards;
       });
     }
   };

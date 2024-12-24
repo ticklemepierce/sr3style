@@ -13,18 +13,12 @@ function capitalizeFirstLetter(val: string) {
 const ToReviewClient = ({ setType }: { setType: SetType }) => {
   const { setTypeMap } = useSessionContext();
 
-  const cards = useMemo(
-    () => setTypeMap?.[setType] ?? {},
-    [setTypeMap, setType],
-  );
-
   const cardsReadyForReview = useMemo(
     () =>
       getCardsReadyForReview({
-        cards,
-        shuffle: true,
+        cards: setTypeMap?.[setType] ?? {},
       }),
-    [cards],
+    [setTypeMap, setType],
   );
 
   const pairOrPairs = cardsReadyForReview.length === 1 ? 'pair' : 'pairs';
