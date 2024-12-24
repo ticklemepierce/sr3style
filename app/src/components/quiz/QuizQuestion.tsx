@@ -11,8 +11,6 @@ import { Heading, Stack } from '@chakra-ui/react';
 export const QuizQuestion = ({
   question,
   onAdvance,
-  // TODO updateCard
-
   setType,
 }: {
   question: Question;
@@ -47,7 +45,6 @@ export const QuizQuestion = ({
       setStopwatchTime(msElapsedSinceStart);
       stopwatchTimeRef.current = msElapsedSinceStart;
     },
-    onBlur: () => {}, // TODO make optional
   });
 
   useEffect(() => {

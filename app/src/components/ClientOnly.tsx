@@ -1,6 +1,5 @@
 import { ReactNode, FC } from 'react';
-import { useHydrated } from '../hooks/use-hydrated';
-import { Skeleton } from '@chakra/skeleton';
+import { ClientOnly as ChakraClientOnly, Skeleton } from '@chakra-ui/react';
 
 type ClientOnlyProps = {
   /**
@@ -12,13 +11,9 @@ type ClientOnlyProps = {
   fallback?: ReactNode;
 };
 
-// TODO replace with Chakra https://www.chakra-ui.com/docs/components/client-only
-
+// TODO refactor away in favor of Skeleton with loading prop for localStorage users
+// premium users should be able to fully SSR
 export const ClientOnly: FC<ClientOnlyProps> = ({
   children,
   fallback = <Skeleton height={'20px'} />,
-}) => {
-  const isHydrated = useHydrated();
-
-  return isHydrated ? children : fallback;
-};
+}) => <ChakraClientOnly fallback={fallback}>{children}</ChakraClientOnly>;

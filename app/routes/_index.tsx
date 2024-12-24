@@ -18,7 +18,6 @@ export const meta: MetaFunction = () => [
 // TODO get SSR working for premium
 // TODO figure out better naming for cards and letters and sets and fsrsCard
 // TODO settings modal
-// TODO removePair/removeSet functionality
 // TODO test local storage
 // TODO improve summary UI
 // TODO triage for unused deps/code
