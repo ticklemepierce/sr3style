@@ -122,3 +122,8 @@ export type CardManager = {
     set: string;
   }) => Promise<void>;
 };
+
+export type SettingsManager = {
+  settings: Settings;
+  saveSettings: (updatedSettings: Partial<Settings>) => void;
+};

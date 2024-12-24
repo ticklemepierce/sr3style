@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Settings, UserData } from '../types';
+import { Settings, SettingsManager, UserData } from '../types';
+import { DEFAULT_SETTINGS } from '../utils/constants';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useSettings = ({ userData }: { userData?: UserData }): any => {
-  // TODO figure out how to read from local here
+const useSettings = ({
+  userData,
+}: {
+  userData?: UserData;
+}): SettingsManager => {
+  // TODO figure out how to read from local here https://usehooks-ts.com/react-hook/use-read-local-storage
   // TODO make this a default obj somewhere and use it in the db as well
-  const initSettings = userData?.settings ?? {
-    autoAddInverse: false,
-  };
+  const initSettings = userData?.settings ?? DEFAULT_SETTINGS;
 
   const [settings, setSettings] = useState<Settings>(initSettings);
 

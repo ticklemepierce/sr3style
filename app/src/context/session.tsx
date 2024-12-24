@@ -1,13 +1,16 @@
 import { ReactNode, createContext, useContext } from 'react';
-import { CardManager, UserData } from '../types';
+import { CardManager, SettingsManager, UserData } from '../types';
 import useLocalStorageCards from '../hooks/use-local-storage-cards';
 import useDbCards from '../hooks/use-db-cards';
 import useSettings from '../hooks/use-settings';
 
-interface ISessionContext extends Partial<CardManager> {
+interface ISessionContext
+  extends Partial<CardManager>,
+    Partial<SettingsManager> {
   userData?: UserData;
 }
 
+// TODO initialize context better here
 const SessionContext = createContext<ISessionContext>({});
 
 export default function SessionContextProvider({

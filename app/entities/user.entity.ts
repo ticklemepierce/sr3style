@@ -7,13 +7,14 @@ import {
 } from '@mikro-orm/core';
 import { LearningSet } from './set.entity.ts'; // Assuming you have Set defined in a separate file
 import { Settings } from '../src/types';
+import { DEFAULT_SETTINGS } from '~/src/utils/constants.ts';
 
 type UserConstructorParams = Required<Pick<User, 'wcaId'>> &
   Partial<Pick<User, 'isComped' | 'settings'>>;
 
 const defaultVals = {
   isComped: false,
-  settings: { autoAddInverse: false },
+  settings: DEFAULT_SETTINGS,
 };
 @Entity()
 export class User {

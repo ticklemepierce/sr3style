@@ -11,7 +11,7 @@ import {
 } from '@chakra/dialog';
 import { Switch } from '@chakra/switch';
 import { Settings } from '../types';
-import { useSettingsContext } from '../context/settings';
+import { useSessionContext } from '../context/session';
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -20,9 +20,9 @@ interface SettingsDialogProps {
 
 export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { settings, saveSettings } = useSettingsContext();
+  const { settings, saveSettings } = useSessionContext();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currSettings, setCurrSettings] = useState(settings);
+  const [currSettings, setCurrSettings] = useState(settings ?? {});
 
   const updateCurrSettings = (updatedSetting: Partial<Settings>) => {
     setCurrSettings((currSettings) => ({

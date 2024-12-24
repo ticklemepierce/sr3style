@@ -2,11 +2,11 @@ import { useLocalStorage } from 'usehooks-ts';
 // import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
 import { createEmptyCard } from 'ts-fsrs';
 import { Card, CardManager, SetType, SetTypeMap } from '../types';
-import { useSettingsContext } from '../context/settings';
 import { setTypeSpeffzMap } from '../utils/constants';
+import { useSessionContext } from '../context/session';
 
 const useLocalStorageCards = (): CardManager => {
-  const { settings } = useSettingsContext();
+  const { settings } = useSessionContext();
 
   const [setTypeMap, setSetTypeMap] = useLocalStorage<SetTypeMap>(
     'cards',
@@ -62,7 +62,7 @@ const useLocalStorageCards = (): CardManager => {
     letter: string;
   }) => {
     await addToCardsIfNotExists({ setType, letterPair: `${set}${letter}` });
-    if (settings.autoAddInverse) {
+    if (settings?.autoAddInverse) {
       await addToCardsIfNotExists({ setType, letterPair: `${letter}${set}` });
     }
   };

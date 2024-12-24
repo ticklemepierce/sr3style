@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { DEFAULT_SETTINGS } from '../utils/constants';
 
 interface ISettings {
   autoAddInverse?: boolean;
@@ -8,10 +9,6 @@ interface ISettingsContext {
   settings: ISettings;
   saveSettings: (settings: ISettings) => void;
 }
-
-const DEFAULT_SETTINGS = {
-  autoAddInverse: false,
-};
 
 const SettingsContext = React.createContext<ISettingsContext>({
   settings: {},
