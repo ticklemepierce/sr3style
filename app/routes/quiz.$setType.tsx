@@ -1,4 +1,3 @@
-import type { MetaFunction } from '@remix-run/node';
 import { useReducer, useEffect } from 'react';
 import { reducer, getInitialState } from '~/src/components/quiz/reducer';
 import {
@@ -19,12 +18,9 @@ import { HStack, Center, Spinner, Flex } from '@chakra-ui/react';
 import { FSRSProvider } from '~/src/context/fsrs';
 import { getCardsReadyForReview } from '~/src/utils/cards';
 import { useSessionContext } from '~/src/context/session';
+import { sharedMeta } from '~/src/utils/meta';
 
-// TODO meta
-export const meta: MetaFunction = () => [
-  { title: 'Remix Starter' },
-  { name: 'description', content: 'Welcome to remix!' },
-];
+export const meta = sharedMeta;
 
 interface Params {
   setType: SetType;

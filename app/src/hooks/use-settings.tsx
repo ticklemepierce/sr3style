@@ -8,7 +8,6 @@ const useSettings = ({
   userData?: UserData;
 }): SettingsManager => {
   // TODO figure out how to read from local here https://usehooks-ts.com/react-hook/use-read-local-storage
-  // TODO make this a default obj somewhere and use it in the db as well
   const initSettings = userData?.settings ?? DEFAULT_SETTINGS;
 
   const [settings, setSettings] = useState<Settings>(initSettings);

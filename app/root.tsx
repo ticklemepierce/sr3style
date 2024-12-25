@@ -30,10 +30,9 @@ const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
 
 interface DocumentProps {
   children: React.ReactNode;
-  title?: string;
 }
 
-function Document({ children, title = 'App title' }: DocumentProps) {
+function Document({ children }: DocumentProps) {
   const serverStyleData = useContext(ServerStyleContext);
 
   return (
@@ -45,7 +44,6 @@ function Document({ children, title = 'App title' }: DocumentProps) {
           content={'width=device-width, initial-scale=1'}
         />
         <Meta />
-        <title>{title}</title>
         <Links />
         {serverStyleData?.map(({ key, ids, css }) => (
           <style
@@ -92,7 +90,7 @@ export function ErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     return (
-      <Document title={'Error!'}>
+      <Document>
         <ChakraProvider value={defaultSystem}>
           <ColorModeProvider>
             <Box>
@@ -107,7 +105,7 @@ export function ErrorBoundary() {
     );
   } else if (error instanceof Error) {
     return (
-      <Document title={'Error!'}>
+      <Document>
         <ChakraProvider value={defaultSystem}>
           <ColorModeProvider>
             <Box>

@@ -1,15 +1,11 @@
-import type { MetaFunction } from '@remix-run/node';
 import { SetSelector } from '~/src/components/SetSelector';
 import { ToReview } from '~/src/components/ToReview';
 import { Layout } from '~/src/components/Layout';
 import { CORNERS, EDGES } from '~/src/utils/constants';
 import { Box, HStack } from '@chakra-ui/react';
+import { sharedMeta } from '~/src/utils/meta';
 
-// TODO meta
-export const meta: MetaFunction = () => [
-  { title: 'Remix Starter' },
-  { name: 'description', content: 'Welcome to remix!' },
-];
+export const meta = sharedMeta;
 
 // TODO make summary show percentage in each state
 // TODO show fraction of selected cases on set selectors
@@ -19,6 +15,7 @@ export const meta: MetaFunction = () => [
 // TODO settings modal for local
 // TODO triage for unused deps/code
 // TODO restructure api code
+// TODO better error handling on api responses
 
 export default function Index() {
   return (
