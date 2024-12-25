@@ -1,37 +1,36 @@
 import { useLocalStorage } from 'usehooks-ts';
-// import { RecordLogItem, createEmptyCard } from 'ts-fsrs';
-import { createEmptyCard } from 'ts-fsrs';
-import { Card, CardManager, SetType, SetTypeMap } from '../types';
+import { createEmptyCard, RecordLogItem } from 'ts-fsrs';
+import { CardManager, LearningCases, SetType } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { useSessionContext } from '../context/session';
 
 const useLocalStorageCards = (): CardManager => {
   const { settings } = useSessionContext();
 
-  const [setTypeMap, setSetTypeMap] = useLocalStorage<SetTypeMap>(
+  const [learningCases, setLearningCases] = useLocalStorage<LearningCases>(
     'cards',
-    {} as SetTypeMap,
+    {} as LearningCases,
   );
 
   const addToCardsIfNotExists = async ({
     setType,
-    letterPair,
+    caseId,
   }: {
     setType: SetType;
-    letterPair: string;
+    caseId: string;
   }) => {
-    const letterPairExists = !!setTypeMap[setType][letterPair];
-    if (!letterPairExists) {
+    const caseIdExists = !!learningCases[setType][caseId];
+    if (!caseIdExists) {
       const card = createEmptyCard();
 
-      setSetTypeMap((prev) => {
+      setLearningCases((prev) => {
         const prevSetTypeCards = prev[setType];
 
         return {
           ...prev,
           [setType]: {
             ...prevSetTypeCards,
-            [letterPair]: { card },
+            [caseId]: { card },
           },
         };
       });
@@ -46,24 +45,24 @@ const useLocalStorageCards = (): CardManager => {
     set: string;
   }) => {
     await Promise.all(
-      setTypeSpeffzMap[setType][set].map((letter) =>
-        addPair({ setType, set, letter }),
+      setTypeSpeffzMap[setType][set].map((subSet) =>
+        addSubset({ setType, set, subSet }),
       ),
     );
   };
 
-  const addPair = async ({
+  const addSubset = async ({
     setType,
     set,
-    letter,
+    subSet,
   }: {
     setType: SetType;
     set: string;
-    letter: string;
+    subSet: string;
   }) => {
-    await addToCardsIfNotExists({ setType, letterPair: `${set}${letter}` });
+    await addToCardsIfNotExists({ setType, caseId: `${set}${subSet}` });
     if (settings?.autoAddInverse) {
-      await addToCardsIfNotExists({ setType, letterPair: `${letter}${set}` });
+      await addToCardsIfNotExists({ setType, caseId: `${subSet}${set}` });
     }
   };
 
@@ -75,56 +74,56 @@ const useLocalStorageCards = (): CardManager => {
     set: string;
   }) => {
     await Promise.all(
-      setTypeSpeffzMap[setType][set].map((letter) =>
-        removePair({ setType, set, letter }),
+      setTypeSpeffzMap[setType][set].map((subSet) =>
+        removeSubset({ setType, set, subSet }),
       ),
     );
   };
 
-  const removePair = async ({
+  const removeSubset = async ({
     setType,
     set,
-    letter,
+    subSet,
   }: {
     setType: SetType;
     set: string;
-    letter: string;
+    subSet: string;
   }) => {
-    setSetTypeMap((prev) => {
-      delete prev[setType][`${set}${letter}`];
+    setLearningCases((prev) => {
+      delete prev[setType][`${set}${subSet}`];
 
       return prev;
     });
   };
 
-  const updateCard = async ({
-    card,
-    letterPair,
+  const updateCase = async ({
+    recordLogItem,
+    caseId,
     setType,
   }: {
-    card: Card;
-    letterPair: string;
+    recordLogItem: RecordLogItem;
+    caseId: string;
     setType: SetType;
   }) => {
-    setSetTypeMap((prev) => {
+    setLearningCases((prev) => {
       const prevSetTypeCards = prev[setType];
 
       return {
         ...prev,
         [setType]: {
           ...prevSetTypeCards,
-          [letterPair]: card,
+          [caseId]: recordLogItem,
         },
       };
     });
   };
 
   return {
-    setTypeMap,
-    removePair,
+    learningCases,
+    removeSubset,
     removeSet,
-    updateCard,
-    addPair,
+    updateCase,
+    addSubset,
     addSet,
   };
 };

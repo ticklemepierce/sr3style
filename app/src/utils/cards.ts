@@ -1,9 +1,9 @@
-import { Cards, Question } from '../types';
+import { RecordLogItemMap, Question } from '../types';
 
-const cardsObjToArray = (cardsObj: Cards): Question[] =>
-  Object.entries(cardsObj).map(([pair, card]) => ({
-    pair,
-    card,
+const cardsObjToArray = (cardsObj: RecordLogItemMap): Question[] =>
+  Object.entries(cardsObj).map(([caseId, recordLogItem]) => ({
+    caseId,
+    recordLogItem,
   }));
 
 const shuffleQuestions = (array: Question[]) => {
@@ -18,7 +18,7 @@ export const getCardsReadyForReview = ({
   cards,
   shuffle = false,
 }: {
-  cards?: Cards;
+  cards?: RecordLogItemMap;
   shuffle?: boolean;
 }) => {
   if (!cards) {
@@ -26,10 +26,9 @@ export const getCardsReadyForReview = ({
   }
 
   const cardsFromStorageArray = cardsObjToArray(cards);
-  const onlyDueCards = cardsFromStorageArray.filter(({ card }) => {
-    const fsrsCard = card.fsrsCard;
+  const onlyDueCards = cardsFromStorageArray.filter(({ recordLogItem }) => {
     const currTime = new Date();
-    const cardTime = new Date(fsrsCard.due);
+    const cardTime = new Date(recordLogItem.card.due);
 
     return cardTime < currTime;
   });

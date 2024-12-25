@@ -29,5 +29,3 @@ export const SetSelector = ({ setType }: { setType: SetType }) => {
     </ClientOnly>
   );
 };
-
-// export const SetSelector = SetSelectorClient;

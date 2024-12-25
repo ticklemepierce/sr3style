@@ -1,39 +1,41 @@
 import { useState } from 'react';
-import { Card, CardManager, SetType, SetTypeMap, UserData } from '../types';
+import { CardManager, LearningCases, SetType, UserData } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
+import { RecordLogItem } from 'ts-fsrs';
 
 const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
-  const initSetTypeMap = userData?.learningSets ?? {
+  const initLearningCases = userData?.learningCases ?? {
     edges: {},
     corners: {},
   };
 
-  const [setTypeMap, setSetTypeMap] = useState<SetTypeMap>(initSetTypeMap);
+  const [learningCases, setLearningCases] =
+    useState<LearningCases>(initLearningCases);
 
-  const addPair = async ({
+  const addSubset = async ({
     setType,
     set,
-    letter,
+    subSet,
   }: {
     setType: SetType;
     set: string;
-    letter: string;
+    subSet: string;
   }) => {
     const response = await fetch(`/api/db-cards/add`, {
       method: 'POST',
-      body: JSON.stringify({ letter, setType, set }),
+      body: JSON.stringify({ subSet, setType, set }),
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
     if (data.success) {
-      setSetTypeMap((prev) => {
+      setLearningCases((prev) => {
         const prevSetTypeCards = prev[setType];
 
         return {
           ...prev,
           [setType]: {
             ...prevSetTypeCards,
-            [`${set}${letter}`]: { fsrsCard: data.card },
+            [`${set}${subSet}`]: { card: data.card },
           },
         };
       });
@@ -55,42 +57,42 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
     const data = await response.json();
 
     if (data.success) {
-      setSetTypeMap((prev) => {
-        const updatedCards = { ...prev[setType] };
+      setLearningCases((prev) => {
+        const updatedRecordLogItemMap = { ...prev[setType] };
 
-        setTypeSpeffzMap[setType][set].forEach((letter: string) => {
-          const letterPair = `${set}${letter}`;
-          updatedCards[letterPair] = { fsrsCard: data.cards[letterPair] };
+        setTypeSpeffzMap[setType][set].forEach((subSet: string) => {
+          const caseId = `${set}${subSet}`;
+          updatedRecordLogItemMap[caseId] = data.recordLogItemMap[caseId];
         });
 
         return {
           ...prev,
-          [setType]: updatedCards,
+          [setType]: updatedRecordLogItemMap,
         };
       });
     }
   };
 
-  const removePair = async ({
+  const removeSubset = async ({
     set,
-    letter,
+    subSet,
     setType,
   }: {
     set: string;
-    letter: string;
+    subSet: string;
     setType: SetType;
   }) => {
     const response = await fetch(`/api/db-cards/remove`, {
       method: 'POST',
-      body: JSON.stringify({ letter, setType, set }),
+      body: JSON.stringify({ subSet, setType, set }),
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
 
     if (data.success) {
-      setSetTypeMap((prev) => {
+      setLearningCases((prev) => {
         const updatedCards = { ...prev };
-        delete prev[setType][`${set}${letter}`];
+        delete prev[setType][`${set}${subSet}`];
 
         return updatedCards;
       });
@@ -112,11 +114,11 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
     const data = await response.json();
 
     if (data.success) {
-      setSetTypeMap((prev) => {
+      setLearningCases((prev) => {
         const updatedCards = { ...prev[setType] };
 
-        setTypeSpeffzMap[setType][set].forEach((letter) => {
-          delete updatedCards[`${set}${letter}`];
+        setTypeSpeffzMap[setType][set].forEach((subSet) => {
+          delete updatedCards[`${set}${subSet}`];
         });
 
         return {
@@ -127,31 +129,31 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
     }
   };
 
-  const updateCard = async ({
-    card,
-    letterPair,
+  const updateCase = async ({
+    recordLogItem,
+    caseId,
     setType,
   }: {
-    card: Card;
-    letterPair: string;
+    recordLogItem: RecordLogItem;
+    caseId: string;
     setType: SetType;
   }) => {
     const response = await fetch(`/api/db-cards/update`, {
       method: 'POST',
-      body: JSON.stringify({ setType, letterPair, card }),
+      body: JSON.stringify({ setType, caseId, recordLogItem }),
       headers: { 'Content-Type': 'application/json' },
     });
     const data = await response.json();
 
     if (data.success) {
-      setSetTypeMap((prev) => {
+      setLearningCases((prev) => {
         const prevSetTypeCards = prev[setType];
 
         return {
           ...prev,
           [setType]: {
             ...prevSetTypeCards,
-            [letterPair]: card,
+            [caseId]: recordLogItem,
           },
         };
       });
@@ -159,11 +161,11 @@ const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
   };
 
   return {
-    setTypeMap,
-    removePair,
+    learningCases,
+    removeSubset,
     removeSet,
-    updateCard,
-    addPair,
+    updateCase,
+    addSubset,
     addSet,
   };
 };

@@ -4,6 +4,7 @@ interface PieceMap {
   [key: string]: string[];
 }
 
+// TODO generate this
 export const edgeMap: PieceMap = {
   a: [
     'b',
@@ -489,10 +490,9 @@ export const edgeMap: PieceMap = {
     'v',
     'w',
   ],
-  // for debugging
-  // y: ['y'],
 };
 
+// TODO generate this
 export const cornersMap: PieceMap = {
   a: [
     'b',

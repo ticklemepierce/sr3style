@@ -13,8 +13,6 @@ export const QuizProgress = ({
       value={(questionNumber / totalQuestions) * 100}
       width={'100%'}
       mr={5}
-      // mx={'auto'}
-      // my={5}
       variant={'subtle'}
     >
       <HStack gap={'5'}>

@@ -1,23 +1,22 @@
-import { LearningSet } from '~/entities/set.entity';
-import { Card as FsrsCard } from 'ts-fsrs';
-import { Card, SetType } from '../types';
+import { LearningCase } from '~/entities/learning-case.entity';
+import { RecordLogItem } from 'ts-fsrs';
+import { RecordLogItemMap, SetType } from '../types';
 import { em } from '~/src/services/db.server';
 import { EntityManager } from '@mikro-orm/core';
 import { User } from '~/entities/user.entity';
 
 const createNewSet = async (
   forkedEm: EntityManager,
-  newSetVals: Omit<LearningSet, 'id'>,
+  newSetVals: Omit<LearningCase, 'id'>,
 ) => {
-  const newSet = new LearningSet(newSetVals);
+  const newSet = new LearningCase(newSetVals);
 
-  // Persist and flush directly within the forked EntityManager
   await forkedEm.persist(newSet);
 
   return newSet;
 };
 
-export const addPair = async (props: Omit<LearningSet, 'id'>) => {
+export const addSubset = async (props: Omit<LearningCase, 'id'>) => {
   const forkedEm = em.fork();
   const newSet = createNewSet(forkedEm, props);
 
@@ -28,45 +27,46 @@ export const addPair = async (props: Omit<LearningSet, 'id'>) => {
 
 export const addSet = async ({
   setType,
-  cards,
+  recordLogItemMap,
   user,
 }: {
   setType: SetType;
-  cards: { letterPair: string; fsrsCard: FsrsCard }[];
+  recordLogItemMap: RecordLogItemMap;
   user: User;
 }) => {
   const forkedEm = em.fork();
 
   const newSets = await Promise.all(
-    cards.map(({ fsrsCard, letterPair }) =>
-      createNewSet(forkedEm, {
-        letterPair,
+    Object.entries(recordLogItemMap).map(([caseId, recordLogItem]) => {
+      console.log({ recordLogItem });
+      return createNewSet(forkedEm, {
+        caseId,
         setType,
-        fsrsCard,
+        ...recordLogItem,
         user,
-      }),
-    ),
+      });
+    }),
   );
   await forkedEm.flush();
 
   return newSets;
 };
 
-export const updatePair = async ({
-  letterPair,
+export const updateCase = async ({
+  caseId,
   setType,
-  card,
+  recordLogItem,
   user,
 }: {
-  letterPair: string;
+  caseId: string;
   setType: SetType;
-  card: Card;
+  recordLogItem: RecordLogItem;
   user: User;
 }) => {
   const forkedEm = em.fork();
 
-  const entity = await forkedEm.findOne(LearningSet, {
-    letterPair,
+  const entity = await forkedEm.findOne(LearningCase, {
+    caseId,
     setType,
     user,
   });
@@ -75,14 +75,11 @@ export const updatePair = async ({
     throw new Error('Entity not found');
   }
 
-  // Apply updates
   Object.assign(entity, {
     ...entity,
-    fsrsCard: card.fsrsCard,
-    log: card.log,
+    ...recordLogItem,
   });
 
-  // Save changes
   await forkedEm.flush();
 
   return entity;

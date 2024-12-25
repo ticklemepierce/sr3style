@@ -5,9 +5,9 @@ import {
   OneToMany,
   Collection,
 } from '@mikro-orm/core';
-import { LearningSet } from './set.entity.ts'; // Assuming you have Set defined in a separate file
+import { LearningCase } from './learning-case.entity.ts';
 import { Settings } from '../src/types';
-import { DEFAULT_SETTINGS } from '~/src/utils/constants.ts';
+import { DEFAULT_SETTINGS } from '../src/utils/constants.ts';
 
 type UserConstructorParams = Required<Pick<User, 'wcaId'>> &
   Partial<Pick<User, 'isComped' | 'settings'>>;
@@ -37,8 +37,8 @@ export class User {
   @Property({ type: 'boolean' })
   isComped: boolean;
 
-  @OneToMany(() => LearningSet, (learningSet) => learningSet.user)
-  learningSets = new Collection<LearningSet>(this);
+  @OneToMany(() => LearningCase, (learningCase) => learningCase.user)
+  learningCases = new Collection<LearningCase>(this);
 
   @Property({ type: 'json' })
   settings: Settings;

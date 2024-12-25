@@ -1,20 +1,20 @@
 import { setTypeSpeffzMap } from '~/src/utils/constants';
 import { createEmptyCard } from 'ts-fsrs';
-import { SetType } from '~/src/types';
+import { RecordLogItemMap, SetType } from '~/src/types';
 import { userRepo } from '~/src/services/db.server';
-import { addPair, addSet } from '~/src/utils/db';
+import { addSubset, addSet } from '~/src/utils/db';
 import { getSession } from '~/src/services/session.server';
 import { data } from '@remix-run/node';
 
 type RequestPayload = {
-  letter?: string;
+  subSet?: string;
   setType: SetType;
   set: string;
 };
 
 // TODO add inverse
 export const action = async ({ request }: { request: Request }) => {
-  const { letter, setType, set }: RequestPayload = await request.json();
+  const { subSet, setType, set }: RequestPayload = await request.json();
   const session = await getSession(request.headers.get('Cookie'));
 
   const user = session.get('user');
@@ -24,45 +24,46 @@ export const action = async ({ request }: { request: Request }) => {
   }
 
   try {
-    if (letter) {
-      const letterPair = `${set}${letter}`;
+    if (subSet) {
+      const caseId = `${set}${subSet}`;
 
       const card = createEmptyCard();
 
-      await addPair({
-        letterPair,
+      await addSubset({
+        caseId,
         setType,
-        fsrsCard: card,
+        card,
         user: await userRepo.findOneOrFail({ wcaId: user.wca_id }),
       });
 
       return {
         success: true,
-        message: `created letter pair: ${letterPair}`,
+        message: `created ${caseId}`,
         card,
       };
     } else {
-      const cards = setTypeSpeffzMap[setType][set].map((letter: string) => ({
-        letterPair: `${set}${letter}`,
-        fsrsCard: createEmptyCard(),
-      }));
+      const recordLogItemMap: RecordLogItemMap = setTypeSpeffzMap[setType][
+        set
+      ].reduce(
+        (acc, subSet) => ({
+          ...acc,
+          [`${set}${subSet}`]: {
+            card: createEmptyCard(),
+          },
+        }),
+        {},
+      );
 
       await addSet({
         setType,
-        cards,
+        recordLogItemMap,
         user: await userRepo.findOneOrFail({ wcaId: user.wca_id }),
       });
 
       return {
         success: true,
         message: `created set: ${set}`,
-        cards: cards.reduce(
-          (acc, { letterPair, fsrsCard }) => {
-            acc[letterPair] = fsrsCard;
-            return acc;
-          },
-          {} as Record<string, object>,
-        ),
+        recordLogItemMap,
       };
     }
   } catch (error) {

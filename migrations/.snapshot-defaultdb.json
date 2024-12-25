@@ -77,8 +77,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "letter_pair": {
-          "name": "letter_pair",
+        "case_id": {
+          "name": "case_id",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -97,8 +97,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "fsrs_card": {
-          "name": "fsrs_card",
+        "card": {
+          "name": "card",
           "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
@@ -125,19 +125,19 @@
           "mappedType": "integer"
         }
       },
-      "name": "learning_set",
+      "name": "learning_case",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "learning_set_letter_pair_set_type_unique",
-          "columnNames": ["letter_pair", "set_type"],
+          "keyName": "learning_case_case_id_set_type_unique",
+          "columnNames": ["case_id", "set_type"],
           "composite": true,
           "constraint": true,
           "primary": false,
           "unique": true
         },
         {
-          "keyName": "learning_set_pkey",
+          "keyName": "learning_case_pkey",
           "columnNames": ["id"],
           "composite": false,
           "constraint": true,
@@ -147,10 +147,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "learning_set_user_id_foreign": {
-          "constraintName": "learning_set_user_id_foreign",
+        "learning_case_user_id_foreign": {
+          "constraintName": "learning_case_user_id_foreign",
           "columnNames": ["user_id"],
-          "localTableName": "public.learning_set",
+          "localTableName": "public.learning_case",
           "referencedColumnNames": ["id"],
           "referencedTableName": "public.user",
           "updateRule": "cascade"

@@ -5,23 +5,17 @@ import {
   ManyToOne,
   Unique,
 } from '@mikro-orm/core';
-import { Card as FsrsCard, ReviewLog } from 'ts-fsrs';
-import { SetType } from '../src/types';
+import { Card, ReviewLog } from 'ts-fsrs';
+import { SetType } from '../src/types.ts';
 import { User } from './user.entity.ts';
 
 @Entity()
-@Unique({ properties: ['letterPair', 'setType'] }) // Define unique constraint here
-export class LearningSet {
-  constructor({
-    letterPair,
-    setType,
-    fsrsCard,
-    log,
-    user,
-  }: Omit<LearningSet, 'id'>) {
-    this.letterPair = letterPair;
+@Unique({ properties: ['caseId', 'setType'] })
+export class LearningCase {
+  constructor({ caseId, setType, card, log, user }: Omit<LearningCase, 'id'>) {
+    this.caseId = caseId;
     this.setType = setType;
-    this.fsrsCard = fsrsCard;
+    this.card = card;
     this.log = log;
     this.user = user;
   }
@@ -30,13 +24,13 @@ export class LearningSet {
   id!: number;
 
   @Property({ type: 'string' })
-  letterPair!: string;
+  caseId!: string;
 
   @Property({ type: 'string' })
   setType!: SetType;
 
   @Property({ type: 'json' })
-  fsrsCard!: FsrsCard;
+  card!: Card;
 
   @Property({ type: 'json', nullable: true })
   log?: ReviewLog;

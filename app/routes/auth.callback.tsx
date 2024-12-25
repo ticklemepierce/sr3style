@@ -16,7 +16,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const accessToken = searchParams.get('access_token');
-  // const expiresIn = searchParams.get('expires_in');
 
   const res = await fetch(
     `${WCA_ORIGIN}/me`,
@@ -41,19 +40,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const forkedEm = em.fork();
 
   const newUser = new User({ wcaId: data.me.wca_id });
-  console.log({ newUser });
-  // Persist and flush directly within the forked EntityManager
   await forkedEm.persist(newUser);
-
   await forkedEm.flush();
-
-  // return json({ user });
-
-  // const data = { error: session.get("error") };
-
-  // const expiresIn = searchParams.get('expires_in');
-
-  // const expiresInAdjusted = expiresIn ? parseInt(expiresIn, 10) - 15 : undefined;
 
   return redirect('/', {
     headers: {

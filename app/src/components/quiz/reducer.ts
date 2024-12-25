@@ -47,7 +47,7 @@ export const reducer = (state: State, action: Action): State => {
         results: {},
       };
     case GET_FEEDBACK:
-      state.results![state.question!.pair] = {
+      state.results![state.question!.caseId] = {
         time: action.payload.time,
         rating: Rating[action.payload.rating],
       };

@@ -20,7 +20,7 @@ import { FSRSProvider } from '~/src/context/fsrs';
 import { getCardsReadyForReview } from '~/src/utils/cards';
 import { useSessionContext } from '~/src/context/session';
 
-// https://remix.run/docs/en/main/route/meta
+// TODO meta
 export const meta: MetaFunction = () => [
   { title: 'Remix Starter' },
   { name: 'description', content: 'Welcome to remix!' },
@@ -30,23 +30,22 @@ interface Params {
   setType: SetType;
 }
 
-// https://remix.run/docs/en/main/file-conventions/routes#basic-routes
 export default function Quiz() {
   const { setType } = useParams<keyof Params>() as Params;
-  const { setTypeMap } = useSessionContext();
+  const { learningCases } = useSessionContext();
   const [state, dispatch] = useReducer(reducer, getInitialState());
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (state.quizState === 'loading') {
       const questions = getCardsReadyForReview({
-        cards: setTypeMap?.[setType] ?? {},
+        cards: learningCases?.[setType] ?? {},
         shuffle: true,
       });
 
       initializeQuiz({ dispatch, questions });
     }
-  }, [setTypeMap]);
+  }, [learningCases]);
 
   return (
     <FSRSProvider>

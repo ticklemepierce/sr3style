@@ -1,22 +1,17 @@
-import { Card as FsrsCard, ReviewLog, Rating } from 'ts-fsrs';
+import { Rating, RecordLogItem } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
 
-export type Card = {
-  fsrsCard: FsrsCard;
-  log?: ReviewLog;
-};
-
-export type Cards = {
-  [pair: string]: Card;
+export type RecordLogItemMap = {
+  [caseId: string]: RecordLogItem;
 };
 
 export type Question = {
-  pair: string;
-  card: Card;
+  caseId: string;
+  recordLogItem: RecordLogItem;
 };
 
 export interface Results {
-  [pair: string]: {
+  [caseId: string]: {
     time: number;
     rating: Rating;
   };
@@ -70,23 +65,23 @@ export type Settings = {
 export type UserData = {
   user: WcaUser;
   settings: Settings;
-  learningSets: SetTypeMap;
+  learningCases: LearningCases;
   isPremium: boolean;
 };
 
 export type Nullable<T> = T | null;
 
-export type SetTypeMap = Record<SetType, Cards>;
+export type LearningCases = Record<SetType, RecordLogItemMap>;
 
 export type CardManager = {
-  setTypeMap: SetTypeMap;
-  removePair: ({
+  learningCases: LearningCases;
+  removeSubset: ({
     set,
-    letter,
+    subSet,
     setType,
   }: {
     set: string;
-    letter: string;
+    subSet: string;
     setType: SetType;
   }) => Promise<void>;
   removeSet: ({
@@ -96,23 +91,23 @@ export type CardManager = {
     setType: SetType;
     set: string;
   }) => Promise<void>;
-  updateCard: ({
-    card,
-    letterPair,
+  updateCase: ({
+    recordLogItem,
+    caseId,
     setType,
   }: {
-    card: Card;
-    letterPair: string;
+    recordLogItem: RecordLogItem;
+    caseId: string;
     setType: SetType;
   }) => Promise<void>;
-  addPair: ({
+  addSubset: ({
     setType,
     set,
-    letter,
+    subSet,
   }: {
     setType: SetType;
     set: string;
-    letter: string;
+    subSet: string;
   }) => Promise<void>;
   addSet: ({
     setType,

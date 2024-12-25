@@ -18,7 +18,7 @@ export const QuizQuestion = ({
   setType: SetType;
 }) => {
   const { f } = useFSRSContext();
-  const { updateCard } = useSessionContext();
+  const { updateCase } = useSessionContext();
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const stopWatchStartTimeRef = useRef(Date.now());
 
@@ -57,8 +57,8 @@ export const QuizQuestion = ({
   }, []);
 
   const rate = () => {
-    const timeForPair = stopwatchTimeRef.current;
-    const timeRatio = Math.floor(timeForPair / DEFAULT_TARGET_TIME_IN_MS);
+    const timeForQuestion = stopwatchTimeRef.current;
+    const timeRatio = Math.floor(timeForQuestion / DEFAULT_TARGET_TIME_IN_MS);
 
     let rating: Rating;
 
@@ -76,22 +76,22 @@ export const QuizQuestion = ({
         rating = Rating.Again;
     }
 
-    const newCard = f!.repeat(question.card.fsrsCard, new Date())[rating];
+    const recordLogItem = f!.repeat(question.recordLogItem.card, new Date())[
+      rating
+    ];
 
-    const { card: fsrsCard, ...rest } = newCard;
-
-    updateCard!({
-      card: { fsrsCard, ...rest },
-      letterPair: question.pair,
+    updateCase!({
+      recordLogItem,
+      caseId: question.caseId,
       setType,
     });
 
-    onAdvance({ time: timeForPair, rating });
+    onAdvance({ time: timeForQuestion, rating });
   };
 
   return (
     <Stack alignItems={'center'}>
-      <Heading size={'4xl'}>{question.pair.toUpperCase()}</Heading>
+      <Heading size={'4xl'}>{question.caseId.toUpperCase()}</Heading>
       <Heading size={'4xl'}>{formatTime(stopwatchTime)}</Heading>
     </Stack>
   );

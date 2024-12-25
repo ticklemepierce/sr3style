@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Box, IconButton } from '@chakra-ui/react';
 import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { Checkbox } from '@chakra/checkbox';
-import { SetType, Cards } from '../types';
+import { SetType, RecordLogItemMap } from '../types';
 import { setTypeSpeffzMap } from '../utils/constants';
 import { useSessionContext } from '../context/session';
 
@@ -15,12 +15,15 @@ export const SetGroup = ({
   possiblePairs: string[];
   setType: SetType;
 }) => {
-  const { addSet, removeSet, addPair, removePair, setTypeMap } =
+  const { addSet, removeSet, addSubset, removeSubset, learningCases } =
     useSessionContext();
 
-  const cards: Cards = useMemo(() => setTypeMap?.[setType] ?? {}, [setTypeMap]);
+  const recordLogItemMap: RecordLogItemMap = useMemo(
+    () => learningCases?.[setType] ?? {},
+    [learningCases],
+  );
 
-  const numChecked = Object.keys(cards).filter((pair) =>
+  const numChecked = Object.keys(recordLogItemMap).filter((pair) =>
     pair.startsWith(set),
   ).length;
 
@@ -32,13 +35,13 @@ export const SetGroup = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleChange = async ({
-    letter,
+    clickedLetter,
     isChecked,
   }: {
-    letter: string;
+    clickedLetter: string;
     isChecked: boolean;
   }) => {
-    if (letter === set) {
+    if (clickedLetter === set) {
       if (isChecked) {
         await addSet!({ setType, set });
       } else {
@@ -46,9 +49,9 @@ export const SetGroup = ({
       }
     } else {
       if (isChecked) {
-        await addPair!({ setType, set, letter });
+        await addSubset!({ setType, set, subSet: clickedLetter });
       } else {
-        await removePair!({ setType, set, letter });
+        await removeSubset!({ setType, set, subSet: clickedLetter });
       }
     }
   };
@@ -61,15 +64,18 @@ export const SetGroup = ({
       justifyContent={'space-between'}
       ml={3}
     >
-      {possiblePairs.map((letter) => (
+      {possiblePairs.map((subSet) => (
         <Checkbox
-          key={letter}
-          checked={Boolean(cards[`${set}${letter}`])}
+          key={subSet}
+          checked={Boolean(recordLogItemMap[`${set}${subSet}`])}
           onCheckedChange={async (e) =>
-            await handleChange({ letter, isChecked: Boolean(e.checked) })
+            await handleChange({
+              clickedLetter: subSet,
+              isChecked: Boolean(e.checked),
+            })
           }
         >
-          {letter.toUpperCase()}
+          {subSet.toUpperCase()}
         </Checkbox>
       ))}
     </Box>
@@ -89,7 +95,10 @@ export const SetGroup = ({
         <Checkbox
           checked={indeterminate ? 'indeterminate' : allChecked}
           onCheckedChange={async (e) =>
-            await handleChange({ letter: set, isChecked: Boolean(e.checked) })
+            await handleChange({
+              clickedLetter: set,
+              isChecked: Boolean(e.checked),
+            })
           }
         >
           {set.toUpperCase()}

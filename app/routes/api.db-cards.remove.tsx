@@ -2,10 +2,10 @@ import { data } from '@remix-run/node';
 import { em } from '../src/services/db.server';
 import { User } from '~/entities/user.entity';
 import { getSession } from '~/src/services/session.server';
-import { LearningSet } from '~/entities/set.entity';
+import { LearningCase } from '~/entities/learning-case.entity';
 
 export const action = async ({ request }: { request: Request }) => {
-  const { letter, setType, set } = await request.json();
+  const { subSet, setType, set } = await request.json();
   const session = await getSession(request.headers.get('Cookie'));
 
   const user = session.get('user');
@@ -16,34 +16,34 @@ export const action = async ({ request }: { request: Request }) => {
   }
 
   try {
-    if (letter) {
-      const letterPair = `${set}${letter}`;
+    if (subSet) {
+      const caseId = `${set}${subSet}`;
 
       const forkedEm = em.fork();
       const dbUser = await forkedEm.findOne(User, { wcaId: user.wca_id });
-      const dbLearningSet = await forkedEm.findOne(LearningSet, {
+      const dbLearningCase = await forkedEm.findOne(LearningCase, {
         user: dbUser,
-        letterPair,
+        caseId,
       });
 
       // TODO remove inverse
-      if (dbLearningSet) {
-        forkedEm.remove(dbLearningSet);
+      if (dbLearningCase) {
+        forkedEm.remove(dbLearningCase);
         await forkedEm.flush();
       }
 
-      return { success: true, message: `Removed pair: ${letterPair}` };
+      return { success: true, message: `Removed ${caseId}` };
     } else {
       const forkedEm = em.fork();
       const dbUser = await forkedEm.findOne(User, { wcaId: user.wca_id });
-      const dbLearningSets = await forkedEm.find(LearningSet, {
+      const dbLearningCases = await forkedEm.find(LearningCase, {
         user: dbUser,
-        letterPair: { $like: `${set}%` },
+        caseId: { $like: `${set}%` },
       });
 
       // TODO remove inverses
-      if (dbLearningSets) {
-        forkedEm.remove(dbLearningSets);
+      if (dbLearningCases) {
+        forkedEm.remove(dbLearningCases);
         await forkedEm.flush();
       }
       return { success: true, message: `Removed set: ${set}` };
