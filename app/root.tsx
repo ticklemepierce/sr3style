@@ -17,7 +17,7 @@ import {
   Code,
   defaultSystem,
 } from '@chakra-ui/react';
-import { ServerStyleContext } from './context';
+import { ServerStyleContext } from './src/context/server-style';
 import WcaContextProvider from './src/context/wca';
 import { getUserData } from './src/services/session.server';
 import type { LoaderFunction } from '@remix-run/node';
