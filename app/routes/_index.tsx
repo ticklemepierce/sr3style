@@ -13,7 +13,6 @@ export const meta = sharedMeta;
 // TODO add inverse for DB
 // TODO get SSR working for premium
 // TODO settings modal for local
-// TODO triage for unused deps/code
 // TODO restructure api code
 // TODO better error handling on api responses
 
