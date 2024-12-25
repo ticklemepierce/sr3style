@@ -8,7 +8,7 @@ const useLocalStorageCards = (): CardManager => {
   const { settings } = useSessionContext();
 
   const [learningCases, setLearningCases] = useLocalStorage<LearningCases>(
-    'cards',
+    'learningCases',
     {} as LearningCases,
   );
 
@@ -19,7 +19,7 @@ const useLocalStorageCards = (): CardManager => {
     setType: SetType;
     caseId: string;
   }) => {
-    const caseIdExists = !!learningCases[setType][caseId];
+    const caseIdExists = !!learningCases[setType]?.[caseId];
     if (!caseIdExists) {
       const card = createEmptyCard();
 

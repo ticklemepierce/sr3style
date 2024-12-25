@@ -118,5 +118,5 @@ export type CardManager = {
 
 export type SettingsManager = {
   settings: Settings;
-  saveSettings: (updatedSettings: Partial<Settings>) => void;
+  saveSettings: (updatedSettings: Settings) => void;
 };

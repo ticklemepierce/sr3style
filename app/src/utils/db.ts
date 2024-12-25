@@ -1,6 +1,6 @@
 import { LearningCase } from '~/entities/learning-case.entity';
 import { RecordLogItem } from 'ts-fsrs';
-import { RecordLogItemMap, SetType } from '../types';
+import { RecordLogItemMap, SetType, Settings } from '../types';
 import { em } from '~/src/services/db.server';
 import { EntityManager } from '@mikro-orm/core';
 import { User } from '~/entities/user.entity';
@@ -83,4 +83,20 @@ export const updateCase = async ({
   await forkedEm.flush();
 
   return entity;
+};
+
+export const updateUserSettings = async ({
+  updatedSettings,
+  user,
+}: {
+  updatedSettings: Settings;
+  user: User;
+}) => {
+  const forkedEm = em.fork();
+
+  user.settings = updatedSettings;
+
+  await forkedEm.persistAndFlush(user);
+
+  return user.settings;
 };

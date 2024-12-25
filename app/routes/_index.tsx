@@ -16,10 +16,9 @@ export const meta: MetaFunction = () => [
 // TODO better loading components
 // TODO add inverse for DB
 // TODO get SSR working for premium
-// TODO settings modal
-// TODO test local storage
-// TODO improve summary UI
+// TODO settings modal for local
 // TODO triage for unused deps/code
+// TODO restructure api code
 
 export default function Index() {
   return (

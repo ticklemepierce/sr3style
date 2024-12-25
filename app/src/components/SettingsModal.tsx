@@ -12,6 +12,7 @@ import {
 import { Switch } from '@chakra/switch';
 import { Settings } from '../types';
 import { useSessionContext } from '../context/session';
+import { DEFAULT_SETTINGS } from '../utils/constants';
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -19,10 +20,10 @@ interface SettingsDialogProps {
 }
 
 export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { settings, saveSettings } = useSessionContext();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currSettings, setCurrSettings] = useState(settings ?? {});
+  const [currSettings, setCurrSettings] = useState(
+    settings ?? DEFAULT_SETTINGS,
+  );
 
   const updateCurrSettings = (updatedSetting: Partial<Settings>) => {
     setCurrSettings((currSettings) => ({
@@ -39,17 +40,20 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
         </DialogHeader>
         <DialogBody>
           <Switch
+            checked={currSettings.autoAddInverse}
             onCheckedChange={({ checked }) =>
               updateCurrSettings({
                 autoAddInverse: checked,
               })
             }
           >
-            Activate Chakra
+            Automatically update inverses
           </Switch>
         </DialogBody>
         <DialogFooter>
-          <Button>Save Settings</Button>
+          <Button onClick={() => saveSettings(currSettings)}>
+            Save Settings
+          </Button>
         </DialogFooter>
         <DialogCloseTrigger onClick={onClose} />
       </DialogContent>

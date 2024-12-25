@@ -13,9 +13,21 @@ const useSettings = ({
 
   const [settings, setSettings] = useState<Settings>(initSettings);
 
-  const saveSettings = (updatedSettings: Partial<Settings>) => {
+  const saveSettings = async (updatedSettings: Settings) => {
     if (userData?.isPremium) {
-      // TODO hit db
+      try {
+        const response = await fetch(`/api/settings`, {
+          method: 'POST',
+          body: JSON.stringify({
+            updatedSettings,
+          }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+        setSettings(data);
+      } catch (e) {
+        console.error(e);
+      }
     } else {
       // TODO hit localStorage
     }
