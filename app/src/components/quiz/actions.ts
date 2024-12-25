@@ -1,50 +1,63 @@
-import { Rating } from 'ts-fsrs';
+import { RatingType } from 'ts-fsrs';
 import { Dispatch } from 'react';
 import { Question } from '~/src/types';
 
-// TODO
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Action = { type: any; payload?: any };
-
 export const INITIALIZE_QUIZ = 'initialize';
+export const GET_FEEDBACK = 'get feedback';
+export const ADVANCE = 'advance';
+export const FINISH_QUIZ = 'finish quiz';
+
+type InitializeAction = {
+  type: typeof INITIALIZE_QUIZ;
+  payload: { questions: Question[] };
+};
+type GetFeedbackAction = {
+  type: typeof GET_FEEDBACK;
+  payload: { time: number; ratingType: RatingType };
+};
+type AdvanceAction = { type: typeof ADVANCE };
+type FinishQuizAction = { type: typeof FINISH_QUIZ };
+
+export type Action =
+  | InitializeAction
+  | GetFeedbackAction
+  | AdvanceAction
+  | FinishQuizAction;
+
 export const initializeQuiz = ({
   dispatch,
   questions,
 }: {
-  dispatch: Dispatch<Action>;
+  dispatch: Dispatch<InitializeAction>;
   questions: Question[];
 }) => {
   dispatch({ type: INITIALIZE_QUIZ, payload: { questions } });
 };
 
-export const GET_FEEDBACK = 'get feedback';
 export const getFeedback = ({
   dispatch,
   time,
-  rating,
+  ratingType,
 }: {
-  dispatch: Dispatch<Action>;
+  dispatch: Dispatch<GetFeedbackAction>;
   time: number;
-  rating: Rating;
+  ratingType: RatingType;
 }) => {
-  dispatch({ type: GET_FEEDBACK, payload: { time, rating } });
+  dispatch({ type: GET_FEEDBACK, payload: { time, ratingType } });
 };
 
-export const ADVANCE = 'advance';
-export const advance = ({ dispatch }: { dispatch: Dispatch<Action> }) => {
+export const advance = ({
+  dispatch,
+}: {
+  dispatch: Dispatch<AdvanceAction>;
+}) => {
   dispatch({ type: ADVANCE });
 };
 
-export const ADVANCE_TO_NEXT_TYPE = 'advance to next type';
-export const advanceToNextType = ({
+export const finishQuiz = ({
   dispatch,
 }: {
-  dispatch: Dispatch<Action>;
+  dispatch: Dispatch<FinishQuizAction>;
 }) => {
-  dispatch({ type: ADVANCE_TO_NEXT_TYPE });
-};
-
-export const FINISH_QUIZ = 'finish quiz';
-export const finishQuiz = ({ dispatch }: { dispatch: Dispatch<Action> }) => {
   dispatch({ type: FINISH_QUIZ });
 };

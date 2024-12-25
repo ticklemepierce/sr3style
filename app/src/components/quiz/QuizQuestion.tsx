@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Rating } from 'ts-fsrs';
+import { Rating, RatingType } from 'ts-fsrs';
 import { Question, SetType } from '~/src/types';
 import { useFSRSContext } from '~/src/context/fsrs';
 import { formatTime } from '~/src/utils/time';
@@ -14,7 +14,13 @@ export const QuizQuestion = ({
   setType,
 }: {
   question: Question;
-  onAdvance: ({ time, rating }: { time: number; rating: number }) => void;
+  onAdvance: ({
+    time,
+    ratingType,
+  }: {
+    time: number;
+    ratingType: RatingType;
+  }) => void;
   setType: SetType;
 }) => {
   const { f } = useFSRSContext();
@@ -86,7 +92,10 @@ export const QuizQuestion = ({
       setType,
     });
 
-    onAdvance({ time: timeForQuestion, rating });
+    onAdvance({
+      time: timeForQuestion,
+      ratingType: Rating[rating] as RatingType,
+    });
   };
 
   return (

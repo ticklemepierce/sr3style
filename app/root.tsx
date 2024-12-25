@@ -24,6 +24,7 @@ import type { LoaderFunction } from '@remix-run/node';
 import SessionContextProvider from './src/context/session';
 import { ColorModeProvider } from '@chakra/color-mode';
 
+// TODO only read these values out of process.env or context
 const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
 const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
 

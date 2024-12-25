@@ -11,7 +11,7 @@ import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
 import { QuizSummary } from '~/src/components/quiz/QuizSummary';
 import { QuizFeedback } from '~/src/components/quiz/QuizFeedback';
 import { QuizProgress } from '~/src/components/quiz/QuizProgress';
-import { Rating } from 'ts-fsrs';
+import { RatingType } from 'ts-fsrs';
 import { Link, useParams, useSearchParams } from '@remix-run/react';
 import { SetType } from '~/src/types';
 import { CloseButton } from '@chakra/close-button';
@@ -77,11 +77,11 @@ export default function Quiz() {
                 question={state.question!}
                 onAdvance={({
                   time,
-                  rating,
+                  ratingType,
                 }: {
                   time: number;
-                  rating: Rating;
-                }) => getFeedback({ dispatch, time, rating })}
+                  ratingType: RatingType;
+                }) => getFeedback({ dispatch, time, ratingType })}
               />
             )}
             {state.quizState === 'feedback' && (

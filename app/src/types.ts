@@ -1,4 +1,4 @@
-import { Rating, RecordLogItem } from 'ts-fsrs';
+import { RatingType, RecordLogItem } from 'ts-fsrs';
 import { EDGES, CORNERS } from './utils/constants';
 
 export type RecordLogItemMap = {
@@ -13,7 +13,7 @@ export type Question = {
 export interface Results {
   [caseId: string]: {
     time: number;
-    rating: Rating;
+    ratingType: RatingType;
   };
 }
 
@@ -68,8 +68,6 @@ export type UserData = {
   learningCases: LearningCases;
   isPremium: boolean;
 };
-
-export type Nullable<T> = T | null;
 
 export type LearningCases = Record<SetType, RecordLogItemMap>;
 

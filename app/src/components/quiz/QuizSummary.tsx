@@ -18,11 +18,11 @@ export const QuizSummary = ({ results }: { results: Results }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.entries(results).map(([pair, { time, rating }]) => (
+          {Object.entries(results).map(([pair, { time, ratingType }]) => (
             <Table.Row key={pair}>
               <Table.Cell>{pair.toUpperCase()}</Table.Cell>
               <Table.Cell>{formatTime(time)}</Table.Cell>
-              <Table.Cell>{rating}</Table.Cell>
+              <Table.Cell>{ratingType}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
