@@ -1,10 +1,8 @@
 import { LearningCase } from '~/entities/learning-case.entity';
-import { RecordLogItem } from 'ts-fsrs';
 import {
   DeleteLearningCasesPayload,
+  PatchLearningCasesPayload,
   PostLearningCasesPayload,
-  RecordLogItemMap,
-  SetType,
   Settings,
 } from '../types';
 import { em } from '~/src/services/db.server';
@@ -65,72 +63,26 @@ export const addLearningCases = async ({
   return addedLearningCases;
 };
 
-export const addSubset = async (props: Omit<LearningCase, 'id'>) => {
-  const forkedEm = em.fork();
-  const newSet = createNewLearningCase(forkedEm, props);
-
-  await forkedEm.flush();
-
-  return newSet;
-};
-
-export const addSet = async ({
-  setType,
-  recordLogItemMap,
-  user,
-}: {
-  setType: SetType;
-  recordLogItemMap: RecordLogItemMap;
-  user: User;
-}) => {
-  const forkedEm = em.fork();
-
-  const newSets = await Promise.all(
-    Object.entries(recordLogItemMap).map(([caseId, recordLogItem]) => {
-      return createNewLearningCase(forkedEm, {
-        caseId,
-        setType,
-        ...recordLogItem,
-        user,
-      });
-    }),
-  );
-  await forkedEm.flush();
-
-  return newSets;
-};
-
-export const updateCase = async ({
-  caseId,
+export const updateLearningCase = async ({
   setType,
   recordLogItem,
+  caseId,
   user,
-}: {
-  caseId: string;
-  setType: SetType;
-  recordLogItem: RecordLogItem;
-  user: User;
-}) => {
+}: PatchLearningCasesPayload & { user: User }) => {
   const forkedEm = em.fork();
 
-  const entity = await forkedEm.findOne(LearningCase, {
+  const learningCase = await forkedEm.findOneOrFail(LearningCase, {
     caseId,
     setType,
     user,
   });
 
-  if (!entity) {
-    throw new Error('Entity not found');
-  }
-
-  Object.assign(entity, {
-    ...entity,
-    ...recordLogItem,
-  });
+  learningCase.card = recordLogItem.card;
+  learningCase.log = recordLogItem.log;
 
   await forkedEm.flush();
 
-  return entity;
+  return learningCase;
 };
 
 export const updateUserSettings = async ({

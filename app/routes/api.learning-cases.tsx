@@ -1,9 +1,14 @@
 import {
   DeleteLearningCasesPayload,
+  PatchLearningCasesPayload,
   PostLearningCasesPayload,
 } from '~/src/types';
 import { userRepo } from '~/src/services/db.server';
-import { addLearningCases, removeLearningCases } from '~/src/utils/db';
+import {
+  addLearningCases,
+  removeLearningCases,
+  updateLearningCase,
+} from '~/src/utils/db';
 import { getSession } from '~/src/services/session.server';
 import { data } from '@remix-run/node';
 import { z, ZodError } from 'zod';
@@ -14,12 +19,30 @@ const learningCasesSchema = z
     corners: z.any().optional(),
   })
   .transform((data) => ({
-    edges: data.edges || {}, // Set default
-    corners: data.corners || {}, // Set default
+    edges: data.edges || {},
+    corners: data.corners || {},
   }));
-const postPatchSchema = z.object({
+const postSchema = z.object({
   setType: z.enum(['edges', 'corners']),
-  learningCasesToAdd: learningCasesSchema, // Adjust the schema to match `learningCasesToAdd` structure
+  learningCasesToAdd: learningCasesSchema,
+});
+const patchSchema = z.object({
+  setType: z.enum(['edges', 'corners']),
+  caseId: z.string(),
+  recordLogItem: z.object({
+    card: z.object({
+      due: z.string(),
+      stability: z.number(),
+      difficulty: z.number(),
+      elapsed_days: z.number(),
+      scheduled_days: z.number(),
+      reps: z.number(),
+      lapses: z.number(),
+      state: z.number(),
+      last_review: z.string().optional(),
+    }),
+    log: z.any(),
+  }),
 });
 const deleteSchema = z.object({
   setType: z.enum(['edges', 'corners']),
@@ -34,44 +57,28 @@ export const action = async ({ request }: { request: Request }) => {
     const sessionUser = session.get('user');
     const user = await userRepo.findOneOrFail({ wcaId: sessionUser.wca_id });
 
-    // Parse and validate the request body
     const requestBody = await request.json();
-
-    // try {
-    //   const requestBody = await request.json();
-
-    //   if (method === 'POST') {
-    //     validatedData = postSchema.parse(requestBody);
-    //   } else if (method === 'PATCH') {
-    //     validatedData = patchSchema.parse(requestBody);
-    //   }
-    // } catch (error) {
-    //   console.error('Validation error:', error);
-    //   return data({ error: 'Invalid request payload' }, { status: 400 });
-    // }
 
     switch (request.method) {
       case 'POST': {
         const { setType, learningCasesToAdd }: PostLearningCasesPayload =
-          postPatchSchema.parse(requestBody);
+          postSchema.parse(requestBody);
         addLearningCases({
           setType,
           learningCasesToAdd,
           user,
         });
       }
-      // TODO patch
-      // case 'PATCH': {
-      //   const { setType, learningCasesToAdd }: PostLearningCasesPayload =
-      //     await request.json();
-      //   // TODO better validation
-      //   if (!setType || !learningCasesToAdd || !user) {
-      //     return data(
-      //       { error: 'Missing required parameters' },
-      //       { status: 400 },
-      //     );
-      //   }
-      // }
+      case 'PATCH': {
+        const { setType, recordLogItem, caseId }: PatchLearningCasesPayload =
+          patchSchema.parse(requestBody);
+        updateLearningCase({
+          setType,
+          recordLogItem,
+          caseId,
+          user,
+        });
+      }
       case 'DELETE': {
         const { setType, learningCasesToRemove }: DeleteLearningCasesPayload =
           deleteSchema.parse(requestBody);

@@ -10,7 +10,6 @@ export const meta = sharedMeta;
 // TODO better loading components
 // TODO add inverse for DB
 // TODO get SSR working for premium
-// TODO restructure api code
 // TODO better error handling on api responses
 
 export default function Index() {
