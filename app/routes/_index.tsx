@@ -7,12 +7,9 @@ import { sharedMeta } from '~/src/utils/meta';
 
 export const meta = sharedMeta;
 
-// TODO make summary show percentage in each state
-// TODO show fraction of selected cases on set selectors
 // TODO better loading components
 // TODO add inverse for DB
 // TODO get SSR working for premium
-// TODO settings modal for local
 // TODO restructure api code
 // TODO better error handling on api responses
 

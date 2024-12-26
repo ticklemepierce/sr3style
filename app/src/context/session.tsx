@@ -6,9 +6,10 @@ import {
   SettingsManager,
   UserData,
 } from '../types';
-import useLocalStorageCards from '../hooks/use-local-storage-cards';
-import useDbCards from '../hooks/use-db-cards';
+// import useLocalStorageCards from '../hooks/use-local-storage-cards';
+// import useDbCards from '../hooks/use-db-cards';
 import useSettings from '../hooks/use-settings';
+import useCards from '../hooks/use-cards';
 
 interface ISessionContext extends CardManager, SettingsManager {
   userData?: UserData;
@@ -36,12 +37,13 @@ export default function SessionContextProvider({
   children: ReactNode;
 }) {
   // TODO conosolidate down to one cards hook
-  const localStorageCards = useLocalStorageCards();
-  const dbCards = useDbCards({ userData });
+  // const localStorageCards = useLocalStorageCards();
+  // const dbCards = useDbCards({ userData });
+  const cardManager = useCards({ userData });
 
   const settingsManager = useSettings({ userData });
 
-  const cardManager = userData?.isPremium ? dbCards : localStorageCards;
+  // const cardManager = userData?.isPremium ? dbCards : localStorageCards;
 
   const value = {
     userData,

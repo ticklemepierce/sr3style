@@ -31,7 +31,11 @@ export const getUserData = async (
     { wcaId: user.wca_id },
     { populate: ['*'] },
   );
+
   if (!dbUser) return;
+
+  const isPremium = dbUser.isComped;
+  if (!isPremium) return { user, isPremium };
 
   const learningCases = dbUser.learningCases.reduce((acc, set) => {
     if (!acc[set.setType]) {
@@ -50,6 +54,6 @@ export const getUserData = async (
     user,
     learningCases,
     settings: dbUser.settings,
-    isPremium: dbUser.isComped,
+    isPremium,
   };
 };

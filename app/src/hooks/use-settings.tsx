@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { Settings, SettingsManager, UserData } from '../types';
 import { DEFAULT_SETTINGS } from '../utils/constants';
+import store from 'store2';
 
 const useSettings = ({
   userData,
 }: {
   userData?: UserData;
 }): SettingsManager => {
-  // TODO figure out how to read from local here https://usehooks-ts.com/react-hook/use-read-local-storage
-  const initSettings = userData?.settings ?? DEFAULT_SETTINGS;
+  const userSettings = userData?.isPremium
+    ? userData.settings
+    : store.get('settings');
+  const initSettings = userSettings ?? DEFAULT_SETTINGS;
 
   const [settings, setSettings] = useState<Settings>(initSettings);
 
@@ -23,12 +26,12 @@ const useSettings = ({
           headers: { 'Content-Type': 'application/json' },
         });
         const data = await response.json();
-        setSettings(data);
+        setSettings(data.settings);
       } catch (e) {
         console.error(e);
       }
     } else {
-      // TODO hit localStorage
+      store.set('settings', updatedSettings);
     }
 
     setSettings((currSettings) => ({

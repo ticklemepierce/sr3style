@@ -17,6 +17,7 @@ export interface Results {
   };
 }
 
+// TODO enum
 export type SetType = typeof EDGES | typeof CORNERS;
 
 export interface Country {
@@ -62,33 +63,42 @@ export type Settings = {
   autoAddInverse: boolean;
 };
 
-export type UserData = {
-  user: WcaUser;
-  settings: Settings;
-  learningCases: LearningCases;
-  isPremium: boolean;
-};
+export type UserData =
+  | {
+      user: WcaUser;
+      isPremium: false;
+    }
+  | {
+      user: WcaUser;
+      isPremium: true;
+      settings: Settings;
+      learningCases: LearningCases;
+    };
 
 export type LearningCases = Record<SetType, RecordLogItemMap>;
 
+export type AddOrRemoveSubset = ({
+  setType,
+  set,
+  subSet,
+}: {
+  setType: SetType;
+  set: string;
+  subSet: string;
+}) => Promise<Response | void>;
+
+export type AddOrRemoveSet = ({
+  setType,
+  set,
+}: {
+  setType: SetType;
+  set: string;
+}) => Promise<Response | void>;
+
 export type CardManager = {
   learningCases: LearningCases;
-  removeSubset: ({
-    set,
-    subSet,
-    setType,
-  }: {
-    set: string;
-    subSet: string;
-    setType: SetType;
-  }) => Promise<void>;
-  removeSet: ({
-    setType,
-    set,
-  }: {
-    setType: SetType;
-    set: string;
-  }) => Promise<void>;
+  removeSubset: AddOrRemoveSubset;
+  removeSet: AddOrRemoveSet;
   updateCase: ({
     recordLogItem,
     caseId,
@@ -98,25 +108,27 @@ export type CardManager = {
     caseId: string;
     setType: SetType;
   }) => Promise<void>;
-  addSubset: ({
-    setType,
-    set,
-    subSet,
-  }: {
-    setType: SetType;
-    set: string;
-    subSet: string;
-  }) => Promise<void>;
-  addSet: ({
-    setType,
-    set,
-  }: {
-    setType: SetType;
-    set: string;
-  }) => Promise<void>;
+  addSubset: AddOrRemoveSubset;
+  addSet: AddOrRemoveSet;
 };
 
 export type SettingsManager = {
   settings: Settings;
   saveSettings: (updatedSettings: Settings) => void;
+};
+
+export type PostLearningCasesPayload = {
+  learningCasesToAdd: LearningCases;
+  setType: SetType;
+};
+
+export type DeleteLearningCasesPayload = {
+  learningCasesToRemove: string[]; // array of caseIds
+  setType: SetType;
+};
+
+export type PatchLearningCasesPayload = {
+  recordLogItem: RecordLogItem;
+  caseId: string;
+  setType: SetType;
 };

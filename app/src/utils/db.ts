@@ -1,24 +1,73 @@
 import { LearningCase } from '~/entities/learning-case.entity';
 import { RecordLogItem } from 'ts-fsrs';
-import { RecordLogItemMap, SetType, Settings } from '../types';
+import {
+  DeleteLearningCasesPayload,
+  PostLearningCasesPayload,
+  RecordLogItemMap,
+  SetType,
+  Settings,
+} from '../types';
 import { em } from '~/src/services/db.server';
 import { EntityManager } from '@mikro-orm/core';
 import { User } from '~/entities/user.entity';
 
-const createNewSet = async (
+const createNewLearningCase = async (
   forkedEm: EntityManager,
-  newSetVals: Omit<LearningCase, 'id'>,
+  newLearningCaseVals: Omit<LearningCase, 'id'>,
 ) => {
-  const newSet = new LearningCase(newSetVals);
+  const newLearningCase = new LearningCase(newLearningCaseVals);
 
-  await forkedEm.persist(newSet);
+  await forkedEm.persist(newLearningCase);
 
-  return newSet;
+  return newLearningCase;
+};
+
+export const removeLearningCases = async ({
+  learningCasesToRemove,
+  setType,
+  user,
+}: DeleteLearningCasesPayload & {
+  user: User;
+}) => {
+  const forkedEm = em.fork();
+  const dbLearningCases = await forkedEm.find(LearningCase, {
+    user,
+    setType,
+    caseId: { $in: learningCasesToRemove },
+  });
+
+  forkedEm.remove(dbLearningCases);
+
+  await forkedEm.flush();
+};
+
+export const addLearningCases = async ({
+  setType,
+  learningCasesToAdd,
+  user,
+}: PostLearningCasesPayload & { user: User }) => {
+  const forkedEm = em.fork();
+  const addedLearningCases = await Promise.all(
+    Object.entries(learningCasesToAdd[setType]).map(
+      async ([caseId, { card, log }]) =>
+        createNewLearningCase(forkedEm, {
+          caseId,
+          setType,
+          card,
+          log,
+          user,
+        }),
+    ),
+  );
+
+  await forkedEm.flush();
+
+  return addedLearningCases;
 };
 
 export const addSubset = async (props: Omit<LearningCase, 'id'>) => {
   const forkedEm = em.fork();
-  const newSet = createNewSet(forkedEm, props);
+  const newSet = createNewLearningCase(forkedEm, props);
 
   await forkedEm.flush();
 
@@ -38,8 +87,7 @@ export const addSet = async ({
 
   const newSets = await Promise.all(
     Object.entries(recordLogItemMap).map(([caseId, recordLogItem]) => {
-      console.log({ recordLogItem });
-      return createNewSet(forkedEm, {
+      return createNewLearningCase(forkedEm, {
         caseId,
         setType,
         ...recordLogItem,

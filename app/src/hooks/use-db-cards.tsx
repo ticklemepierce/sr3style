@@ -4,10 +4,12 @@ import { setTypeSpeffzMap } from '../utils/constants';
 import { RecordLogItem } from 'ts-fsrs';
 
 const useDbCards = ({ userData }: { userData?: UserData }): CardManager => {
-  const initLearningCases = userData?.learningCases ?? {
-    edges: {},
-    corners: {},
-  };
+  const initLearningCases = userData?.isPremium
+    ? userData.learningCases
+    : {
+        edges: {},
+        corners: {},
+      };
 
   const [learningCases, setLearningCases] =
     useState<LearningCases>(initLearningCases);
