@@ -1,8 +1,17 @@
 import { useEffect, useState } from 'react';
-import { CardManager, LearningCases, SetType, UserData } from '../types';
+import {
+  AddOrRemoveSet,
+  AddOrRemoveSubset,
+  CardManager,
+  DeleteLearningCasesPayload,
+  LearningCases,
+  SetType,
+  UpdateCase,
+  UserData,
+} from '../types';
 import { DEFAULT_LEARNING_CASES, setTypeSpeffzMap } from '../utils/constants';
 import store from 'store2';
-import { createEmptyCard, RecordLogItem } from 'ts-fsrs';
+import { createEmptyCard } from 'ts-fsrs';
 import {
   postLearningCases,
   deleteLearningCases,
@@ -44,27 +53,11 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
     }, {} as LearningCases);
   };
 
-  // TODO better types
-  const removeSubset = async ({
-    set,
-    subSet,
-    setType,
-  }: {
-    set: string;
-    subSet: string;
-    setType: SetType;
-  }) => {
+  const removeSubset: AddOrRemoveSubset = async ({ set, subSet, setType }) => {
     await removeCases({ learningCasesToRemove: [`${set}${subSet}`], setType });
   };
 
-  // TODO better types
-  const removeSet = async ({
-    setType,
-    set,
-  }: {
-    setType: SetType;
-    set: string;
-  }) => {
+  const removeSet: AddOrRemoveSet = async ({ setType, set }) => {
     const learningCasesToRemove: string[] = [];
     setTypeSpeffzMap[setType][set].forEach((subSet) => {
       learningCasesToRemove.push(`${set}${subSet}`);
@@ -73,93 +66,61 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
     await removeCases({ learningCasesToRemove, setType });
   };
 
-  // TODO better types
-  const addSubset = async ({
-    setType,
-    set,
-    subSet,
-  }: {
-    setType: SetType;
-    set: string;
-    subSet: string;
-  }) => {
+  const addSubset: AddOrRemoveSubset = async ({ setType, set, subSet }) => {
     await addCases({ caseIds: [`${set}${subSet}`], setType });
   };
 
-  // TODO better types
-  const addSet = async ({
-    setType,
-    set,
-  }: {
-    setType: SetType;
-    set: string;
-  }) => {
+  const addSet: AddOrRemoveSet = async ({ setType, set }) => {
     const caseIds = setTypeSpeffzMap[setType][set].map(
       (subSet) => `${set}${subSet}`,
     );
     await addCases({ caseIds, setType });
   };
 
-  // TODO better types
-  const updateCase = async ({
-    recordLogItem,
-    caseId,
-    setType,
-  }: {
-    recordLogItem: RecordLogItem;
-    caseId: string;
-    setType: SetType;
-  }) => {
+  const updateCase: UpdateCase = async ({ recordLogItem, caseId, setType }) => {
     if (userData?.isPremium) {
       await patchLearningCase({
         recordLogItem,
         caseId,
         setType,
       });
-
-      setLearningCases((prev) => {
-        const prevSetTypeCards = prev[setType];
-
-        return {
-          ...prev,
-          [setType]: {
-            ...prevSetTypeCards,
-            [caseId]: recordLogItem,
-          },
-        };
-      });
     }
+    setLearningCases((prev) => {
+      const prevSetTypeCards = prev[setType];
+
+      return {
+        ...prev,
+        [setType]: {
+          ...prevSetTypeCards,
+          [caseId]: recordLogItem,
+        },
+      };
+    });
   };
 
-  // TODO better types
   const removeCases = async ({
     learningCasesToRemove,
     setType,
-  }: {
-    learningCasesToRemove: string[];
-    setType: SetType;
-  }) => {
+  }: DeleteLearningCasesPayload) => {
     if (userData?.isPremium) {
       await deleteLearningCases({
         setType,
         learningCasesToRemove,
       });
-
-      setLearningCases((prev) => {
-        const updatedLearningCases = { ...prev[setType] };
-        learningCasesToRemove.forEach((caseId) => {
-          delete updatedLearningCases[caseId];
-        });
-
-        return {
-          ...prev,
-          [setType]: updatedLearningCases,
-        };
-      });
     }
+    setLearningCases((prev) => {
+      const updatedLearningCases = { ...prev[setType] };
+      learningCasesToRemove.forEach((caseId) => {
+        delete updatedLearningCases[caseId];
+      });
+
+      return {
+        ...prev,
+        [setType]: updatedLearningCases,
+      };
+    });
   };
 
-  // TODO better types
   const addCases = async ({
     caseIds,
     setType,

@@ -49,7 +49,6 @@ const deleteSchema = z.object({
   learningCasesToRemove: z.array(z.string()),
 });
 
-// TODO add inverse
 export const action = async ({ request }: { request: Request }) => {
   try {
     const session = await getSession(request.headers.get('Cookie'));
@@ -91,14 +90,12 @@ export const action = async ({ request }: { request: Request }) => {
     }
   } catch (error) {
     if (error instanceof ZodError) {
-      // Handle validation errors
       return data(
         { error: 'Invalid request data', issues: error.flatten() },
         { status: 400 },
       );
     }
 
-    // Handle other unexpected errors
     return data({ error: 'Something went wrong' }, { status: 500 });
   }
 };

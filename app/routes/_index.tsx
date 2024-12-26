@@ -8,7 +8,7 @@ import { sharedMeta } from '~/src/utils/meta';
 export const meta = sharedMeta;
 
 // TODO better loading components
-// TODO add inverse for DB
+// TODO add inverse
 // TODO get SSR working for premium
 // TODO better error handling on api responses
 

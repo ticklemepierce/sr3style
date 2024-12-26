@@ -1,24 +1,24 @@
-import { Settings } from '~/src/types';
 import { userRepo } from '~/src/services/db.server';
 import { updateUserSettings } from '~/src/utils/db';
 import { getSession } from '~/src/services/session.server';
 import { data } from '@remix-run/node';
+import { z, ZodError } from 'zod';
 
-type RequestPayload = {
-  updatedSettings: Settings;
-};
+const settingsSchema = z.object({
+  updatedSettings: z.object({
+    autoAddInverse: z.boolean(),
+  }),
+});
 
 export const action = async ({ request }: { request: Request }) => {
-  const { updatedSettings }: RequestPayload = await request.json();
-  const session = await getSession(request.headers.get('Cookie'));
-
-  const user = session.get('user');
-  // TODO better validation
-  if (!updatedSettings || !user) {
-    return data({ error: 'Missing required parameters' }, { status: 400 });
-  }
-
   try {
+    const requestBody = await request.json();
+
+    const { updatedSettings } = settingsSchema.parse(requestBody);
+    const session = await getSession(request.headers.get('Cookie'));
+
+    const user = session.get('user');
+
     const newSettings = await updateUserSettings({
       updatedSettings,
       user: await userRepo.findOneOrFail({ wcaId: user.wca_id }),
@@ -30,7 +30,12 @@ export const action = async ({ request }: { request: Request }) => {
       settings: newSettings,
     };
   } catch (error) {
-    console.error('Error in add API:', error);
-    return data({ error: 'Failed to add items' }, { status: 500 });
+    if (error instanceof ZodError) {
+      return data(
+        { error: 'Invalid request data', issues: error.flatten() },
+        { status: 400 },
+      );
+    }
+    return data({ error: 'Something went wrong' }, { status: 500 });
   }
 };

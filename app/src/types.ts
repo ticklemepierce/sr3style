@@ -95,19 +95,21 @@ export type AddOrRemoveSet = ({
   set: string;
 }) => Promise<Response | void>;
 
+export type UpdateCase = ({
+  recordLogItem,
+  caseId,
+  setType,
+}: {
+  recordLogItem: RecordLogItem;
+  caseId: string;
+  setType: SetType;
+}) => Promise<void>;
+
 export type CardManager = {
   learningCases: LearningCases;
   removeSubset: AddOrRemoveSubset;
   removeSet: AddOrRemoveSet;
-  updateCase: ({
-    recordLogItem,
-    caseId,
-    setType,
-  }: {
-    recordLogItem: RecordLogItem;
-    caseId: string;
-    setType: SetType;
-  }) => Promise<void>;
+  updateCase: UpdateCase;
   addSubset: AddOrRemoveSubset;
   addSet: AddOrRemoveSet;
 };
