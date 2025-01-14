@@ -17,15 +17,23 @@ import {
   deleteLearningCases,
   patchLearningCase,
 } from '../utils/api';
+import { toaster } from '@chakra/toaster';
 
 const useCards = ({ userData }: { userData?: UserData }): CardManager => {
   const userLearningCases = userData?.isPremium
     ? userData.learningCases
-    : store.get('learningCases');
-  const initLearningCases = userLearningCases ?? DEFAULT_LEARNING_CASES;
+    : undefined;
+  const initLearningCases = userLearningCases;
 
-  const [learningCases, setLearningCases] =
-    useState<LearningCases>(initLearningCases);
+  const [learningCases, setLearningCases] = useState<LearningCases | undefined>(
+    initLearningCases,
+  );
+
+  useEffect(() => {
+    if (userData?.isPremium) return;
+
+    setLearningCases(store.get('learningCases') ?? DEFAULT_LEARNING_CASES);
+  }, []);
 
   useEffect(() => {
     if (userData?.isPremium) return;
@@ -40,6 +48,9 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
     setType: SetType;
     caseIds: string[];
   }) => {
+    if (!learningCases) {
+      throw new Error('learningCases is unexpectedly undefined');
+    }
     return caseIds.reduce((acc, caseId) => {
       if (!learningCases[setType]?.[caseId]) {
         if (!acc[setType]) {
@@ -78,47 +89,63 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
   };
 
   const updateCase: UpdateCase = async ({ recordLogItem, caseId, setType }) => {
-    if (userData?.isPremium) {
-      await patchLearningCase({
-        recordLogItem,
-        caseId,
-        setType,
+    try {
+      if (userData?.isPremium) {
+        await patchLearningCase({
+          recordLogItem,
+          caseId,
+          setType,
+        });
+      }
+      setLearningCases((prev = {} as LearningCases) => {
+        const prevSetTypeCards = prev[setType];
+
+        return {
+          ...prev,
+          [setType]: {
+            ...prevSetTypeCards,
+            [caseId]: recordLogItem,
+          },
+        };
+      });
+    } catch {
+      // TODO helper func
+      toaster.create({
+        title: 'We had a problem with your request.  Please try again later.',
+        type: 'error',
       });
     }
-    setLearningCases((prev) => {
-      const prevSetTypeCards = prev[setType];
-
-      return {
-        ...prev,
-        [setType]: {
-          ...prevSetTypeCards,
-          [caseId]: recordLogItem,
-        },
-      };
-    });
   };
 
   const removeCases = async ({
     learningCasesToRemove,
     setType,
   }: DeleteLearningCasesPayload) => {
-    if (userData?.isPremium) {
-      await deleteLearningCases({
-        setType,
-        learningCasesToRemove,
+    try {
+      if (userData?.isPremium) {
+        await deleteLearningCases({
+          setType,
+          learningCasesToRemove,
+        });
+      }
+      setLearningCases((prev = {} as LearningCases) => {
+        const updatedLearningCases = { ...prev![setType] };
+        learningCasesToRemove.forEach((caseId) => {
+          delete updatedLearningCases[caseId];
+        });
+
+        return {
+          ...prev,
+          [setType]: updatedLearningCases,
+        };
+      });
+    } catch {
+      // TODO helper func
+      toaster.create({
+        title: 'We had a problem with your request.  Please try again later.',
+        type: 'error',
       });
     }
-    setLearningCases((prev) => {
-      const updatedLearningCases = { ...prev[setType] };
-      learningCasesToRemove.forEach((caseId) => {
-        delete updatedLearningCases[caseId];
-      });
-
-      return {
-        ...prev,
-        [setType]: updatedLearningCases,
-      };
-    });
   };
 
   const addCases = async ({
@@ -128,30 +155,41 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
     caseIds: string[];
     setType: SetType;
   }) => {
-    const learningCasesToAdd = createLearningCasesIfNotExists({
-      setType,
-      caseIds,
-    });
-    if (Object.keys(learningCasesToAdd).length === 0) {
-      throw new Error('Unexpectedly already had this subset');
-    }
-    if (userData?.isPremium) {
-      await postLearningCases({
+    try {
+      const learningCasesToAdd = createLearningCasesIfNotExists({
         setType,
-        learningCasesToAdd,
+        caseIds,
+      });
+      if (Object.keys(learningCasesToAdd).length === 0) {
+        throw new Error('Unexpectedly already had this subset');
+      }
+      if (!learningCases) {
+        throw new Error('learningCases is unexpectedly undefined');
+      }
+      if (userData?.isPremium) {
+        await postLearningCases({
+          setType,
+          learningCasesToAdd,
+        });
+      }
+      setLearningCases((prev = {} as LearningCases) => {
+        const prevSetTypeRecordLogMap = prev![setType];
+
+        return {
+          ...prev,
+          [setType]: {
+            ...prevSetTypeRecordLogMap,
+            ...learningCasesToAdd[setType],
+          },
+        };
+      });
+    } catch {
+      // TODO helper func
+      toaster.create({
+        title: 'We had a problem with your request.  Please try again later.',
+        type: 'error',
       });
     }
-    setLearningCases((prev) => {
-      const prevSetTypeRecordLogMap = prev[setType];
-
-      return {
-        ...prev,
-        [setType]: {
-          ...prevSetTypeRecordLogMap,
-          ...learningCasesToAdd[setType],
-        },
-      };
-    });
   };
 
   return {

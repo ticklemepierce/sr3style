@@ -10,7 +10,6 @@ import {
   updateLearningCase,
 } from '~/src/utils/db';
 import { getSession } from '~/src/services/session.server';
-import { data } from '@remix-run/node';
 import { z, ZodError } from 'zod';
 
 const learningCasesSchema = z
@@ -49,6 +48,17 @@ const deleteSchema = z.object({
   learningCasesToRemove: z.array(z.string()),
 });
 
+type Error = {
+  errMessage: string;
+  [key: string]: unknown;
+};
+
+const error = (error: Error, init?: ResponseInit) => {
+  const jsonData = JSON.stringify(error);
+
+  return new Response(jsonData, init);
+};
+
 export const action = async ({ request }: { request: Request }) => {
   try {
     const session = await getSession(request.headers.get('Cookie'));
@@ -67,6 +77,7 @@ export const action = async ({ request }: { request: Request }) => {
           learningCasesToAdd,
           user,
         });
+        return { message: 'Added successfully!' };
       }
       case 'PATCH': {
         const { setType, recordLogItem, caseId }: PatchLearningCasesPayload =
@@ -77,25 +88,27 @@ export const action = async ({ request }: { request: Request }) => {
           caseId,
           user,
         });
+        return { message: 'Updated successfully!' };
       }
       case 'DELETE': {
         const { setType, learningCasesToRemove }: DeleteLearningCasesPayload =
           deleteSchema.parse(requestBody);
 
         removeLearningCases({ setType, learningCasesToRemove, user });
+        return { message: 'Removed successfully!' };
       }
       default: {
-        return data({ error: 'Unknown request method' }, { status: 405 });
+        return error({ errMessage: 'Unknown request method' }, { status: 405 });
       }
     }
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return data(
-        { error: 'Invalid request data', issues: error.flatten() },
+  } catch (e) {
+    if (e instanceof ZodError) {
+      return error(
+        { errMessage: 'Invalid request data', issues: e.flatten() },
         { status: 400 },
       );
     }
 
-    return data({ error: 'Something went wrong' }, { status: 500 });
+    return error({ errMessage: 'Something went wrong' }, { status: 500 });
   }
 };

@@ -1,11 +1,5 @@
 import { ReactNode, createContext, useContext } from 'react';
-import {
-  CardManager,
-  LearningCases,
-  Settings,
-  SettingsManager,
-  UserData,
-} from '../types';
+import { CardManager, Settings, SettingsManager, UserData } from '../types';
 import useSettings from '../hooks/use-settings';
 import useCards from '../hooks/use-cards';
 
@@ -15,7 +9,7 @@ interface ISessionContext extends CardManager, SettingsManager {
 
 const defaultSessionContext: ISessionContext = {
   userData: undefined,
-  learningCases: {} as LearningCases,
+  learningCases: undefined,
   removeSubset: async () => {},
   removeSet: async () => {},
   updateCase: async () => {},

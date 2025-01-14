@@ -106,7 +106,7 @@ export type UpdateCase = ({
 }) => Promise<void>;
 
 export type CardManager = {
-  learningCases: LearningCases;
+  learningCases?: LearningCases;
   removeSubset: AddOrRemoveSubset;
   removeSet: AddOrRemoveSet;
   updateCase: UpdateCase;

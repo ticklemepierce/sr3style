@@ -1,4 +1,4 @@
-import { SetType } from '../types';
+import { LearningCases, SetType } from '../types';
 
 interface PieceMap {
   [key: string]: string[];
@@ -918,7 +918,10 @@ export const cornersMap: PieceMap = {
 
 export const DEFAULT_TARGET_TIME_IN_MS = 15 * 1000;
 export const DEFAULT_SETTINGS = { autoAddInverse: false };
-export const DEFAULT_LEARNING_CASES = { edges: {}, corners: {} };
+export const DEFAULT_LEARNING_CASES = {
+  edges: {},
+  corners: {},
+} as LearningCases;
 
 export const EDGES = 'edges' as const;
 export const CORNERS = 'corners' as const;

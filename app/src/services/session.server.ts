@@ -1,8 +1,9 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
-import { UserData, LearningCases } from '../types';
+import { UserData } from '../types';
 import { em } from '~/src/services/db.server';
 import { User } from '~/entities/user.entity';
+import { DEFAULT_LEARNING_CASES } from '../utils/constants';
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -48,7 +49,7 @@ export const getUserData = async (
     };
 
     return acc;
-  }, {} as LearningCases);
+  }, DEFAULT_LEARNING_CASES);
 
   return {
     user,
