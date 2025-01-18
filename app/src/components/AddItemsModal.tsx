@@ -8,11 +8,7 @@ import {
 } from '@chakra/dialog';
 import { SetType } from '../types';
 import { SetSelector } from './SetSelector';
-
-// TODO util function
-function capitalizeFirstLetter(val: string) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}
+import { capitalizeFirstLetter } from '../utils/text';
 
 export const AddItemsModal = ({
   setType,

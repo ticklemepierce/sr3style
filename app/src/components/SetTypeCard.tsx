@@ -6,18 +6,11 @@ import { useMemo, useState } from 'react';
 import { Button, Card } from '@chakra-ui/react';
 import { SkeletonText } from '@chakra/skeleton';
 import { AddItemsModal } from '~/src/components/AddItemsModal';
-
-// TODO util function
-function capitalizeFirstLetter(val: string) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}
+import { capitalizeFirstLetter } from '../utils/text';
 
 export const SetTypeCard = ({ setType }: { setType: SetType }) => {
   const { learningCases } = useSessionContext();
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
-
-  console.log(setType);
-  console.log(learningCases?.[setType]);
 
   const cardsReadyForReview = useMemo(
     () =>

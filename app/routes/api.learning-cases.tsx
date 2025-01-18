@@ -2,6 +2,7 @@ import {
   DeleteLearningCasesPayload,
   PatchLearningCasesPayload,
   PostLearningCasesPayload,
+  SetType,
 } from '~/src/types';
 import { userRepo } from '~/src/services/db.server';
 import {
@@ -22,11 +23,11 @@ const learningCasesSchema = z
     corners: data.corners || {},
   }));
 const postSchema = z.object({
-  setType: z.enum(['edges', 'corners']),
+  setType: z.nativeEnum(SetType),
   learningCasesToAdd: learningCasesSchema,
 });
 const patchSchema = z.object({
-  setType: z.enum(['edges', 'corners']),
+  setType: z.nativeEnum(SetType),
   caseId: z.string(),
   recordLogItem: z.object({
     card: z.object({
@@ -44,7 +45,7 @@ const patchSchema = z.object({
   }),
 });
 const deleteSchema = z.object({
-  setType: z.enum(['edges', 'corners']),
+  setType: z.nativeEnum(SetType),
   learningCasesToRemove: z.array(z.string()),
 });
 

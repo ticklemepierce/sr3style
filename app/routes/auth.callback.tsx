@@ -5,8 +5,7 @@ import { redirect } from '@remix-run/node';
 
 import { commitSession, getSession } from '~/src/services/session.server';
 import { User } from '~/entities/user.entity';
-
-const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
+import { WCA_ORIGIN } from '~/src/utils/constants';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { searchParams } = new URL(request.url);

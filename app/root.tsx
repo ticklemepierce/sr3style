@@ -18,15 +18,11 @@ import {
   defaultSystem,
 } from '@chakra-ui/react';
 import { ServerStyleContext } from './src/context/server-style';
-import WcaContextProvider from './src/context/wca';
 import { getUserData } from './src/services/session.server';
 import type { LoaderFunction } from '@remix-run/node';
 import SessionContextProvider from './src/context/session';
 import { ColorModeProvider } from '@chakra/color-mode';
-
-// TODO only read these values out of process.env or context
-const WCA_ORIGIN = 'https://api.worldcubeassociation.org';
-const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
+import { WCA_OAUTH_ORIGIN, WCA_ORIGIN } from './src/utils/constants';
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -72,15 +68,13 @@ export const loader: LoaderFunction = async ({ request }) => ({
 });
 
 export default function App() {
-  const { userData, ...wcaContextValue } = useLoaderData<typeof loader>();
+  const { userData } = useLoaderData<typeof loader>();
 
   return (
     <Document>
-      <WcaContextProvider value={wcaContextValue}>
-        <SessionContextProvider userData={userData}>
-          <Outlet />
-        </SessionContextProvider>
-      </WcaContextProvider>
+      <SessionContextProvider userData={userData}>
+        <Outlet />
+      </SessionContextProvider>
     </Document>
   );
 }

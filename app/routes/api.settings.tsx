@@ -3,10 +3,17 @@ import { updateUserSettings } from '~/src/utils/db';
 import { getSession } from '~/src/services/session.server';
 import { data } from '@remix-run/node';
 import { z, ZodError } from 'zod';
+import { Face, Color, CornerPiece, EdgePiece } from '~/src/types';
 
 const settingsSchema = z.object({
   updatedSettings: z.object({
     autoAddInverse: z.boolean(),
+    letterScheme: z
+      .record(z.nativeEnum(CornerPiece).or(z.nativeEnum(EdgePiece)), z.string())
+      .transform((x) => x as typeof x extends Partial<infer T> ? T : never),
+    orientation: z
+      .record(z.nativeEnum(Face), z.nativeEnum(Color))
+      .transform((x) => x as typeof x extends Partial<infer T> ? T : never),
   }),
 });
 

@@ -1,26 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { DEFAULT_SETTINGS } from '../utils/constants';
-
-interface ISettings {
-  autoAddInverse?: boolean;
-}
+import { Settings } from '../types';
 
 interface ISettingsContext {
-  settings: ISettings;
-  saveSettings: (settings: ISettings) => void;
+  settings: Settings;
+  saveSettings: (settings: Settings) => void;
 }
 
 const SettingsContext = React.createContext<ISettingsContext>({
-  settings: {},
+  settings: DEFAULT_SETTINGS,
   saveSettings: () => {},
 });
 
 export default SettingsContext;
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [settings, setSettings] = useState<ISettings>({});
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
-  const saveSettings = (newSettings: ISettings) => {
+  const saveSettings = (newSettings: Settings) => {
     localStorage.setItem('settings', JSON.stringify(newSettings));
     setSettings(newSettings);
   };

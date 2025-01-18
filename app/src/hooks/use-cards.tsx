@@ -17,7 +17,7 @@ import {
   deleteLearningCases,
   patchLearningCase,
 } from '../utils/api';
-import { toaster } from '@chakra/toaster';
+import { showGenericErrorToast } from '../utils/toast';
 
 const useCards = ({ userData }: { userData?: UserData }): CardManager => {
   const userLearningCases = userData?.isPremium
@@ -109,11 +109,7 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
         };
       });
     } catch {
-      // TODO helper func
-      toaster.create({
-        title: 'We had a problem with your request.  Please try again later.',
-        type: 'error',
-      });
+      showGenericErrorToast();
     }
   };
 
@@ -140,11 +136,7 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
         };
       });
     } catch {
-      // TODO helper func
-      toaster.create({
-        title: 'We had a problem with your request.  Please try again later.',
-        type: 'error',
-      });
+      showGenericErrorToast();
     }
   };
 
@@ -184,11 +176,7 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
         };
       });
     } catch {
-      // TODO helper func
-      toaster.create({
-        title: 'We had a problem with your request.  Please try again later.',
-        type: 'error',
-      });
+      showGenericErrorToast();
     }
   };
 

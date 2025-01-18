@@ -1,7 +1,6 @@
-const WCA_OAUTH_ORIGIN = 'https://worldcubeassociation.org';
-
 import type { ActionFunction } from '@remix-run/node';
 import { redirect } from '@remix-run/node';
+import { WCA_OAUTH_ORIGIN } from '~/src/utils/constants';
 
 export const action: ActionFunction = async ({ request }) => {
   const { origin } = new URL(request.url);
