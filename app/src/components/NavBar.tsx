@@ -3,16 +3,11 @@ import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { Avatar } from '@chakra/avatar';
 import { ColorModeButton } from '@chakra/color-mode';
 import { useSessionContext } from '~/src/context/session';
-import {
-  MenuRoot,
-  MenuTrigger,
-  MenuContent,
-  MenuItem,
-  MenuSeparator,
-} from '@chakra/menu';
+import { MenuRoot, MenuTrigger, MenuContent, MenuItem } from '@chakra/menu';
 import { Button } from '@chakra/button';
 import { Form } from '@remix-run/react';
 import { SettingsModal } from '~/src/components/SettingsModal';
+import { LuSettings } from 'react-icons/lu';
 
 export const NavBar = () => {
   const { userData } = useSessionContext();
@@ -27,7 +22,12 @@ export const NavBar = () => {
 
         <Flex alignItems={'center'} gap={5}>
           <ColorModeButton />
-
+          <IconButton
+            onClick={() => setIsSettingsModalOpen(true)}
+            variant={'ghost'}
+          >
+            <LuSettings />
+          </IconButton>
           {userData ? (
             <MenuRoot>
               <MenuTrigger asChild>
@@ -36,15 +36,6 @@ export const NavBar = () => {
                 </IconButton>
               </MenuTrigger>
               <MenuContent>
-                <MenuItem
-                  value={'settings'}
-                  cursor={'pointer'}
-                  as={'button'}
-                  onClick={() => setIsSettingsModalOpen(true)}
-                >
-                  Settings
-                </MenuItem>
-                <MenuSeparator />
                 <Form action={'/logout'} method={'post'}>
                   <MenuItem as={'button'} cursor={'pointer'} value={'sign-out'}>
                     Sign out
@@ -53,13 +44,15 @@ export const NavBar = () => {
               </MenuContent>
             </MenuRoot>
           ) : (
-            <Form
-              action={`/auth`}
-              method={'post'}
-              className={'flex justify-center'}
-            >
-              <Button type={'submit'}>Sign in with WCA</Button>
-            </Form>
+            <>
+              <Form
+                action={`/auth`}
+                method={'post'}
+                className={'flex justify-center'}
+              >
+                <Button type={'submit'}>Sign in with WCA</Button>
+              </Form>
+            </>
           )}
         </Flex>
       </Flex>

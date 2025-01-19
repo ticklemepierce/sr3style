@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValueText,
 } from '@chakra/select';
-import { createListCollection, Flex, HStack } from '@chakra-ui/react';
+import { createListCollection, Flex, HStack, Stack } from '@chakra-ui/react';
 import { capitalizeFirstLetter } from '../utils/text';
 import { typedEnumKeys } from '../utils/utils';
 
@@ -101,17 +101,31 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
-        <DialogBody>
-          <Switch
-            checked={currSettings.autoAddInverse}
-            onCheckedChange={({ checked }) =>
-              updateCurrSettings({
-                autoAddInverse: checked,
-              })
-            }
-          >
-            Automatically update inverses
-          </Switch>
+        <DialogBody paddingBottom={0}>
+          <Stack gapY={'16px'}>
+            <Switch
+              checked={currSettings.autoAddInverse}
+              onCheckedChange={({ checked }) =>
+                updateCurrSettings({
+                  autoAddInverse: checked,
+                })
+              }
+              colorPalette={'blue'}
+            >
+              Automatically update inverses
+            </Switch>
+            <Switch
+              checked={currSettings.autoRemoveInverse}
+              onCheckedChange={({ checked }) =>
+                updateCurrSettings({
+                  autoRemoveInverse: checked,
+                })
+              }
+              colorPalette={'blue'}
+            >
+              Automatically remove inverses
+            </Switch>
+          </Stack>
         </DialogBody>
         <DialogHeader>
           <DialogTitle>Lettering Scheme</DialogTitle>

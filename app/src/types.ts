@@ -62,6 +62,7 @@ export interface WcaUser {
 
 export type Settings = {
   autoAddInverse: boolean;
+  autoRemoveInverse: boolean;
   letterScheme: LetterScheme;
   orientation: Orientation;
 };

@@ -8,11 +8,11 @@ import { DEFAULT_LEARNING_CASES } from '../utils/constants';
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
     name: '_session',
-    sameSite: 'lax', // this helps with CSRF
-    path: '/', // remember to add this so the cookie will work in all routes
-    httpOnly: true, // for security reasons, make this cookie http only
-    secrets: ['s3cr3t'], // TODO replace this with an actual secret
-    secure: process.env.NODE_ENV === 'production', // enable this in prod only
+    sameSite: 'lax',
+    path: '/',
+    httpOnly: true,
+    secrets: [process.env.SESSION_SECRET!],
+    secure: process.env.NODE_ENV === 'production',
   },
 });
 

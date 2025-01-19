@@ -22,7 +22,6 @@ import { getUserData } from './src/services/session.server';
 import type { LoaderFunction } from '@remix-run/node';
 import SessionContextProvider from './src/context/session';
 import { ColorModeProvider } from '@chakra/color-mode';
-import { WCA_OAUTH_ORIGIN, WCA_ORIGIN } from './src/utils/constants';
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -61,9 +60,6 @@ function Document({ children }: DocumentProps) {
 }
 
 export const loader: LoaderFunction = async ({ request }) => ({
-  wcaOrigin: WCA_ORIGIN,
-  wcaOauthOrigin: WCA_OAUTH_ORIGIN,
-  wcaOauthClientId: process.env.WCA_OAUTH_CLIENT_ID,
   userData: await getUserData(request),
 });
 

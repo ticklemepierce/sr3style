@@ -23,9 +23,13 @@ import { showGenericErrorToast } from '../utils/toast';
 const useCards = ({
   userData,
   setTypeLetterSchemeMap,
+  autoAddInverse,
+  autoRemoveInverse,
 }: {
   userData?: UserData;
   setTypeLetterSchemeMap: SetTypeLetterSchemeMap;
+  autoAddInverse: boolean;
+  autoRemoveInverse: boolean;
 }): CardManager => {
   const userLearningCases = userData?.isPremium
     ? userData.learningCases
@@ -40,7 +44,7 @@ const useCards = ({
     if (userData?.isPremium) return;
 
     setLearningCases(store.get('learningCases') ?? DEFAULT_LEARNING_CASES);
-  }, []);
+  }, [userData]);
 
   useEffect(() => {
     if (userData?.isPremium) return;
@@ -120,15 +124,33 @@ const useCards = ({
     }
   };
 
+  function reverseString(str: string): string {
+    if (str.length === 2) {
+      return str[1] + str[0];
+    }
+    throw new Error('Input string must be exactly 2 characters long');
+  }
+  const createInverses = (caseIds: string[]) =>
+    caseIds.reduce((acc, id) => {
+      acc.push(id);
+      acc.push(reverseString(id));
+      return acc;
+    }, [] as string[]);
+
   const removeCases = async ({
     learningCasesToRemove,
     setType,
   }: DeleteLearningCasesPayload) => {
     try {
+      learningCasesToRemove = autoRemoveInverse
+        ? Array.from(new Set(createInverses(learningCasesToRemove)))
+        : learningCasesToRemove;
       if (userData?.isPremium) {
         await deleteLearningCases({
           setType,
-          learningCasesToRemove,
+          learningCasesToRemove: autoRemoveInverse
+            ? Array.from(new Set(createInverses(learningCasesToRemove)))
+            : learningCasesToRemove,
         });
       }
       setLearningCases((prev = {} as LearningCases) => {
@@ -157,7 +179,9 @@ const useCards = ({
     try {
       const learningCasesToAdd = createLearningCasesIfNotExists({
         setType,
-        caseIds,
+        caseIds: autoAddInverse
+          ? Array.from(new Set(createInverses(caseIds)))
+          : caseIds,
       });
       if (Object.keys(learningCasesToAdd).length === 0) {
         throw new Error('Unexpectedly already had this subset');

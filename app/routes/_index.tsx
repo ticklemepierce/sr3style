@@ -6,15 +6,20 @@ import { SetType } from '~/src/types';
 
 export const meta = sharedMeta;
 
-// TODO add inverse
-// TODO fix login
-// TODO mobile layout
+// TODO support floating
+// TODO tsconfig for tsnode
+// TODO add buffer setting
 
 export default function Index() {
   return (
     <Layout>
       <Box px={10}>
-        <HStack my={4} gap={4}>
+        <HStack
+          my={4}
+          gap={4}
+          wrap={{ base: 'wrap', md: 'nowrap' }}
+          justifyContent={'center'}
+        >
           <SetTypeCard setType={SetType.EDGES} />
           <SetTypeCard setType={SetType.CORNERS} />
         </HStack>

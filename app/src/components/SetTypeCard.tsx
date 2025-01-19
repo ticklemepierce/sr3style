@@ -26,7 +26,7 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
 
   return (
     <>
-      <Card.Root width={'100%'}>
+      <Card.Root width={'100%'} minWidth={'298px'} maxWidth={'400px'}>
         <Card.Body gap={'2'}>
           <Card.Title mb={'2'}>{capitalizeFirstLetter(setType)}</Card.Title>
           {cardsReadyForReview ? (
@@ -38,10 +38,11 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
             <SkeletonText noOfLines={1} height={21} />
           )}
         </Card.Body>
-        <Card.Footer justifyContent={'flex-end'}>
+        <Card.Footer justifyContent={'flex-end'} gap={'10px'}>
           <Button
             variant={'outline'}
             onClick={() => setIsAddItemsModalOpen(true)}
+            width={'120px'}
           >
             Add {capitalizeFirstLetter(setType)}
           </Button>
@@ -50,7 +51,10 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
               pathname: `/quiz/${setType}`,
             }}
           >
-            <Button disabled={!Boolean(cardsReadyForReview?.length)}>
+            <Button
+              disabled={!Boolean(cardsReadyForReview?.length)}
+              width={'120px'}
+            >
               Review Now
             </Button>
           </Link>

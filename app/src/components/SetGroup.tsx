@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Box, IconButton } from '@chakra-ui/react';
+import { Box, IconButton, Stack } from '@chakra-ui/react';
 import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { Checkbox } from '@chakra/checkbox';
 import { SetType, RecordLogItemMap } from '../types';
@@ -62,13 +62,7 @@ export const SetGroup = ({
   };
 
   const children = (
-    <Box
-      display={'flex'}
-      alignItems={'center'}
-      width={'100px'}
-      justifyContent={'space-between'}
-      ml={3}
-    >
+    <Stack width={'100px'} ml={3}>
       {possiblePairs.map((subSet) => (
         <Checkbox
           key={subSet}
@@ -83,7 +77,7 @@ export const SetGroup = ({
           {subSet.toUpperCase()}
         </Checkbox>
       ))}
-    </Box>
+    </Stack>
   );
 
   const toggleIsExpanded = () => {

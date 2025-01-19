@@ -19,7 +19,7 @@ export const AddItemsModal = ({
 }) => {
   return (
     <DialogRoot placement={'center'} open={true}>
-      <DialogContent maxHeight={'95vw'}>
+      <DialogContent maxHeight={'90vh'}>
         <DialogHeader>
           <DialogTitle>
             Select {capitalizeFirstLetter(setType)} to Learn

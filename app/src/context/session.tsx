@@ -39,10 +39,17 @@ export default function SessionContextProvider({
   children: ReactNode;
 }) {
   const settingsManager = useSettings({ userData });
-  const setTypeLetterSchemeMap = getUserLetterSchemeMap(
-    settingsManager.settings.letterScheme,
-  );
-  const cardManager = useCards({ userData, setTypeLetterSchemeMap });
+  const { autoAddInverse, autoRemoveInverse, letterScheme } =
+    settingsManager.settings;
+
+  const setTypeLetterSchemeMap = getUserLetterSchemeMap(letterScheme);
+
+  const cardManager = useCards({
+    userData,
+    setTypeLetterSchemeMap,
+    autoAddInverse,
+    autoRemoveInverse,
+  });
 
   const value = {
     userData,

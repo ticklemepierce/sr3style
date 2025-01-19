@@ -37,10 +37,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   session.set('user', data.me);
 
   const forkedEm = em.fork();
+  const existingUser = await forkedEm.findOne(User, { wcaId: data.me.wca_id });
 
-  const newUser = new User({ wcaId: data.me.wca_id });
-  await forkedEm.persist(newUser);
-  await forkedEm.flush();
+  if (!existingUser) {
+    const newUser = new User({ wcaId: data.me.wca_id });
+    await forkedEm.persist(newUser);
+    await forkedEm.flush();
+  }
 
   return redirect('/', {
     headers: {

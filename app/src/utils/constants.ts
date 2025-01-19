@@ -63,6 +63,7 @@ export const DEFAULT_ORIENTATION: Orientation = {
 export const DEFAULT_TARGET_TIME_IN_MS = 15 * 1000;
 export const DEFAULT_SETTINGS = {
   autoAddInverse: false,
+  autoRemoveInverse: false,
   orientation: DEFAULT_ORIENTATION,
   letterScheme: SPEFFZ_LETTER_SCHEME,
 };
