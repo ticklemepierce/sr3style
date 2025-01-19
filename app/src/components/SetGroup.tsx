@@ -3,7 +3,6 @@ import { Box, IconButton } from '@chakra-ui/react';
 import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
 import { Checkbox } from '@chakra/checkbox';
 import { SetType, RecordLogItemMap } from '../types';
-import { setTypeSpeffzMap } from '../utils/constants';
 import { useSessionContext } from '../context/session';
 
 export const SetGroup = ({
@@ -15,8 +14,14 @@ export const SetGroup = ({
   possiblePairs: string[];
   setType: SetType;
 }) => {
-  const { addSet, removeSet, addSubset, removeSubset, learningCases } =
-    useSessionContext();
+  const {
+    addSet,
+    removeSet,
+    addSubset,
+    removeSubset,
+    learningCases,
+    setTypeLetterSchemeMap,
+  } = useSessionContext();
 
   const recordLogItemMap: RecordLogItemMap = useMemo(
     () => learningCases?.[setType] ?? {},
@@ -28,9 +33,9 @@ export const SetGroup = ({
   ).length;
 
   const indeterminate =
-    0 < numChecked && numChecked < setTypeSpeffzMap[setType][set].length;
+    0 < numChecked && numChecked < setTypeLetterSchemeMap[setType][set].length;
 
-  const allChecked = numChecked === setTypeSpeffzMap[setType][set].length;
+  const allChecked = numChecked === setTypeLetterSchemeMap[setType][set].length;
 
   const [isExpanded, setIsExpanded] = useState(false);
 

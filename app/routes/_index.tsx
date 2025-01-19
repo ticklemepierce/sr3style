@@ -9,7 +9,6 @@ export const meta = sharedMeta;
 // TODO add inverse
 // TODO fix login
 // TODO mobile layout
-// TODO save generated piece map thing on user data or settings and use that instead of setTypeSpeffzMap
 
 export default function Index() {
   return (

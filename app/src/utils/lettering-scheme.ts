@@ -5,6 +5,7 @@ import {
   Piece,
   SetType,
 } from '~/src/types';
+import { typedEnumKeys } from './utils';
 
 const cornerBuffer = CornerPiece.UFR;
 const edgeBuffer = EdgePiece.UF;
@@ -37,12 +38,9 @@ export const getUserLetterSchemeMap = (userLetterScheme: LetterScheme) => {
     );
 
   return {
-    [SetType.EDGES]: generatePieceMap(
-      Object.keys(EdgePiece) as Piece[],
-      edgeBuffer,
-    ),
+    [SetType.EDGES]: generatePieceMap(typedEnumKeys(EdgePiece), edgeBuffer),
     [SetType.CORNERS]: generatePieceMap(
-      Object.keys(CornerPiece) as Piece[],
+      typedEnumKeys(CornerPiece),
       cornerBuffer,
     ),
   };

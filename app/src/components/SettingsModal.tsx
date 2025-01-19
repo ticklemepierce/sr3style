@@ -23,6 +23,7 @@ import {
 } from '@chakra/select';
 import { createListCollection, Flex, HStack } from '@chakra-ui/react';
 import { capitalizeFirstLetter } from '../utils/text';
+import { typedEnumKeys } from '../utils/utils';
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -117,11 +118,11 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
         </DialogHeader>
         <DialogBody>
           <Flex wrap={'wrap'} gapY={'10px'} gapX={'25px'} marginBottom={'10px'}>
-            {Object.keys(Face).map((face) => (
+            {typedEnumKeys(Face).map((face) => (
               <ColorSelect
-                face={face as Face}
+                face={face}
                 key={face}
-                value={[currSettings.orientation[face as Face]]}
+                value={[currSettings.orientation[face]]}
                 onChange={onChange}
               />
             ))}

@@ -70,6 +70,7 @@ export type UserData =
   | {
       user: WcaUser;
       isPremium: false;
+      setTypeLetterSchemeMap?: SetTypeLetterSchemeMap;
     }
   | {
       user: WcaUser;
@@ -196,6 +197,14 @@ export type Piece = EdgePiece | CornerPiece;
 
 export type LetterScheme = {
   [key in Piece]: string;
+};
+
+export interface PieceMap {
+  [key: string]: string[];
+}
+
+export type SetTypeLetterSchemeMap = {
+  [key in SetType]: PieceMap;
 };
 
 export enum Color {

@@ -1,10 +1,19 @@
 import { ReactNode, createContext, useContext } from 'react';
-import { CardManager, Settings, SettingsManager, UserData } from '../types';
+import {
+  CardManager,
+  Settings,
+  SettingsManager,
+  SetTypeLetterSchemeMap,
+  UserData,
+} from '../types';
 import useSettings from '../hooks/use-settings';
 import useCards from '../hooks/use-cards';
+import { getUserLetterSchemeMap } from '../utils/lettering-scheme';
+import { SPEFFZ_LETTER_SCHEME } from '../utils/constants';
 
 interface ISessionContext extends CardManager, SettingsManager {
   userData?: UserData;
+  setTypeLetterSchemeMap: SetTypeLetterSchemeMap;
 }
 
 const defaultSessionContext: ISessionContext = {
@@ -17,6 +26,7 @@ const defaultSessionContext: ISessionContext = {
   addSet: async () => {},
   settings: {} as Settings,
   saveSettings: () => {},
+  setTypeLetterSchemeMap: getUserLetterSchemeMap(SPEFFZ_LETTER_SCHEME),
 };
 
 const SessionContext = createContext<ISessionContext>(defaultSessionContext);
@@ -28,13 +38,17 @@ export default function SessionContextProvider({
   userData?: UserData;
   children: ReactNode;
 }) {
-  const cardManager = useCards({ userData });
   const settingsManager = useSettings({ userData });
+  const setTypeLetterSchemeMap = getUserLetterSchemeMap(
+    settingsManager.settings.letterScheme,
+  );
+  const cardManager = useCards({ userData, setTypeLetterSchemeMap });
 
   const value = {
     userData,
     ...cardManager,
     ...settingsManager,
+    setTypeLetterSchemeMap,
   };
 
   return (

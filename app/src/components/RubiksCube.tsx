@@ -9,6 +9,7 @@ import {
   CornerPiece,
 } from '../types';
 import { DEFAULT_ORIENTATION } from '../utils/constants';
+import { typedEntries } from '../utils/utils';
 
 // Layout map for the cube
 const faceLayout: Record<Face, { colStart: number; rowStart: number }> = {
@@ -200,13 +201,13 @@ const RubiksCube = ({
       justifyContent={'center'}
       alignItems={'center'}
     >
-      {Object.entries(faceSchemeKeys).map(([face, pieces]) => {
-        const { colStart, rowStart } = faceLayout[face as Face];
-        const faceColor = orientation[face as Face];
+      {typedEntries(faceSchemeKeys).map(([face, pieces]) => {
+        const { colStart, rowStart } = faceLayout[face];
+        const faceColor = orientation[face];
         return (
           <GridItem key={face} colStart={colStart} rowStart={rowStart}>
             <FaceGrid
-              faceColor={orientation[face as Face]}
+              faceColor={orientation[face]}
               textColor={textColorMap[faceColor]}
               pieces={pieces}
               onLetterChange={handleInputChange}

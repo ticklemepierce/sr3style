@@ -6,10 +6,11 @@ import {
   DeleteLearningCasesPayload,
   LearningCases,
   SetType,
+  SetTypeLetterSchemeMap,
   UpdateCase,
   UserData,
 } from '../types';
-import { DEFAULT_LEARNING_CASES, setTypeSpeffzMap } from '../utils/constants';
+import { DEFAULT_LEARNING_CASES } from '../utils/constants';
 import store from 'store2';
 import { createEmptyCard } from 'ts-fsrs';
 import {
@@ -19,7 +20,13 @@ import {
 } from '../utils/api';
 import { showGenericErrorToast } from '../utils/toast';
 
-const useCards = ({ userData }: { userData?: UserData }): CardManager => {
+const useCards = ({
+  userData,
+  setTypeLetterSchemeMap,
+}: {
+  userData?: UserData;
+  setTypeLetterSchemeMap: SetTypeLetterSchemeMap;
+}): CardManager => {
   const userLearningCases = userData?.isPremium
     ? userData.learningCases
     : undefined;
@@ -70,7 +77,7 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
 
   const removeSet: AddOrRemoveSet = async ({ setType, set }) => {
     const learningCasesToRemove: string[] = [];
-    setTypeSpeffzMap[setType][set].forEach((subSet) => {
+    setTypeLetterSchemeMap[setType][set].forEach((subSet) => {
       learningCasesToRemove.push(`${set}${subSet}`);
     });
 
@@ -82,7 +89,7 @@ const useCards = ({ userData }: { userData?: UserData }): CardManager => {
   };
 
   const addSet: AddOrRemoveSet = async ({ setType, set }) => {
-    const caseIds = setTypeSpeffzMap[setType][set].map(
+    const caseIds = setTypeLetterSchemeMap[setType][set].map(
       (subSet) => `${set}${subSet}`,
     );
     await addCases({ caseIds, setType });
