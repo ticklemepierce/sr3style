@@ -11,7 +11,8 @@
     "start:web": "remix dev --manual",
     "start:db": "cockroach start-single-node --advertise-addr=127.0.0.1 --port=26257 --http-port=8080 --insecure",
     "migration:create": "mikro-orm-esm migration:create",
-    "migration:up": "mikro-orm-esm migration:up"
+    "migration:up": "mikro-orm-esm migration:up",
+    "migration:prod:up": "IS_PROD_MIGRATION=true mikro-orm-esm migration:up"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.2.3",

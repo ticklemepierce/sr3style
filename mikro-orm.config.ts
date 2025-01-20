@@ -10,13 +10,15 @@ const driverOptions: Dictionary = {
   version: '7.2',
 };
 
-if (process.env.DATABASE_SSL === 'true') {
+if (process.env.IS_PROD_MIGRATION) {
   driverOptions['connection'] = { ssl: true };
 }
 
 export default defineConfig({
   metadataProvider: TsMorphMetadataProvider,
-  clientUrl: process.env.DATABASE_URL,
+  clientUrl: process.env.IS_PROD_MIGRATION
+    ? process.env.PROD_DATABASE_URL
+    : process.env.DATABASE_URL,
   entities: [User, LearningCase],
   discovery: { disableDynamicFileAccess: true },
   driverOptions,
