@@ -1,6 +1,8 @@
-import { ReactNode, createContext, useContext } from 'react';
+import { ReactNode, createContext, useContext, useMemo } from 'react';
 import {
   CardManager,
+  CornerPiece,
+  EdgePiece,
   Settings,
   SettingsManager,
   SetTypeLetterSchemeMap,
@@ -24,9 +26,14 @@ const defaultSessionContext: ISessionContext = {
   updateCase: async () => {},
   addSubset: async () => {},
   addSet: async () => {},
+  resetSetType: async () => {},
   settings: {} as Settings,
   saveSettings: () => {},
-  setTypeLetterSchemeMap: getUserLetterSchemeMap(SPEFFZ_LETTER_SCHEME),
+  setTypeLetterSchemeMap: getUserLetterSchemeMap({
+    userLetterScheme: SPEFFZ_LETTER_SCHEME,
+    edgeBuffer: EdgePiece.UF,
+    cornerBuffer: CornerPiece.UFR,
+  }),
 };
 
 const SessionContext = createContext<ISessionContext>(defaultSessionContext);
@@ -39,10 +46,23 @@ export default function SessionContextProvider({
   children: ReactNode;
 }) {
   const settingsManager = useSettings({ userData });
-  const { autoAddInverse, autoRemoveInverse, letterScheme } =
-    settingsManager.settings;
+  const {
+    autoAddInverse,
+    autoRemoveInverse,
+    letterScheme,
+    edgeBuffer,
+    cornerBuffer,
+  } = settingsManager.settings;
 
-  const setTypeLetterSchemeMap = getUserLetterSchemeMap(letterScheme);
+  const setTypeLetterSchemeMap = useMemo(
+    () =>
+      getUserLetterSchemeMap({
+        userLetterScheme: letterScheme,
+        edgeBuffer,
+        cornerBuffer,
+      }),
+    [letterScheme, edgeBuffer, cornerBuffer],
+  );
 
   const cardManager = useCards({
     userData,

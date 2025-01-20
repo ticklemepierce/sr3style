@@ -1,4 +1,11 @@
-import { Color, LearningCases, LetterScheme, Orientation } from '../types.ts';
+import {
+  Color,
+  CornerPiece,
+  EdgePiece,
+  LearningCases,
+  LetterScheme,
+  Orientation,
+} from '../types.ts';
 
 export const SPEFFZ_LETTER_SCHEME: LetterScheme = {
   UB: 'a',
@@ -64,6 +71,8 @@ export const DEFAULT_TARGET_TIME_IN_MS = 15 * 1000;
 export const DEFAULT_SETTINGS = {
   autoAddInverse: false,
   autoRemoveInverse: false,
+  edgeBuffer: EdgePiece.UF,
+  cornerBuffer: CornerPiece.UFR,
   orientation: DEFAULT_ORIENTATION,
   letterScheme: SPEFFZ_LETTER_SCHEME,
 };

@@ -9,6 +9,8 @@ const settingsSchema = z.object({
   updatedSettings: z.object({
     autoAddInverse: z.boolean(),
     autoRemoveInverse: z.boolean(),
+    edgeBuffer: z.nativeEnum(EdgePiece),
+    cornerBuffer: z.nativeEnum(CornerPiece),
     letterScheme: z
       .record(z.nativeEnum(CornerPiece).or(z.nativeEnum(EdgePiece)), z.string())
       .transform((x) => x as typeof x extends Partial<infer T> ? T : never),

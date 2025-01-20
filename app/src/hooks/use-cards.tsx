@@ -211,6 +211,13 @@ const useCards = ({
     }
   };
 
+  const resetSetType = async ({ setType }: { setType: SetType }) => {
+    setLearningCases((prev = {} as LearningCases) => ({
+      ...prev,
+      [setType]: {},
+    }));
+  };
+
   return {
     learningCases,
     removeSubset,
@@ -218,6 +225,7 @@ const useCards = ({
     updateCase,
     addSubset,
     addSet,
+    resetSetType,
   };
 };
 

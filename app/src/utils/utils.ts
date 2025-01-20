@@ -22,3 +22,10 @@ export function typedEntries<T extends Record<string, unknown>>(
 ): [keyof T, T[keyof T]][] {
   return Object.entries(obj) as [keyof T, T[keyof T]][];
 }
+
+export function getKeyByValue<T extends Record<string, unknown>>(
+  obj: T,
+  value: T[keyof T],
+): keyof T | undefined {
+  return (Object.keys(obj) as (keyof T)[]).find((key) => obj[key] === value);
+}

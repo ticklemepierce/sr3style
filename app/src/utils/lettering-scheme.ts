@@ -7,9 +7,6 @@ import {
 } from '~/src/types';
 import { typedEnumKeys } from './utils';
 
-const cornerBuffer = CornerPiece.UFR;
-const edgeBuffer = EdgePiece.UF;
-
 const isSamePiece = (piece1: Piece, piece2: Piece) => {
   const set1 = new Set(piece1);
   const set2 = new Set(piece2);
@@ -17,7 +14,15 @@ const isSamePiece = (piece1: Piece, piece2: Piece) => {
   return set1.size === set2.size && [...set1].every((char) => set2.has(char));
 };
 
-export const getUserLetterSchemeMap = (userLetterScheme: LetterScheme) => {
+export const getUserLetterSchemeMap = ({
+  userLetterScheme,
+  edgeBuffer,
+  cornerBuffer,
+}: {
+  userLetterScheme: LetterScheme;
+  edgeBuffer: Piece;
+  cornerBuffer: Piece;
+}) => {
   const generatePieceMap = (pieceArr: Piece[], buffer: Piece) =>
     pieceArr.reduce(
       (acc, firstPiece) => {
@@ -30,7 +35,7 @@ export const getUserLetterSchemeMap = (userLetterScheme: LetterScheme) => {
                   isSamePiece(secondPiece, buffer)
                 ),
             )
-            .map((piece) => userLetterScheme[piece]); // Initialize each key with an empty array
+            .map((piece) => userLetterScheme[piece]);
         }
         return acc;
       },

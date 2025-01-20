@@ -63,6 +63,8 @@ export interface WcaUser {
 export type Settings = {
   autoAddInverse: boolean;
   autoRemoveInverse: boolean;
+  edgeBuffer: Piece;
+  cornerBuffer: Piece;
   letterScheme: LetterScheme;
   orientation: Orientation;
 };
@@ -100,6 +102,12 @@ export type AddOrRemoveSet = ({
   set: string;
 }) => Promise<Response | void>;
 
+export type ResetSetType = ({
+  setType,
+}: {
+  setType: SetType;
+}) => Promise<Response | void>;
+
 export type UpdateCase = ({
   recordLogItem,
   caseId,
@@ -117,6 +125,7 @@ export type CardManager = {
   updateCase: UpdateCase;
   addSubset: AddOrRemoveSubset;
   addSet: AddOrRemoveSet;
+  resetSetType: ResetSetType;
 };
 
 export type SettingsManager = {

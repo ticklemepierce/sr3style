@@ -8,7 +8,6 @@ export const meta = sharedMeta;
 
 // TODO support floating
 // TODO tsconfig for tsnode
-// TODO add buffer setting
 
 export default function Index() {
   return (
