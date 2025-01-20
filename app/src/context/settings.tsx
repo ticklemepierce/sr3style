@@ -1,27 +1,23 @@
-import React, {useEffect, useState, useContext} from "react";
-
-interface ISettings {
-  autoAddInverse?: boolean,
-}
+import React, { useEffect, useState, useContext } from 'react';
+import { DEFAULT_SETTINGS } from '../utils/constants';
+import { Settings } from '../types';
 
 interface ISettingsContext {
-  settings: ISettings,
-  saveSettings: Function,
-  debugMode: boolean,
+  settings: Settings;
+  saveSettings: (settings: Settings) => void;
 }
 
-const DEFAULT_SETTINGS = {
-  autoAddInverse: false,
-}
-
-const SettingsContext = React.createContext<ISettingsContext>({settings: {}, saveSettings: () => {}, debugMode: false});
+const SettingsContext = React.createContext<ISettingsContext>({
+  settings: DEFAULT_SETTINGS,
+  saveSettings: () => {},
+});
 
 export default SettingsContext;
 
-export function SettingsProvider({ debugMode, children }: { debugMode: boolean, children: React.ReactNode }) {
-  const [settings, setSettings] = useState<ISettings>({});
+export function SettingsProvider({ children }: { children: React.ReactNode }) {
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
-  const saveSettings = (newSettings: ISettings) => {
+  const saveSettings = (newSettings: Settings) => {
     localStorage.setItem('settings', JSON.stringify(newSettings));
     setSettings(newSettings);
   };
@@ -29,20 +25,24 @@ export function SettingsProvider({ debugMode, children }: { debugMode: boolean, 
   const value = {
     saveSettings,
     settings,
-    debugMode,
-  }
-  
+  };
+
   useEffect(() => {
     const settingsFromStorage = window.localStorage.getItem('settings');
 
-    let settings = settingsFromStorage ? JSON.parse(settingsFromStorage) : DEFAULT_SETTINGS;
+    const settings = settingsFromStorage
+      ? JSON.parse(settingsFromStorage)
+      : DEFAULT_SETTINGS;
 
     setSettings(settings);
   }, []);
 
-  return <SettingsContext.Provider value={value}>
+  return (
+    <SettingsContext.Provider value={value}>
       {children}
-  </SettingsContext.Provider>
+    </SettingsContext.Provider>
+  );
 }
 
-export const useSettingsContext = () => useContext<ISettingsContext>(SettingsContext);
+export const useSettingsContext = () =>
+  useContext<ISettingsContext>(SettingsContext);

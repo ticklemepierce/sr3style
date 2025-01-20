@@ -1,25 +1,23 @@
-import { Question, Questions, Results, SetType } from "~/src/types";
-import { INITIALIZE_QUIZ, ADVANCE, GET_FEEDBACK, FINISH_QUIZ } from "./actions";
-import { Rating, RatingType } from "ts-fsrs";
-
-type Advance = { type: typeof ADVANCE }
-type InitializeQuiz = { type: typeof INITIALIZE_QUIZ, payload: { questions: Questions, type: SetType }}
-type GetFeedback = { type: typeof GET_FEEDBACK, payload: { time: number, rating: RatingType }}
-type Complete = { type: typeof FINISH_QUIZ }
-
-type Action = Advance | InitializeQuiz | GetFeedback | Complete;
+import { Question, Results } from '~/src/types';
+import {
+  INITIALIZE_QUIZ,
+  ADVANCE,
+  GET_FEEDBACK,
+  FINISH_QUIZ,
+  Action,
+} from './actions';
 
 export interface State {
-  quizState: 'loading' | 'question' | 'feedback' | 'complete',
-  question?: Question,
-  questions?: Question[],
-  questionIndex?: number,
-  setIndex?: number,
-  isLastQuestion?: boolean,
-  isStartScreen?: boolean,
-  isLastSet?: boolean,
-  showQuizProgress?: boolean,
-  results?: Results,
+  quizState: 'loading' | 'question' | 'feedback' | 'complete';
+  question?: Question;
+  questions?: Question[];
+  questionIndex?: number;
+  setIndex?: number;
+  isLastQuestion?: boolean;
+  isStartScreen?: boolean;
+  isLastSet?: boolean;
+  showQuizProgress?: boolean;
+  results?: Results;
 }
 
 export const getInitialState = (): State => ({
@@ -39,18 +37,18 @@ export const reducer = (state: State, action: Action): State => {
         questionIndex: -1, // TODO fix hack
         showQuizProgress: true,
         results: {},
-      }
+      };
     case GET_FEEDBACK:
-      state.results![state.question.pair] = {
+      state.results![state.question!.caseId] = {
         time: action.payload.time,
-        rating: Rating[action.payload.rating],
-      }
+        ratingType: action.payload.ratingType,
+      };
 
       return {
         ...state,
         quizState: 'feedback',
         isStartScreen: false,
-        isLastQuestion: state.questions!.length === (state.questionIndex! + 1),
+        isLastQuestion: state.questions!.length === state.questionIndex! + 1,
         showQuizProgress: true,
       };
     case ADVANCE:
@@ -70,6 +68,4 @@ export const reducer = (state: State, action: Action): State => {
         isStartScreen: false,
       };
   }
-}
-
-
+};

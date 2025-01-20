@@ -1,8 +1,15 @@
-import { Typography } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
+import { Heading } from '@chakra-ui/react';
 
-
-export const QuizFeedback = ({ isLastQuestion, isStartScreen, onAdvance }: { isLastQuestion: boolean, isStartScreen: boolean, onAdvance: Function }) => {
+export const QuizFeedback = ({
+  isLastQuestion,
+  isStartScreen,
+  onAdvance,
+}: {
+  isLastQuestion: boolean;
+  isStartScreen: boolean;
+  onAdvance: () => void;
+}) => {
   const touchStarted = useRef(false);
 
   const handleSpacePress = (e: KeyboardEvent) => {
@@ -11,40 +18,40 @@ export const QuizFeedback = ({ isLastQuestion, isStartScreen, onAdvance }: { isL
     }
   };
 
-  const handleTouchStart = () => touchStarted.current = true;
+  const handleTouchStart = () => (touchStarted.current = true);
 
   const handleTouchEnd = () => {
     if (!touchStarted.current) return;
 
     onAdvance();
-  }
+  };
 
   const supportsTouch = 'ontouchstart' in window;
-  
+
   useEffect(() => {
-    document.addEventListener("keydown", handleSpacePress, false);
-    document.addEventListener("touchstart", handleTouchStart, false);
-    document.addEventListener("touchend", handleTouchEnd, false);
+    document.addEventListener('keydown', handleSpacePress, false);
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchend', handleTouchEnd, false);
     return () => {
-      document.removeEventListener("touchstart", handleTouchStart, false);
-      document.removeEventListener("touchend", handleTouchEnd, false);
-      document.removeEventListener("keydown", handleSpacePress, false);
-    }
+      document.removeEventListener('touchstart', handleTouchStart, false);
+      document.removeEventListener('touchend', handleTouchEnd, false);
+      document.removeEventListener('keydown', handleSpacePress, false);
+    };
   }, []);
 
   const getCopy = () => {
     if (isStartScreen) {
-      return 'start quiz'
+      return 'start quiz';
     }
     if (isLastQuestion) {
-      return 'view quiz summary'
+      return 'view quiz summary';
     }
     return 'go to next question';
-  }
-  
+  };
+
   return (
-    <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
+    <Heading size={'4xl'}>
       {supportsTouch ? 'Tap screen' : `Press 'space'`} to {getCopy()}
-    </Typography>
+    </Heading>
   );
-}
+};

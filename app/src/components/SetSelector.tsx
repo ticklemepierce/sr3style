@@ -1,29 +1,22 @@
-import { FormGroup } from "@mui/material";
-import { setTypeMap } from "../utils/constants";
-import { SetGroup } from "./SetGroup";
-import Typography from '@mui/material/Typography';
-import { SetType } from "../types";
-import { ClientOnly } from "./ClientOnly";
+import { SetGroup } from './SetGroup';
+import { SetType } from '../types';
+import { useSessionContext } from '../context/session';
 
-const SetSelectorClient = ({ type } : { type: SetType }) => {
+export const SetSelector = ({ setType }: { setType: SetType }) => {
+  const { setTypeLetterSchemeMap } = useSessionContext();
+
   return (
     <>
-      <Typography variant="h5">
-        Select { type.slice(0, -1) } pairs to learn:
-      </Typography>
-      <FormGroup>
-        {Object.entries(setTypeMap[type]).map(([set, possiblePairs]) => (
-          <SetGroup set={set} possiblePairs={possiblePairs} key={set} type={type} />
-        ))}
-      </FormGroup>
+      {Object.entries(setTypeLetterSchemeMap[setType]).map(
+        ([set, possiblePairs]) => (
+          <SetGroup
+            set={set}
+            possiblePairs={possiblePairs}
+            key={set}
+            setType={setType}
+          />
+        ),
+      )}
     </>
   );
-}
-
-export const SetSelector = ({ type } : { type: SetType }) => {
-  return (
-    <ClientOnly fallback={<div>Loading...</div>}>
-      {() => <SetSelectorClient type={type} />}
-    </ClientOnly>
-  );
-}
+};

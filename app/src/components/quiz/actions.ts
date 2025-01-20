@@ -1,27 +1,63 @@
-import { Rating } from "ts-fsrs";
-import { Questions, SetType } from "~/src/types";
+import { RatingType } from 'ts-fsrs';
+import { Dispatch } from 'react';
+import { Question } from '~/src/types';
 
 export const INITIALIZE_QUIZ = 'initialize';
-export const initializeQuiz = ({ dispatch, questions }: { dispatch: Function, questions: Questions }) => {
-  dispatch({ type: INITIALIZE_QUIZ, payload: { questions }});
-}
-
 export const GET_FEEDBACK = 'get feedback';
-export const getFeedback = ({ dispatch, time, rating }: { dispatch: Function, time: number, rating: Rating }) => {
-  dispatch({ type: GET_FEEDBACK, payload: { time, rating } })
-}
-
 export const ADVANCE = 'advance';
-export const advance = ({ dispatch }: { dispatch: Function }) => {
-  dispatch({ type: ADVANCE })
-}
-
-export const ADVANCE_TO_NEXT_TYPE = 'advance to next type';
-export const advanceToNextType = ({ dispatch }: { dispatch: Function }) => {
-  dispatch({ type: ADVANCE_TO_NEXT_TYPE })
-}
-
 export const FINISH_QUIZ = 'finish quiz';
-export const finishQuiz = ({ dispatch }: { dispatch: Function }) => {
-  dispatch({ type: FINISH_QUIZ })
-}
+
+type InitializeAction = {
+  type: typeof INITIALIZE_QUIZ;
+  payload: { questions: Question[] };
+};
+type GetFeedbackAction = {
+  type: typeof GET_FEEDBACK;
+  payload: { time: number; ratingType: RatingType };
+};
+type AdvanceAction = { type: typeof ADVANCE };
+type FinishQuizAction = { type: typeof FINISH_QUIZ };
+
+export type Action =
+  | InitializeAction
+  | GetFeedbackAction
+  | AdvanceAction
+  | FinishQuizAction;
+
+export const initializeQuiz = ({
+  dispatch,
+  questions,
+}: {
+  dispatch: Dispatch<InitializeAction>;
+  questions: Question[];
+}) => {
+  dispatch({ type: INITIALIZE_QUIZ, payload: { questions } });
+};
+
+export const getFeedback = ({
+  dispatch,
+  time,
+  ratingType,
+}: {
+  dispatch: Dispatch<GetFeedbackAction>;
+  time: number;
+  ratingType: RatingType;
+}) => {
+  dispatch({ type: GET_FEEDBACK, payload: { time, ratingType } });
+};
+
+export const advance = ({
+  dispatch,
+}: {
+  dispatch: Dispatch<AdvanceAction>;
+}) => {
+  dispatch({ type: ADVANCE });
+};
+
+export const finishQuiz = ({
+  dispatch,
+}: {
+  dispatch: Dispatch<FinishQuizAction>;
+}) => {
+  dispatch({ type: FINISH_QUIZ });
+};

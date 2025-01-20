@@ -1,24 +1,13 @@
-import * as React from 'react';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import { FSRSProvider } from '../context/fsrs';
-import { SettingsProvider } from '../context/settings';
-import { useSearchParams } from "@remix-run/react";
+import { ReactNode } from 'react';
+import { NavBar } from '~/src/components/NavBar';
+import { Toaster } from '@chakra/toaster';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const [searchParams, ] = useSearchParams();
-
-  const debugMode = searchParams.get('debugMode');
-
+export const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <SettingsProvider debugMode={debugMode === '1' || debugMode === 'true'}>
-      <FSRSProvider>
-        <Container maxWidth="sm">
-          <Box>
-            {children}
-          </Box>
-        </Container>
-      </FSRSProvider>
-    </SettingsProvider>
+    <>
+      <NavBar />
+      {children}
+      <Toaster />
+    </>
   );
-}
+};

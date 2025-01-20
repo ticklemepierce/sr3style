@@ -1,72 +1,116 @@
-import { useMemo, useState } from "react";
-import { FormControlLabel, Checkbox, Box, IconButton } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { SetType } from "../types";
-import useLocalStorageCards from "../hooks/use-local-storage-cards";
-import { setTypeMap } from "../utils/constants";
+import { useMemo, useState } from 'react';
+import { Box, IconButton, Stack } from '@chakra-ui/react';
+import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { Checkbox } from '@chakra/checkbox';
+import { SetType, RecordLogItemMap } from '../types';
+import { useSessionContext } from '../context/session';
 
+export const SetGroup = ({
+  set,
+  possiblePairs,
+  setType,
+}: {
+  set: string;
+  possiblePairs: string[];
+  setType: SetType;
+}) => {
+  const {
+    addSet,
+    removeSet,
+    addSubset,
+    removeSubset,
+    learningCases,
+    setTypeLetterSchemeMap,
+  } = useSessionContext();
 
-export const SetGroup = ({set, possiblePairs, type}: {set: string, possiblePairs: string[], type: SetType}) => {
-  const { cards, addSet, addPair, removeSet, removePair } = useLocalStorageCards({ type });
+  const recordLogItemMap: RecordLogItemMap = useMemo(
+    () => learningCases?.[setType] ?? {},
+    [learningCases],
+  );
 
-  const numChecked = useMemo(() => Object.keys(cards).filter((pair) => pair.startsWith(set)).length, [cards]);
+  const numChecked = Object.keys(recordLogItemMap).filter((pair) =>
+    pair.startsWith(set),
+  ).length;
 
-  const [isExpanded, setIsExpanded] = useState<Boolean>(false);
+  const indeterminate =
+    0 < numChecked && numChecked < setTypeLetterSchemeMap[setType][set].length;
 
-  const areAllChecked = () => numChecked === setTypeMap[type][set].length;
-  const areSomeChecked = () => 0 < numChecked && numChecked < setTypeMap[type][set].length;
+  const allChecked = numChecked === setTypeLetterSchemeMap[setType][set].length;
 
-  const handleChange = ({ letter, isChecked }: {letter: string, isChecked: boolean}) => {
-    if (letter === set) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleChange = async ({
+    clickedLetter,
+    isChecked,
+  }: {
+    clickedLetter: string;
+    isChecked: boolean;
+  }) => {
+    if (clickedLetter === set) {
       if (isChecked) {
-        addSet(set);
+        await addSet!({ setType, set });
       } else {
-        removeSet(set);
+        await removeSet!({ setType, set });
       }
     } else {
       if (isChecked) {
-        addPair({set, letter});
+        await addSubset!({ setType, set, subSet: clickedLetter });
       } else {
-        removePair(`${set}${letter}`);
+        await removeSubset!({ setType, set, subSet: clickedLetter });
       }
     }
-  }
+  };
 
   const children = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-      {possiblePairs.map(letter => (
-        <FormControlLabel
-          label={letter.toUpperCase()}
-          key={letter}
-          control={<Checkbox checked={Boolean(cards[`${set}${letter}`])} onChange={(e) => handleChange({ letter, isChecked: e.target.checked })} />}
-        />
+    <Stack width={'100px'} ml={3}>
+      {possiblePairs.map((subSet) => (
+        <Checkbox
+          key={subSet}
+          checked={Boolean(recordLogItemMap[`${set}${subSet}`])}
+          onCheckedChange={async (e) =>
+            await handleChange({
+              clickedLetter: subSet,
+              isChecked: Boolean(e.checked),
+            })
+          }
+        >
+          {subSet.toUpperCase()}
+        </Checkbox>
       ))}
-    </Box>
+    </Stack>
   );
 
   const toggleIsExpanded = () => {
-    setIsExpanded(isExpanded => !isExpanded);
-  }
-
+    setIsExpanded((isExpanded) => !isExpanded);
+  };
   return (
     <>
-      <Box sx={{display: 'flex', alignItems: 'center', width: '100px', justifyContent: 'space-between'}}>
-        <FormControlLabel
-          label={set.toUpperCase()}
-          control={
-            <Checkbox
-              checked={areAllChecked()}
-              indeterminate={areSomeChecked()}
-              onChange={(e) => handleChange({ letter: set, isChecked: e.target.checked })}
-            />
+      <Box
+        display={'flex'}
+        alignItems={'center'}
+        width={'100px'}
+        justifyContent={'space-between'}
+      >
+        <Checkbox
+          checked={indeterminate ? 'indeterminate' : allChecked}
+          onCheckedChange={async (e) =>
+            await handleChange({
+              clickedLetter: set,
+              isChecked: Boolean(e.checked),
+            })
           }
-        />
-        <IconButton aria-label="Example" onClick={toggleIsExpanded}>
-          { isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon /> }
+        >
+          {set.toUpperCase()}
+        </Checkbox>
+        <IconButton
+          aria-label={'Example'}
+          onClick={toggleIsExpanded}
+          variant={'plain'}
+        >
+          {isExpanded ? <LuChevronUp /> : <LuChevronDown />}
         </IconButton>
       </Box>
       {isExpanded && children}
     </>
   );
-}
+};

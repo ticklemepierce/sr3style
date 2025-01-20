@@ -1,26 +1,28 @@
 {
-  "include": ["remix.env.d.ts", "app/**/*.ts", "app/**/*.tsx"],
+  "include": ["global.d.ts", "app/**/*.ts", "app/**/*.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "ES2022",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "@chakra/*": ["./app/src/components/snippets/*"]
     },
+    "declaration": true,
+    "experimentalDecorators": true,
 
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true
   },
-  "exclude": [
-    "node_modules",
-    "**/node_modules/*"  
-  ]
+  "exclude": ["node_modules", "**/node_modules/*"]
 }

@@ -1,40 +1,15 @@
-# Material UI - Remix example in TypeScript
+# SR 3 Style
 
-## How to use
+Leverage the power of spaced repetition to learn 3-Style!
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+## Terminology
 
-<!-- #default-branch-switch -->
-
-```bash
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/material-ui-remix-ts
-cd material-ui-remix-ts
-```
-
-Install it and run:
-
-```bash
-npm install
-npm run dev
-```
-
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-remix-ts)
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-remix-ts)
-
-## The idea behind the example
-
-The project uses [Remix](https://remix.run/), which is a full stack web framework.
-It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/material-ui/integrations/interoperability/#styled-components).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+`card` - Returned from FSRS
+`log` - Returned from FSRS
+`recordLogItem` - object consisting of card and (optional) log
+`setType` - i.e. Edges, Corners, +centers, parity
+`set` - the main grouping. For a letter pair driven setType, this will be equivalent to the first letter in the pair. For another setType, such as parity, it will be equivalent to the corresponding letter.
+`subSet` - sub grouping. For a letter pair driven setType, this will be equivalent to the second letter in the pair.
+`caseId` - since not all setTypes have letterPairs, we think of it as a `case` - however this is a reserved word, hence `caseId`
+`learningCase` - entity for a user-setType-caseId
+`recordLogItemMap` - object consisting of `case` with value of `recordLogItem`
