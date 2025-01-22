@@ -10,8 +10,10 @@ const driverOptions: Dictionary = {
   version: '7.2',
 };
 
-if (process.env.IS_PROD_MIGRATION) {
-  driverOptions['connection'] = { ssl: true };
+const caCert = process.env.COCKROACH_CA_CERT;
+
+if (process.env.IS_PROD_MIGRATION || process.env.NODE_ENV === 'production') {
+  driverOptions['connection'] = { ssl: caCert };
 }
 
 export default defineConfig({
