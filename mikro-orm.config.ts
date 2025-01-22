@@ -10,7 +10,7 @@ const driverOptions: Dictionary = {
   version: '7.2',
 };
 
-const caCert = process.env.COCKROACH_CA_CERT;
+const caCert = JSON.parse(process.env.COCKROACH_CA_CERT!);
 
 if (process.env.IS_PROD_MIGRATION || process.env.NODE_ENV === 'production') {
   driverOptions['connection'] = { ssl: caCert };
