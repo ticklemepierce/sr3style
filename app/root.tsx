@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
-  // useLoaderData,
+  useLoaderData,
   useRouteError,
 } from '@remix-run/react';
 import {
@@ -18,9 +18,9 @@ import {
   defaultSystem,
 } from '@chakra-ui/react';
 import { ServerStyleContext } from './src/context/server-style';
-// import { getUserData } from './src/services/session.server';
-// import type { LoaderFunction } from '@remix-run/node';
-// import SessionContextProvider from './src/context/session';
+import { getUserData } from './src/services/session.server';
+import type { LoaderFunction } from '@remix-run/node';
+import SessionContextProvider from './src/context/session';
 import { ColorModeProvider } from '@chakra/color-mode';
 
 interface DocumentProps {
@@ -59,18 +59,18 @@ function Document({ children }: DocumentProps) {
   );
 }
 
-// export const loader: LoaderFunction = async ({ request }) => ({
-//   userData: await getUserData(request),
-// });
+export const loader: LoaderFunction = async ({ request }) => ({
+  userData: await getUserData(request),
+});
 
 export default function App() {
-  // const { userData } = useLoaderData<typeof loader>();
+  const { userData } = useLoaderData<typeof loader>();
 
   return (
     <Document>
-      {/* <SessionContextProvider userData={userData}> */}
-      <Outlet />
-      {/* </SessionContextProvider> */}
+      <SessionContextProvider userData={userData}>
+        <Outlet />
+      </SessionContextProvider>
     </Document>
   );
 }
