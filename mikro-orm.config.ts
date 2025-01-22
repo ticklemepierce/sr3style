@@ -10,10 +10,14 @@ const driverOptions: Dictionary = {
   version: '7.2',
 };
 
-const caCert = JSON.parse(process.env.COCKROACH_CA_CERT!);
-
 if (process.env.IS_PROD_MIGRATION || process.env.NODE_ENV === 'production') {
-  driverOptions['connection'] = { ssl: caCert };
+  // const certBuffer = Buffer.from(process.env.COCKROACH_CA_CERT!, 'base64');
+  driverOptions['connection'] = {
+    ssl: {
+      rejectUnauthorized: true, // Reject connections if the server certificate cannot be verified
+      ca: process.env.COCKROACH_CA_CERT, // Use the Base64-encoded string directly
+    },
+  };
 }
 
 export default defineConfig({
