@@ -4,7 +4,7 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "build": "remix build",
+    "build": "remix vite:build",
     "dev": "npm-run-all --parallel start:db start:web",
     "typecheck": "tsc",
     "prepare": "husky",
