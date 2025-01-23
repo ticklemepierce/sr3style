@@ -11,7 +11,6 @@ import {
 import { DEFAULT_ORIENTATION } from '../utils/constants';
 import { typedEntries } from '../utils/utils';
 
-// Layout map for the cube
 const faceLayout: Record<Face, { colStart: number; rowStart: number }> = {
   U: { colStart: 2, rowStart: 1 },
   L: { colStart: 1, rowStart: 2 },
@@ -94,7 +93,6 @@ const textColorMap: Record<Color, 'white' | 'black'> = {
   [Color.Black]: 'white',
 };
 
-// Components
 const StickerInput = ({
   value,
   textColor,
@@ -148,7 +146,6 @@ const FaceGrid = ({
     alignItems={'center'}
   >
     {Array.from({ length: 9 }).map((_, index) => {
-      // Skip the middle cell (index 4)
       if (index === 4) {
         return (
           <GridItem
@@ -161,7 +158,6 @@ const FaceGrid = ({
         );
       }
 
-      // Map index to the correct position in the letters array
       const pieceIndex = index > 4 ? index - 1 : index;
       const piece = pieces[pieceIndex];
       return (

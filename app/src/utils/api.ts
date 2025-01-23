@@ -7,7 +7,6 @@ import {
 const fetchWithErrorHandling = async (url: string, options: RequestInit) => {
   const response = await fetch(url, options);
 
-  // Check if the response is not OK and throw an error
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(
@@ -15,7 +14,6 @@ const fetchWithErrorHandling = async (url: string, options: RequestInit) => {
     );
   }
 
-  // Return the parsed response (or the raw response if needed)
   return response.json();
 };
 

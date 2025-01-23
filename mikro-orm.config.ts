@@ -10,8 +10,13 @@ const driverOptions: Dictionary = {
   version: '7.2',
 };
 
-if (process.env.IS_PROD_MIGRATION) {
-  driverOptions['connection'] = { ssl: true };
+if (process.env.IS_PROD_MIGRATION || process.env.NODE_ENV === 'production') {
+  driverOptions['connection'] = {
+    ssl: {
+      rejectUnauthorized: true,
+      ca: Buffer.from(process.env.COCKROACH_CA_CERT!, 'base64'),
+    },
+  };
 }
 
 export default defineConfig({

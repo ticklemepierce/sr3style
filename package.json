@@ -4,7 +4,7 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "build": "remix build",
+    "build": "remix vite:build",
     "dev": "npm-run-all --parallel start:db start:web",
     "typecheck": "tsc",
     "prepare": "husky",
@@ -62,7 +62,8 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tslib": "^2.8.1",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "engines": {
     "node": ">=14"
