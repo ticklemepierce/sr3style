@@ -1,4 +1,3 @@
-// app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
 import { UserData } from '../types';
 import { em } from '~/src/services/db.server';

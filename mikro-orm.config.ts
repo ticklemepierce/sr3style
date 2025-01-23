@@ -13,8 +13,8 @@ const driverOptions: Dictionary = {
 if (process.env.IS_PROD_MIGRATION || process.env.NODE_ENV === 'production') {
   driverOptions['connection'] = {
     ssl: {
-      rejectUnauthorized: true, // Reject connections if the server certificate cannot be verified
-      ca: Buffer.from(process.env.COCKROACH_CA_CERT!, 'base64'), // Use the Base64-encoded string directly
+      rejectUnauthorized: true,
+      ca: Buffer.from(process.env.COCKROACH_CA_CERT!, 'base64'),
     },
   };
 }

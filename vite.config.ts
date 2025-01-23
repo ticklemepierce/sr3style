@@ -8,6 +8,6 @@ export default defineConfig({
     target: 'esnext',
   },
   build: {
-    target: 'esnext', // Ensures compatibility with top-level await
+    target: 'esnext',
   },
 });
