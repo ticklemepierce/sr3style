@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Settings, SettingsManager, UserData } from '../types';
 import { DEFAULT_SETTINGS } from '../utils/constants';
 import store from 'store2';
+import { toaster } from '../components/snippets/toaster';
 
 const useSettings = ({
   userData,
@@ -39,6 +40,10 @@ const useSettings = ({
       ...currSettings,
       ...updatedSettings,
     }));
+    toaster.create({
+      title: 'Settings updated!',
+      type: 'success',
+    });
   };
 
   return {

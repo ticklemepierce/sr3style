@@ -10,6 +10,7 @@ import {
 } from '../types';
 import { DEFAULT_ORIENTATION } from '../utils/constants';
 import { typedEntries } from '../utils/utils';
+import { useRef } from 'react';
 
 const faceLayout: Record<Face, { colStart: number; rowStart: number }> = {
   U: { colStart: 2, rowStart: 1 },
@@ -103,27 +104,37 @@ const StickerInput = ({
   textColor: string;
   disabled: boolean;
   onChange: (value: string) => void;
-}) => (
-  <Input
-    h={'100%'}
-    w={'100%'}
-    value={value}
-    bg={'transparent'}
-    border={'1px solid slategray'}
-    borderRadius={0}
-    fontSize={'20px'}
-    letterSpacing={'2px'}
-    textAlign={'center'}
-    color={textColor}
-    cursor={disabled ? 'not-allowed' : 'pointer'}
-    maxLength={1}
-    minWidth={0}
-    padding={0}
-    disabled={disabled}
-    onChange={(e) => onChange(e.target.value)}
-    _focus={{ boxShadow: 'none', outline: 'none' }}
-  />
-);
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <Input
+      ref={inputRef}
+      h={'100%'}
+      w={'100%'}
+      value={value}
+      bg={'transparent'}
+      border={'1px solid slategray'}
+      borderRadius={0}
+      fontSize={'20px'}
+      letterSpacing={'2px'}
+      textAlign={'center'}
+      color={textColor}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
+      maxLength={1}
+      minWidth={0}
+      padding={0}
+      disabled={disabled}
+      onChange={(e) => onChange(e.target.value)}
+      onClick={() => inputRef.current!.setSelectionRange(0, 1)}
+      _selection={{
+        background: 'black.500',
+        color: 'white',
+      }}
+      _focus={{ boxShadow: 'none', outline: 'none' }}
+    />
+  );
+};
 
 const FaceGrid = ({
   faceColor,
