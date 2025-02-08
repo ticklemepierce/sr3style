@@ -67,7 +67,6 @@ export const DEFAULT_ORIENTATION: Orientation = {
   D: Color.Yellow,
 };
 
-export const DEFAULT_TARGET_TIME_IN_MS = 15 * 1000;
 export const DEFAULT_SETTINGS = {
   autoAddInverse: false,
   autoRemoveInverse: false,
@@ -75,6 +74,7 @@ export const DEFAULT_SETTINGS = {
   cornerBuffer: CornerPiece.UFR,
   orientation: DEFAULT_ORIENTATION,
   letterScheme: SPEFFZ_LETTER_SCHEME,
+  targetTimeInSeconds: 15,
 };
 export const DEFAULT_LEARNING_CASES = {
   edges: {},

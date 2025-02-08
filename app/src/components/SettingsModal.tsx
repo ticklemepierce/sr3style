@@ -30,6 +30,8 @@ import {
 } from '@chakra-ui/react';
 import { capitalizeFirstLetter } from '../utils/text';
 import { getKeyByValue, typedEnumKeys } from '../utils/utils';
+import { Field } from '@chakra/field';
+import { NumberInputField, NumberInputRoot } from './snippets/number-input';
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -112,7 +114,7 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
 
   return (
     <DialogRoot placement={'center'} open={isOpen}>
-      <DialogContent>
+      <DialogContent maxHeight={'90vh'} overflow={'auto'}>
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
@@ -140,6 +142,19 @@ export const SettingsModal = ({ isOpen, onClose }: SettingsDialogProps) => {
             >
               Automatically remove inverses
             </Switch>
+            <Field label={'Target Time (in seconds)'}>
+              <NumberInputRoot
+                value={currSettings.targetTimeInSeconds.toString()}
+                min={1}
+                onValueChange={({ valueAsNumber }) =>
+                  updateCurrSettings({
+                    targetTimeInSeconds: valueAsNumber,
+                  })
+                }
+              >
+                <NumberInputField />
+              </NumberInputRoot>
+            </Field>
           </Stack>
         </DialogBody>
         <DialogHeader>
