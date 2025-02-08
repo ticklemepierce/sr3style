@@ -17,6 +17,7 @@ const settingsSchema = z.object({
     orientation: z
       .record(z.nativeEnum(Face), z.nativeEnum(Color))
       .transform((x) => x as typeof x extends Partial<infer T> ? T : never),
+    targetTimeInSeconds: z.number(),
   }),
 });
 
