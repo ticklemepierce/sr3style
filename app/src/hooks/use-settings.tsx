@@ -13,9 +13,10 @@ const useSettings = ({
     ? userData.settings
     : (store.get('settings') ?? store.set('settings', DEFAULT_SETTINGS));
 
-  const [settings, setSettings] = useState<Settings>(
-    userSettings ?? DEFAULT_SETTINGS,
-  );
+  const [settings, setSettings] = useState<Settings>({
+    ...DEFAULT_SETTINGS,
+    ...userSettings,
+  });
 
   const saveSettings = async (updatedSettings: Settings) => {
     if (userData?.isPremium) {

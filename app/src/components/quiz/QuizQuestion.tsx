@@ -3,7 +3,6 @@ import { Rating, RatingType } from 'ts-fsrs';
 import { Question, SetType } from '~/src/types';
 import { useFSRSContext } from '~/src/context/fsrs';
 import { formatTime } from '~/src/utils/time';
-import { DEFAULT_TARGET_TIME_IN_MS } from '~/src/utils/constants';
 import useTabActive from '~/src/hooks/use-tab-active';
 import { useSessionContext } from '~/src/context/session';
 import { Heading, Stack } from '@chakra-ui/react';
@@ -24,7 +23,7 @@ export const QuizQuestion = ({
   setType: SetType;
 }) => {
   const { f } = useFSRSContext();
-  const { updateCase } = useSessionContext();
+  const { updateCase, settings } = useSessionContext();
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const stopWatchStartTimeRef = useRef(Date.now());
 
@@ -64,7 +63,9 @@ export const QuizQuestion = ({
 
   const rate = () => {
     const timeForQuestion = stopwatchTimeRef.current;
-    const timeRatio = Math.floor(timeForQuestion / DEFAULT_TARGET_TIME_IN_MS);
+    const timeRatio = Math.floor(
+      timeForQuestion / (settings.targetTimeInSeconds * 1000),
+    );
 
     let rating: Rating;
 
