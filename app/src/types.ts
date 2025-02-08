@@ -67,6 +67,7 @@ export type Settings = {
   cornerBuffer: Piece;
   letterScheme: LetterScheme;
   orientation: Orientation;
+  targetTimeInSeconds: number;
 };
 
 export type UserData =
