@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
+import { Box, Flex, Text, IconButton } from '@chakra-ui/react';
 import { Avatar } from '@chakra/avatar';
 import { ColorModeButton } from '@chakra/color-mode';
 import { useSessionContext } from '~/src/context/session';
@@ -16,11 +16,17 @@ export const NavBar = () => {
   return (
     <Box bg={{ base: 'gray.100', _dark: 'gray.900' }} px={4}>
       <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-        <Heading size={'4xl'} as={'h1'} my={2}>
+        <Text
+          textStyle={'2xl'}
+          fontWeight={'bold'}
+          md={{ textStyle: '4xl' }}
+          as={'h1'}
+          my={2}
+        >
           SR 3style
-        </Heading>
+        </Text>
 
-        <Flex alignItems={'center'} gap={5}>
+        <Flex alignItems={'center'} gap={1} md={{ gap: 5 }}>
           <ColorModeButton />
           <IconButton
             onClick={() => setIsSettingsModalOpen(true)}
