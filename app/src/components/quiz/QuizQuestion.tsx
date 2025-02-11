@@ -6,6 +6,7 @@ import { formatTime } from '~/src/utils/time';
 import useTabActive from '~/src/hooks/use-tab-active';
 import { useSessionContext } from '~/src/context/session';
 import { Heading, Stack } from '@chakra-ui/react';
+import { KeepAwake } from '~/src/components/KeepAwake';
 
 export const QuizQuestion = ({
   question,
@@ -103,6 +104,7 @@ export const QuizQuestion = ({
     <Stack alignItems={'center'}>
       <Heading size={'4xl'}>{question.caseId.toUpperCase()}</Heading>
       <Heading size={'4xl'}>{formatTime(stopwatchTime)}</Heading>
+      <KeepAwake />
     </Stack>
   );
 };

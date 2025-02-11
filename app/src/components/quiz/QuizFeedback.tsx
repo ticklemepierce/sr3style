@@ -50,7 +50,12 @@ export const QuizFeedback = ({
   };
 
   return (
-    <Heading size={'4xl'}>
+    <Heading
+      size={'4xl'}
+      textAlign={'center'}
+      padding={3}
+      style={{ userSelect: 'none' }}
+    >
       {supportsTouch ? 'Tap screen' : `Press 'space'`} to {getCopy()}
     </Heading>
   );
