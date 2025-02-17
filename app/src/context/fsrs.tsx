@@ -14,7 +14,10 @@ export default FSRSContext;
 
 export function FSRSProvider({
   children,
-  p = generatorParameters(),
+  p = generatorParameters({
+    enable_fuzz: true,
+    enable_short_term: false,
+  }),
 }: {
   children: React.ReactNode;
   p?: FSRSParameters;
