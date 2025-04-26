@@ -75,8 +75,16 @@ const useCards = ({
     }, {} as LearningCases);
   };
 
-  const removeSubset: AddOrRemoveSubset = async ({ set, subSet, setType }) => {
-    await removeCases({ learningCasesToRemove: [`${set}${subSet}`], setType });
+  const removeSubset: AddOrRemoveSubset = async ({
+    set,
+    subSet,
+    setType,
+    isParity,
+  }) => {
+    await removeCases({
+      learningCasesToRemove: [isParity ? subSet : `${set}${subSet}`],
+      setType,
+    });
   };
 
   const removeSet: AddOrRemoveSet = async ({ setType, set }) => {
@@ -88,8 +96,16 @@ const useCards = ({
     await removeCases({ learningCasesToRemove, setType });
   };
 
-  const addSubset: AddOrRemoveSubset = async ({ setType, set, subSet }) => {
-    await addCases({ caseIds: [`${set}${subSet}`], setType });
+  const addSubset: AddOrRemoveSubset = async ({
+    setType,
+    set,
+    subSet,
+    isParity,
+  }) => {
+    await addCases({
+      caseIds: [isParity ? subSet : `${set}${subSet}`],
+      setType,
+    });
   };
 
   const addSet: AddOrRemoveSet = async ({ setType, set }) => {

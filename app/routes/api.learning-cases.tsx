@@ -17,10 +17,12 @@ const learningCasesSchema = z
   .object({
     edges: z.any().optional(),
     corners: z.any().optional(),
+    parities: z.any().optional(),
   })
   .transform((data) => ({
     edges: data.edges || {},
     corners: data.corners || {},
+    parities: data.parities || {},
   }));
 const postSchema = z.object({
   setType: z.nativeEnum(SetType),

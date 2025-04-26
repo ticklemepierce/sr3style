@@ -19,6 +19,7 @@ export interface Results {
 export enum SetType {
   EDGES = 'edges',
   CORNERS = 'corners',
+  PARITIES = 'parities',
 }
 
 export interface Country {
@@ -89,10 +90,12 @@ export type AddOrRemoveSubset = ({
   setType,
   set,
   subSet,
+  isParity,
 }: {
   setType: SetType;
   set: string;
   subSet: string;
+  isParity: boolean;
 }) => Promise<Response | void>;
 
 export type AddOrRemoveSet = ({

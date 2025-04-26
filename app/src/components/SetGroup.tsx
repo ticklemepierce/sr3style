@@ -23,6 +23,8 @@ export const SetGroup = ({
     setTypeLetterSchemeMap,
   } = useSessionContext();
 
+  const isParity = setType === SetType.PARITIES;
+
   const recordLogItemMap: RecordLogItemMap = useMemo(
     () => learningCases?.[setType] ?? {},
     [learningCases],
@@ -54,9 +56,9 @@ export const SetGroup = ({
       }
     } else {
       if (isChecked) {
-        await addSubset!({ setType, set, subSet: clickedLetter });
+        await addSubset!({ setType, set, subSet: clickedLetter, isParity });
       } else {
-        await removeSubset!({ setType, set, subSet: clickedLetter });
+        await removeSubset!({ setType, set, subSet: clickedLetter, isParity });
       }
     }
   };
@@ -66,7 +68,9 @@ export const SetGroup = ({
       {possiblePairs.map((subSet) => (
         <Checkbox
           key={subSet}
-          checked={Boolean(recordLogItemMap[`${set}${subSet}`])}
+          checked={Boolean(
+            recordLogItemMap[isParity ? subSet : `${set}${subSet}`],
+          )}
           onCheckedChange={async (e) =>
             await handleChange({
               clickedLetter: subSet,
@@ -85,32 +89,34 @@ export const SetGroup = ({
   };
   return (
     <>
-      <Box
-        display={'flex'}
-        alignItems={'center'}
-        width={'100px'}
-        justifyContent={'space-between'}
-      >
-        <Checkbox
-          checked={indeterminate ? 'indeterminate' : allChecked}
-          onCheckedChange={async (e) =>
-            await handleChange({
-              clickedLetter: set,
-              isChecked: Boolean(e.checked),
-            })
-          }
+      {!isParity && (
+        <Box
+          display={'flex'}
+          alignItems={'center'}
+          width={'100px'}
+          justifyContent={'space-between'}
         >
-          {set.toUpperCase()}
-        </Checkbox>
-        <IconButton
-          aria-label={'Example'}
-          onClick={toggleIsExpanded}
-          variant={'plain'}
-        >
-          {isExpanded ? <LuChevronUp /> : <LuChevronDown />}
-        </IconButton>
-      </Box>
-      {isExpanded && children}
+          <Checkbox
+            checked={indeterminate ? 'indeterminate' : allChecked}
+            onCheckedChange={async (e) =>
+              await handleChange({
+                clickedLetter: set,
+                isChecked: Boolean(e.checked),
+              })
+            }
+          >
+            {set.toUpperCase()}
+          </Checkbox>
+          <IconButton
+            aria-label={'Example'}
+            onClick={toggleIsExpanded}
+            variant={'plain'}
+          >
+            {isExpanded ? <LuChevronUp /> : <LuChevronDown />}
+          </IconButton>
+        </Box>
+      )}
+      {(isExpanded || isParity) && children}
     </>
   );
 };
