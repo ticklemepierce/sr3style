@@ -9,7 +9,6 @@ export const meta = sharedMeta;
 
 // TODO support floating
 // TODO tsconfig for tsnode
-// TODO support parities
 // TODO review "again" questions without regrading
 // TODO test mode?
 

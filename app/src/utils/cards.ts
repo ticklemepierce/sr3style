@@ -26,7 +26,6 @@ export const getCardsReadyForReview = ({
   }
 
   const cardsFromStorageArray = cardsObjToArray(cards);
-  console.log({ cardsFromStorageArray });
   const onlyDueCards = cardsFromStorageArray.filter(({ recordLogItem }) => {
     const currTime = new Date();
     const cardTime = new Date(recordLogItem.card.due);
