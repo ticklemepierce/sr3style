@@ -23,7 +23,7 @@ export const getUserLetterSchemeMap = ({
   edgeBuffer: Piece;
   cornerBuffer: Piece;
 }) => {
-  const generatePieceMap = (pieceArr: Piece[], buffer: Piece) =>
+  const generatePieceMapForPairs = (pieceArr: Piece[], buffer: Piece) =>
     pieceArr.reduce(
       (acc, firstPiece) => {
         if (!isSamePiece(firstPiece, buffer)) {
@@ -42,9 +42,27 @@ export const getUserLetterSchemeMap = ({
       {} as Record<string, string[]>,
     );
 
+  const generatePieceMapForParities = (pieceArr: Piece[], buffer: Piece) =>
+    pieceArr.reduce(
+      (acc, piece) => {
+        if (!isSamePiece(piece, buffer)) {
+          acc['z'].push(userLetterScheme[piece]);
+        }
+        return acc;
+      },
+      { z: [] } as Record<string, string[]>,
+    );
+
   return {
-    [SetType.EDGES]: generatePieceMap(typedEnumKeys(EdgePiece), edgeBuffer),
-    [SetType.CORNERS]: generatePieceMap(
+    [SetType.EDGES]: generatePieceMapForPairs(
+      typedEnumKeys(EdgePiece),
+      edgeBuffer,
+    ),
+    [SetType.CORNERS]: generatePieceMapForPairs(
+      typedEnumKeys(CornerPiece),
+      cornerBuffer,
+    ),
+    [SetType.PARITIES]: generatePieceMapForParities(
       typedEnumKeys(CornerPiece),
       cornerBuffer,
     ),

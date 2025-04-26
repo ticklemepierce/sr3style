@@ -39,6 +39,8 @@ export default function Quiz() {
         shuffle: true,
       });
 
+      console.log({ questions });
+
       initializeQuiz({ dispatch, questions });
     }
   }, [learningCases]);

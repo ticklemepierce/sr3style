@@ -37,6 +37,8 @@ export const getUserData = async (
   const isPremium = dbUser.isComped;
   if (!isPremium) return { user, isPremium };
 
+  console.log(dbUser);
+
   const learningCases = dbUser.learningCases.reduce((acc, set) => {
     if (!acc[set.setType]) {
       acc[set.setType] = {};
@@ -49,6 +51,8 @@ export const getUserData = async (
 
     return acc;
   }, DEFAULT_LEARNING_CASES);
+
+  console.log({ learningCases });
 
   return {
     user,

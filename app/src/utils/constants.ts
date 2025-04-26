@@ -79,6 +79,7 @@ export const DEFAULT_SETTINGS = {
 export const DEFAULT_LEARNING_CASES = {
   edges: {},
   corners: {},
+  parities: {},
 } as LearningCases;
 
 export const WCA_ORIGIN =
