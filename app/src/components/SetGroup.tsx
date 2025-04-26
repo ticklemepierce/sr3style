@@ -25,10 +25,10 @@ export const SetGroup = ({
 
   const isParity = setType === SetType.PARITIES;
 
-  const recordLogItemMap: RecordLogItemMap = useMemo(
-    () => learningCases?.[setType] ?? {},
-    [learningCases],
-  );
+  const recordLogItemMap: RecordLogItemMap = useMemo(() => {
+    console.log({ learningCases });
+    return learningCases?.[setType] ?? {};
+  }, [learningCases]);
 
   const numChecked = Object.keys(recordLogItemMap).filter((pair) =>
     pair.startsWith(set),

@@ -43,7 +43,10 @@ const useCards = ({
   useEffect(() => {
     if (userData?.isPremium) return;
 
-    setLearningCases(store.get('learningCases') ?? DEFAULT_LEARNING_CASES);
+    setLearningCases({
+      ...DEFAULT_LEARNING_CASES,
+      ...(store.get('learningCases') || {}),
+    });
   }, [userData]);
 
   useEffect(() => {
