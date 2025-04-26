@@ -34,6 +34,8 @@ export const getUserData = async (
 
   if (!dbUser) return;
 
+  console.log(dbUser);
+
   const isPremium = dbUser.isComped;
   if (!isPremium) return { user, isPremium };
 
