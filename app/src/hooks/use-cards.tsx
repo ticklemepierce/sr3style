@@ -225,7 +225,8 @@ const useCards = ({
           },
         };
       });
-    } catch {
+    } catch (e) {
+      console.error(e);
       showGenericErrorToast();
     }
   };
