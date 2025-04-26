@@ -26,7 +26,6 @@ export const SetGroup = ({
   const isParity = setType === SetType.PARITIES;
 
   const recordLogItemMap: RecordLogItemMap = useMemo(() => {
-    console.log({ learningCases });
     return learningCases?.[setType] ?? {};
   }, [learningCases]);
 
