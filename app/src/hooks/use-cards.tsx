@@ -143,16 +143,21 @@ const useCards = ({
     }
   };
 
-  function reverseString(str: string): string {
+  function reverseString(str: string): string | null {
+    if (str.length < 2) return null;
+
     if (str.length === 2) {
       return str[1] + str[0];
     }
-    throw new Error('Input string must be exactly 2 characters long');
+    throw new Error('Input string must not be longer than 2 characters');
   }
   const createInverses = (caseIds: string[]) =>
     caseIds.reduce((acc, id) => {
       acc.push(id);
-      acc.push(reverseString(id));
+      const reversedId = reverseString(id);
+      if (reversedId) {
+        acc.push(reversedId);
+      }
       return acc;
     }, [] as string[]);
 
@@ -226,7 +231,7 @@ const useCards = ({
         };
       });
     } catch (e) {
-      console.error(e);
+      console.log(e);
       showGenericErrorToast();
     }
   };
