@@ -14,13 +14,7 @@ import { RatingType } from 'ts-fsrs';
 import { Link, useParams, useSearchParams } from '@remix-run/react';
 import { SetType } from '~/src/types';
 import { CloseButton } from '@chakra/close-button';
-import {
-  HStack,
-  Center,
-  // Spinner,
-  Flex,
-  AbsoluteCenter,
-} from '@chakra-ui/react';
+import { HStack, Center, Flex, AbsoluteCenter } from '@chakra-ui/react';
 import { FSRSProvider } from '~/src/context/fsrs';
 import { sharedMeta } from '~/src/utils/meta';
 import { PracticeSelector } from '~/src/components/practice/PracticeSelector';

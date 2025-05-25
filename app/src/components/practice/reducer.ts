@@ -33,7 +33,7 @@ export const reducer = (state: State, action: Action): State => {
         quizState: 'feedback',
         isStartScreen: true,
         questions: action.payload.questions,
-        questionIndex: -1,
+        questionIndex: -1, // TODO fix hack
         showQuizProgress: false,
         results: {},
       };
