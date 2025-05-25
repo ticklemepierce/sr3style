@@ -21,7 +21,7 @@ export const CheckboxCard = React.forwardRef<
     description,
     icon,
     addon,
-    indicator = <ChakraCheckboxCard.Indicator />,
+    indicator = <ChakraCheckboxCard.Indicator cursor={props.cursor} />,
     indicatorPlacement = 'end',
     ...rest
   } = props;
