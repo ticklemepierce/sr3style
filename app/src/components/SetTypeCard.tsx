@@ -73,7 +73,7 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
             <Button variant={'outline'} flex={1} asChild>
               <Link
                 to={{
-                  pathname: `/practice/${SetType.PARITIES}`,
+                  pathname: `/practice/${setType}`,
                 }}
               >
                 Practice
@@ -86,7 +86,7 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
             >
               <Link
                 to={{
-                  pathname: `/quiz/${SetType.PARITIES}`,
+                  pathname: `/quiz/${setType}`,
                 }}
               >
                 Review Now
