@@ -20,9 +20,35 @@ export const PracticeSelector = ({
 }) => {
   const { setTypeLetterSchemeMap, learningCases } = useSessionContext();
 
-  const [selectedSets, setSelectedSets] = useState<string[]>(
-    Object.keys(learningCases?.[setType] ?? []),
-  );
+  const isParity = setType === SetType.PARITIES;
+
+  const getLearningSets = () => {
+    if (!learningCases) return [];
+    const counts = Object.keys(learningCases?.[setType]).reduce(
+      (acc, key) => {
+        const letter = key[0];
+        acc[letter] = (acc[letter] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const comparison = Object.entries(counts).reduce((acc, [letter, count]) => {
+      if (count === setTypeLetterSchemeMap[setType]?.[letter]?.length) {
+        acc.push(letter);
+      }
+      return acc;
+    }, [] as string[]);
+
+    return comparison;
+  };
+
+  const initSelectedStates = isParity
+    ? Object.keys(learningCases?.[setType] ?? {})
+    : getLearningSets();
+
+  const [selectedSets, setSelectedSets] =
+    useState<string[]>(initSelectedStates);
 
   const toggleSet = (set: string) => {
     setSelectedSets((prev) => {
