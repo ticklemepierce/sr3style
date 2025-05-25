@@ -10,8 +10,9 @@ export const meta = sharedMeta;
 // TODO support floating
 // TODO tsconfig for tsnode
 // TODO review "again" questions without regrading
-// TODO test mode?
 // TODO debug caching
+// TODO combine practice mode and quiz mode more
+// TODO make set type card and parity card composable/share sub components or some other refactor
 
 export default function Index() {
   return (

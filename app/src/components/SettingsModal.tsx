@@ -31,7 +31,7 @@ import {
 import { capitalizeFirstLetter } from '../utils/text';
 import { getKeyByValue, typedEnumKeys } from '../utils/utils';
 import { Field } from '@chakra/field';
-import { NumberInputField, NumberInputRoot } from './snippets/number-input';
+import { NumberInputField, NumberInputRoot } from '@chakra/number-input';
 
 interface SettingsDialogProps {
   isOpen: boolean;
