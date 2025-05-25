@@ -8,7 +8,7 @@ import {
 } from './actions';
 
 export interface State {
-  quizState: 'loading' | 'question' | 'feedback' | 'complete';
+  quizState: 'question' | 'feedback' | 'complete' | 'select';
   question?: Question;
   questions?: Question[];
   questionIndex?: number;
@@ -20,7 +20,7 @@ export interface State {
 }
 
 export const getInitialState = (): State => ({
-  quizState: 'loading',
+  quizState: 'select',
   showQuizProgress: false,
   isStartScreen: false,
 });
@@ -33,8 +33,8 @@ export const reducer = (state: State, action: Action): State => {
         quizState: 'feedback',
         isStartScreen: true,
         questions: action.payload.questions,
-        questionIndex: -1, // TODO fix hack
-        showQuizProgress: true,
+        questionIndex: -1,
+        showQuizProgress: false,
         results: {},
       };
     case GET_FEEDBACK:

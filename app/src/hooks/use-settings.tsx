@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Settings, SettingsManager, UserData } from '../types';
 import { DEFAULT_SETTINGS } from '../utils/constants';
 import store from 'store2';
-import { toaster } from '../components/snippets/toaster';
+import { toaster } from '@chakra/toaster';
 
 const useSettings = ({
   userData,

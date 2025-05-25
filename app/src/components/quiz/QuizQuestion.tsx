@@ -12,8 +12,10 @@ export const QuizQuestion = ({
   question,
   onAdvance,
   setType,
+  isPracticeMode = false,
 }: {
   question: Question;
+  isPracticeMode?: boolean;
   onAdvance: ({
     time,
     ratingType,
@@ -88,11 +90,13 @@ export const QuizQuestion = ({
       rating
     ];
 
-    updateCase!({
-      recordLogItem,
-      caseId: question.caseId,
-      setType,
-    });
+    if (!isPracticeMode) {
+      updateCase!({
+        recordLogItem,
+        caseId: question.caseId,
+        setType,
+      });
+    }
 
     onAdvance({
       time: timeForQuestion,

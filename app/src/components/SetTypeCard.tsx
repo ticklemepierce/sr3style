@@ -3,10 +3,18 @@ import { Link } from '@remix-run/react';
 import { useSessionContext } from '../context/session';
 import { getCardsReadyForReview } from '../utils/cards';
 import { useMemo, useState } from 'react';
-import { Button, Card } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  HStack,
+  IconButton,
+} from '@chakra-ui/react';
 import { SkeletonText } from '@chakra/skeleton';
 import { AddItemsModal } from '~/src/components/AddItemsModal';
 import { capitalizeFirstLetter } from '../utils/text';
+import { LuPlus } from 'react-icons/lu';
+import { Tooltip } from '@chakra/tooltip';
 
 export const SetTypeCard = ({ setType }: { setType: SetType }) => {
   const { learningCases } = useSessionContext();
@@ -28,7 +36,29 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
     <>
       <Card.Root width={'100%'} minWidth={'298px'} maxWidth={'400px'}>
         <Card.Body gap={'2'}>
-          <Card.Title mb={'2'}>{capitalizeFirstLetter(setType)}</Card.Title>
+          <HStack
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            mb={'2'}
+          >
+            <Card.Title fontSize={'2xl'}>
+              {capitalizeFirstLetter(setType)}
+            </Card.Title>
+            <Tooltip
+              content={`Add ${capitalizeFirstLetter(setType)}`}
+              positioning={{ placement: 'top' }}
+              showArrow
+            >
+              <IconButton
+                onClick={() => setIsAddItemsModalOpen(true)}
+                aria-label={`Add ${capitalizeFirstLetter(setType)}`}
+                variant={'ghost'}
+                rounded={'full'}
+              >
+                <LuPlus />
+              </IconButton>
+            </Tooltip>
+          </HStack>
           {cardsReadyForReview ? (
             <Card.Description>
               You have {cardsReadyForReview.length} {setType.slice(0, -1)}{' '}
@@ -38,26 +68,31 @@ export const SetTypeCard = ({ setType }: { setType: SetType }) => {
             <SkeletonText noOfLines={1} height={21} />
           )}
         </Card.Body>
-        <Card.Footer justifyContent={'flex-end'} gap={'10px'}>
-          <Button
-            variant={'outline'}
-            onClick={() => setIsAddItemsModalOpen(true)}
-            width={'120px'}
-          >
-            Add {capitalizeFirstLetter(setType)}
-          </Button>
-          <Link
-            to={{
-              pathname: `/quiz/${setType}`,
-            }}
-          >
+        <Card.Footer flexDirection={'column'}>
+          <ButtonGroup justifyContent={'center'} width={'100%'}>
+            <Button variant={'outline'} flex={1} asChild>
+              <Link
+                to={{
+                  pathname: `/practice/${SetType.PARITIES}`,
+                }}
+              >
+                Practice
+              </Link>
+            </Button>
             <Button
               disabled={!Boolean(cardsReadyForReview?.length)}
-              width={'120px'}
+              asChild
+              flex={1}
             >
-              Review Now
+              <Link
+                to={{
+                  pathname: `/quiz/${SetType.PARITIES}`,
+                }}
+              >
+                Review Now
+              </Link>
             </Button>
-          </Link>
+          </ButtonGroup>
         </Card.Footer>
       </Card.Root>
       {isAddItemsModalOpen && (
