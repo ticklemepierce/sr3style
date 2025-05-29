@@ -5,6 +5,7 @@ import {
   finishQuiz,
   getFeedback,
   initializeQuiz,
+  restartQuiz,
 } from '~/src/components/quiz/actions';
 import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
 import { QuizSummary } from '~/src/components/quiz/QuizSummary';
@@ -44,9 +45,23 @@ export default function Practice() {
     initializeQuiz({ dispatch, questions });
   }, []);
 
+  if (state.quizState === 'complete') {
+    return (
+      <QuizSummary
+        results={state.results!}
+        onPracticeAgain={() => restartQuiz({ dispatch })}
+      />
+    );
+  }
+
   return (
     <FSRSProvider>
-      <Flex direction={'column'} height={'100vh'} width={'100vw'}>
+      <Flex
+        direction={'column'}
+        height={'100vh'}
+        width={'100vw'}
+        overflowX={'hidden'}
+      >
         <HStack width={'100vw'} flexShrink={0}>
           <Link
             to={{
@@ -65,12 +80,11 @@ export default function Practice() {
             />
           )}
         </HStack>
-        <AbsoluteCenter axis={'horizontal'} mt={10}>
-          {state.quizState === 'select' && (
+        {state.quizState === 'select' ? (
+          <AbsoluteCenter axis={'horizontal'} mt={10}>
             <PracticeSelector setType={setType} startQuiz={startQuiz} />
-          )}
-        </AbsoluteCenter>
-        {state.quizState !== 'complete' && (
+          </AbsoluteCenter>
+        ) : (
           <Center flex={1}>
             {state.quizState === 'question' && (
               <QuizQuestion
@@ -87,20 +101,19 @@ export default function Practice() {
               />
             )}
             {state.quizState === 'feedback' && (
-              <QuizFeedback
-                isLastQuestion={state.isLastQuestion!}
-                isStartScreen={state.isStartScreen!}
-                onAdvance={() =>
-                  !state.isLastQuestion
-                    ? advance({ dispatch })
-                    : finishQuiz({ dispatch })
-                }
-              />
+              <>
+                <QuizFeedback
+                  isLastQuestion={state.isLastQuestion!}
+                  isStartScreen={state.isStartScreen!}
+                  onAdvance={() =>
+                    !state.isLastQuestion
+                      ? advance({ dispatch })
+                      : finishQuiz({ dispatch })
+                  }
+                />
+              </>
             )}
           </Center>
-        )}
-        {state.quizState === 'complete' && (
-          <QuizSummary results={state.results!} />
         )}
       </Flex>
     </FSRSProvider>

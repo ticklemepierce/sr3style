@@ -64,8 +64,8 @@ export const PracticeSelector = ({
       : Object.keys(setTypeLetterSchemeMap[setType]);
 
   return (
-    <Stack>
-      <Heading size={'4xl'} textAlign={'center'} mb={10}>
+    <Stack gapY={10} mb={10}>
+      <Heading size={'4xl'} textAlign={'center'}>
         Select sets to practice
       </Heading>
       <SimpleGrid columns={[2, 3, 4, 5]} gap={'20px'} width={'75vw'}>
@@ -81,8 +81,8 @@ export const PracticeSelector = ({
           />
         ))}
       </SimpleGrid>
-      <Flex justify={'flex-end'}>
-        <ButtonGroup align={'end'} flexDirection={'column'}>
+      <Flex justify={'center'}>
+        <ButtonGroup flexDirection={'column'}>
           <Button
             disabled={selectedSets.length === 0}
             onClick={() => startQuiz(selectedSets)}

@@ -6,6 +6,7 @@ export const INITIALIZE_QUIZ = 'initialize';
 export const GET_FEEDBACK = 'get feedback';
 export const ADVANCE = 'advance';
 export const FINISH_QUIZ = 'finish quiz';
+export const RESTART_QUIZ = 'restart quiz';
 
 type InitializeAction = {
   type: typeof INITIALIZE_QUIZ;
@@ -17,12 +18,14 @@ type GetFeedbackAction = {
 };
 type AdvanceAction = { type: typeof ADVANCE };
 type FinishQuizAction = { type: typeof FINISH_QUIZ };
+type RestartQuizAction = { type: typeof RESTART_QUIZ };
 
 export type Action =
   | InitializeAction
   | GetFeedbackAction
   | AdvanceAction
-  | FinishQuizAction;
+  | FinishQuizAction
+  | RestartQuizAction;
 
 export const initializeQuiz = ({
   dispatch,
@@ -60,4 +63,12 @@ export const finishQuiz = ({
   dispatch: Dispatch<FinishQuizAction>;
 }) => {
   dispatch({ type: FINISH_QUIZ });
+};
+
+export const restartQuiz = ({
+  dispatch,
+}: {
+  dispatch: Dispatch<RestartQuizAction>;
+}) => {
+  dispatch({ type: RESTART_QUIZ });
 };

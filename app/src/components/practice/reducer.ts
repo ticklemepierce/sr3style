@@ -5,7 +5,9 @@ import {
   GET_FEEDBACK,
   FINISH_QUIZ,
   Action,
+  RESTART_QUIZ,
 } from './actions';
+import { shuffleQuestions } from '~/src/utils/cards';
 
 export interface State {
   quizState: 'question' | 'feedback' | 'complete' | 'select';
@@ -65,6 +67,17 @@ export const reducer = (state: State, action: Action): State => {
         quizState: 'complete',
         showQuizProgress: false,
         isStartScreen: false,
+      };
+    case RESTART_QUIZ:
+      return {
+        ...state,
+        quizState: 'feedback',
+        isStartScreen: true,
+        isLastQuestion: false,
+        questions: shuffleQuestions(state.questions!),
+        questionIndex: -1, // TODO fix hack
+        showQuizProgress: false,
+        results: {},
       };
   }
 };

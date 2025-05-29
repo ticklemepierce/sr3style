@@ -43,9 +43,18 @@ export default function Quiz() {
     }
   }, [learningCases]);
 
+  if (state.quizState === 'complete') {
+    return <QuizSummary results={state.results!} />;
+  }
+
   return (
     <FSRSProvider>
-      <Flex direction={'column'} height={'100vh'} width={'100vw'}>
+      <Flex
+        direction={'column'}
+        height={'100vh'}
+        width={'100vw'}
+        overflowX={'hidden'}
+      >
         <HStack width={'100vw'} flexShrink={0}>
           <Link
             to={{
@@ -64,38 +73,33 @@ export default function Quiz() {
             />
           )}
         </HStack>
-        {state.quizState !== 'complete' && (
-          <Center flex={1}>
-            {state.quizState === 'loading' && <Spinner />}
-            {state.quizState === 'question' && (
-              <QuizQuestion
-                setType={setType}
-                question={state.question!}
-                onAdvance={({
-                  time,
-                  ratingType,
-                }: {
-                  time: number;
-                  ratingType: RatingType;
-                }) => getFeedback({ dispatch, time, ratingType })}
-              />
-            )}
-            {state.quizState === 'feedback' && (
-              <QuizFeedback
-                isLastQuestion={state.isLastQuestion!}
-                isStartScreen={state.isStartScreen!}
-                onAdvance={() =>
-                  !state.isLastQuestion
-                    ? advance({ dispatch })
-                    : finishQuiz({ dispatch })
-                }
-              />
-            )}
-          </Center>
-        )}
-        {state.quizState === 'complete' && (
-          <QuizSummary results={state.results!} />
-        )}
+        <Center flex={1}>
+          {state.quizState === 'loading' && <Spinner />}
+          {state.quizState === 'question' && (
+            <QuizQuestion
+              setType={setType}
+              question={state.question!}
+              onAdvance={({
+                time,
+                ratingType,
+              }: {
+                time: number;
+                ratingType: RatingType;
+              }) => getFeedback({ dispatch, time, ratingType })}
+            />
+          )}
+          {state.quizState === 'feedback' && (
+            <QuizFeedback
+              isLastQuestion={state.isLastQuestion!}
+              isStartScreen={state.isStartScreen!}
+              onAdvance={() =>
+                !state.isLastQuestion
+                  ? advance({ dispatch })
+                  : finishQuiz({ dispatch })
+              }
+            />
+          )}
+        </Center>
       </Flex>
     </FSRSProvider>
   );

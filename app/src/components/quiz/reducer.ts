@@ -5,6 +5,7 @@ import {
   GET_FEEDBACK,
   FINISH_QUIZ,
   Action,
+  RESTART_QUIZ,
 } from './actions';
 
 export interface State {
@@ -66,5 +67,7 @@ export const reducer = (state: State, action: Action): State => {
         showQuizProgress: false,
         isStartScreen: false,
       };
+    case RESTART_QUIZ:
+      return state; // TODO fix this
   }
 };
