@@ -32,17 +32,11 @@ export const QuizQuestion = ({
 
   const stopwatchTimeRef = useRef(0);
 
-  const handleSpacePress = (e: KeyboardEvent) => {
-    if (e.key === ' ') {
-      rate();
-    }
-  };
-
   useEffect(() => {
     document.addEventListener('touchstart', rate, false);
-    document.addEventListener('keydown', handleSpacePress, false);
+    document.addEventListener('keydown', rate, false);
     return () => {
-      document.removeEventListener('keydown', handleSpacePress, false);
+      document.removeEventListener('keydown', rate, false);
       document.removeEventListener('touchstart', rate, false);
     };
   }, []);
