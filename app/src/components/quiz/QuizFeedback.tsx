@@ -29,10 +29,14 @@ export const QuizFeedback = ({
   const supportsTouch = 'ontouchstart' in window;
 
   useEffect(() => {
-    document.addEventListener('keydown', handleSpacePress, false);
-    document.addEventListener('touchstart', handleTouchStart, false);
-    document.addEventListener('touchend', handleTouchEnd, false);
+    const timer = setTimeout(() => {
+      document.addEventListener('keydown', handleSpacePress, false);
+      document.addEventListener('touchstart', handleTouchStart, false);
+      document.addEventListener('touchend', handleTouchEnd, false);
+    }, 300);
+
     return () => {
+      clearTimeout(timer);
       document.removeEventListener('touchstart', handleTouchStart, false);
       document.removeEventListener('touchend', handleTouchEnd, false);
       document.removeEventListener('keydown', handleSpacePress, false);
