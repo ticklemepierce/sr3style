@@ -33,9 +33,13 @@ export const QuizQuestion = ({
   const stopwatchTimeRef = useRef(0);
 
   useEffect(() => {
-    document.addEventListener('touchstart', rate, false);
-    document.addEventListener('keydown', rate, false);
+    const timer = setTimeout(() => {
+      document.addEventListener('touchstart', rate, false);
+      document.addEventListener('keydown', rate, false);
+    }, 300);
+
     return () => {
+      clearTimeout(timer);
       document.removeEventListener('keydown', rate, false);
       document.removeEventListener('touchstart', rate, false);
     };
