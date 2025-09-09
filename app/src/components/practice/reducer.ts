@@ -69,12 +69,19 @@ export const reducer = (state: State, action: Action): State => {
         isStartScreen: false,
       };
     case RESTART_QUIZ:
+      const filteredQuestions = state.questions!.filter(
+        (q) =>
+          !action.payload.onlyDifficultQuestions ||
+          state.results![q.caseId].ratingType === 'Hard' ||
+          state.results![q.caseId].ratingType === 'Again',
+      );
+
       return {
         ...state,
         quizState: 'feedback',
         isStartScreen: true,
         isLastQuestion: false,
-        questions: shuffleQuestions(state.questions!),
+        questions: shuffleQuestions(filteredQuestions),
         questionIndex: -1, // TODO fix hack
         showQuizProgress: false,
         results: {},

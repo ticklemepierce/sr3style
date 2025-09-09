@@ -10,9 +10,13 @@ export const QuizSummary = ({
   onPracticeAgain,
 }: {
   results: Results;
-  onPracticeAgain?: () => void;
+  onPracticeAgain?: (onlyDifficultQuestions?: boolean) => void;
 }) => {
   const [searchParams] = useSearchParams();
+
+  const showDifficultQuestionsButton = Object.values(results).some(
+    (r) => r.ratingType === 'Hard' || r.ratingType === 'Again',
+  );
 
   return (
     <Stack width={'100%'} align={'center'} gap={0}>
@@ -57,9 +61,26 @@ export const QuizSummary = ({
         </Table.ScrollArea>
       </Stack>
       {onPracticeAgain && (
-        <Button onClick={onPracticeAgain} width={'auto'} my={10}>
-          Practice Again
-        </Button>
+        <>
+          <Button
+            onClick={() => onPracticeAgain()}
+            width={350}
+            marginTop={10}
+            marginBottom={5}
+          >
+            Practice Again
+          </Button>
+          {showDifficultQuestionsButton && (
+            <Button
+              onClick={() => onPracticeAgain(true)}
+              width={350}
+              marginBottom={10}
+              variant={'outline'}
+            >
+              Review Difficult Questions
+            </Button>
+          )}
+        </>
       )}
     </Stack>
   );

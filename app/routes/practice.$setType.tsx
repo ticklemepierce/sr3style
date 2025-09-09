@@ -6,7 +6,7 @@ import {
   getFeedback,
   initializeQuiz,
   restartQuiz,
-} from '~/src/components/quiz/actions';
+} from '~/src/components/practice/actions';
 import { QuizQuestion } from '~/src/components/quiz/QuizQuestion';
 import { QuizSummary } from '~/src/components/quiz/QuizSummary';
 import { QuizFeedback } from '~/src/components/quiz/QuizFeedback';
@@ -49,7 +49,9 @@ export default function Practice() {
     return (
       <QuizSummary
         results={state.results!}
-        onPracticeAgain={() => restartQuiz({ dispatch })}
+        onPracticeAgain={(onlyDifficultQuestions?: boolean) => {
+          restartQuiz({ dispatch, onlyDifficultQuestions });
+        }}
       />
     );
   }

@@ -18,7 +18,10 @@ type GetFeedbackAction = {
 };
 type AdvanceAction = { type: typeof ADVANCE };
 type FinishQuizAction = { type: typeof FINISH_QUIZ };
-type RestartQuizAction = { type: typeof RESTART_QUIZ };
+type RestartQuizAction = {
+  type: typeof RESTART_QUIZ;
+  payload: { onlyDifficultQuestions: boolean };
+};
 
 export type Action =
   | InitializeAction
@@ -67,8 +70,15 @@ export const finishQuiz = ({
 
 export const restartQuiz = ({
   dispatch,
+  onlyDifficultQuestions,
 }: {
   dispatch: Dispatch<RestartQuizAction>;
+  onlyDifficultQuestions?: boolean;
 }) => {
-  dispatch({ type: RESTART_QUIZ });
+  dispatch({
+    type: RESTART_QUIZ,
+    payload: {
+      onlyDifficultQuestions: Boolean(onlyDifficultQuestions),
+    },
+  });
 };
