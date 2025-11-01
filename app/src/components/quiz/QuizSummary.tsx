@@ -14,9 +14,9 @@ export const QuizSummary = ({
 }) => {
   const [searchParams] = useSearchParams();
 
-  const showDifficultQuestionsButton = Object.values(results).some(
+  const numDifficultQuestionsButton = Object.values(results).filter(
     (r) => r.ratingType === 'Hard' || r.ratingType === 'Again',
-  );
+  ).length;
 
   return (
     <Stack width={'100%'} align={'center'} gap={0}>
@@ -70,14 +70,14 @@ export const QuizSummary = ({
           >
             Practice Again
           </Button>
-          {showDifficultQuestionsButton && (
+          {numDifficultQuestionsButton > 0 && (
             <Button
               onClick={() => onPracticeAgain(true)}
               width={350}
               marginBottom={10}
               variant={'outline'}
             >
-              Review Difficult Questions
+              Review Difficult Questions ({numDifficultQuestionsButton})
             </Button>
           )}
         </>

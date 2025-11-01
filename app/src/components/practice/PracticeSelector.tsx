@@ -10,6 +10,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Switch } from '@chakra/switch';
 
 export const PracticeSelector = ({
   setType,
@@ -63,11 +64,47 @@ export const PracticeSelector = ({
       ? setTypeLetterSchemeMap.parities.z
       : Object.keys(setTypeLetterSchemeMap[setType]);
 
+  const allSelected = selectedSets.length === sets.length;
+
+  const handleSelectAllToggle = () => {
+    setSelectedSets(allSelected ? [] : [...sets]);
+  };
+
   return (
     <Stack gapY={10} mb={10}>
-      <Heading size={'4xl'} textAlign={'center'}>
-        Select sets to practice
-      </Heading>
+      <Flex
+        direction={{ base: 'column', sm: 'row' }}
+        justify={'space-between'}
+        align={{ base: 'flex-start', sm: 'center' }}
+        width={'100%'}
+        maxW={'75vw'}
+        mx={'auto'}
+        gap={{ base: 4, sm: 0 }}
+      >
+        <Heading
+          size={'4xl'}
+          textAlign={{ base: 'center', sm: 'left' }}
+          width={'100%'}
+        >
+          Select sets to practice
+        </Heading>
+
+        <Flex
+          align={'center'}
+          justify={{ base: 'center', sm: 'flex-end' }}
+          gap={2}
+          width={'100%'}
+        >
+          <span style={{ fontWeight: 500 }}>
+            {allSelected ? 'Deselect All' : 'Select All'}
+          </span>
+          <Switch
+            checked={allSelected}
+            onChange={handleSelectAllToggle}
+            colorScheme={'teal'}
+          />
+        </Flex>
+      </Flex>
       <SimpleGrid columns={[2, 3, 4, 5]} gap={'20px'} width={'75vw'}>
         {sets.map((set) => (
           <CheckboxCard
